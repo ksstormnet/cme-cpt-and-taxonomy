@@ -17,7 +17,6 @@ namespace CME_CPT_Taxonomy;
  * @package    CME_CPT_Taxonomy
  */
 class Shortcodes {
-    // No readonly properties with default values here
 
     /**
      * Register shortcodes.

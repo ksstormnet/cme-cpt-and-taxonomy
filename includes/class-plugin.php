@@ -1,4 +1,22 @@
 <?php
+/**
+ * The core plugin class.
+ *
+ * @since      1.0.0
+ * @package    CME_CPT_Taxonomy
+ */
+
+namespace CME_CPT_Taxonomy;
+
+/**
+ * The core plugin class.
+ *
+ * This is used to define internationalization, admin-specific hooks, and
+ * public-facing site hooks.
+ *
+ * @since      1.0.0
+ * @package    CME_CPT_Taxonomy
+ */
 class Plugin {
     /**
      * The custom post types manager instance.
