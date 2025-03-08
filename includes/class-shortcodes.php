@@ -18,129 +18,136 @@ namespace CME_CPT_Taxonomy;
  */
 class Shortcodes {
 
-    /**
-     * Register shortcodes.
-     *
-     * @since    1.0.0
-     * @return   void
-     */
-    public function register(): void {
-        add_shortcode('cme-persona-rotator', [$this, 'persona_rotator_shortcode']);
-    }
+	/**
+	 * Register shortcodes.
+	 *
+	 * @since    1.0.0
+	 * @return   void
+	 */
+	public function register(): void {
+		add_shortcode( 'cme-persona-rotator', array( $this, 'persona_rotator_shortcode' ) );
+	}
 
-    /**
-     * Persona rotator shortcode callback.
-     *
-     * @since    1.0.0
-     * @param    array  $atts    Shortcode attributes.
-     * @return   string          Shortcode output.
-     */
-    public function persona_rotator_shortcode($atts): string {
-        // Parse attributes
-        $atts = shortcode_atts([
-            'limit' => 3,    // Number of personas to show
-            'speed' => 5000, // Rotation speed in milliseconds
-        ], $atts);
+	/**
+	 * Persona rotator shortcode callback.
+	 *
+	 * @since    1.0.0
+	 * @param    array $atts    Shortcode attributes.
+	 * @return   string          Shortcode output.
+	 */
+	public function persona_rotator_shortcode( $atts ): string {
+		// Parse attributes
+		$atts = shortcode_atts(
+			array(
+				'limit' => 3,    // Number of personas to show
+				'speed' => 5000, // Rotation speed in milliseconds
+			),
+			$atts
+		);
 
-        // Get all personas
-        $personas = get_posts([
-            'post_type'      => 'persona',
-            'posts_per_page' => intval($atts['limit']),
-            'orderby'        => 'rand',
-        ]);
+		// Get all personas
+		$personas = get_posts(
+			array(
+				'post_type'      => 'persona',
+				'posts_per_page' => intval( $atts['limit'] ),
+				'orderby'        => 'rand',
+			)
+		);
 
-        if (empty($personas)) {
-            return '<p>' . __('No personas found.', 'cme-cpt-and-taxonomy') . '</p>';
-        }
+		if ( empty( $personas ) ) {
+			return '<p>' . __( 'No personas found.', 'cme-cpt-and-taxonomy' ) . '</p>';
+		}
 
-        // Start output buffer
-        ob_start();
+		// Start output buffer
+		ob_start();
 
-        // Enqueue necessary styles and scripts
-        $this->enqueue_rotator_assets();
+		// Enqueue necessary styles and scripts
+		$this->enqueue_rotator_assets();
 
-        // Generate a unique ID for this rotator instance
-        $rotator_id = 'cme-persona-rotator-' . wp_rand();
+		// Generate a unique ID for this rotator instance
+		$rotator_id = 'cme-persona-rotator-' . wp_rand();
 
-        // Open rotator container
-        echo '<div id="' . esc_attr($rotator_id) . '" class="cme-persona-rotator">';
+		// Open rotator container
+		echo '<div id="' . esc_attr( $rotator_id ) . '" class="cme-persona-rotator">';
 
-        foreach ($personas as $persona) {
-            // Get persona data
-            $title = get_the_title($persona);
-            $excerpt = get_the_excerpt($persona);
+		foreach ( $personas as $persona ) {
+			// Get persona data
+			$title   = get_the_title( $persona );
+			$excerpt = get_the_excerpt( $persona );
 
-            // Get gender-specific image
-            $genders = ['male', 'female', 'indeterminate'];
-            $random_gender = $genders[array_rand($genders)];
+			// Get gender-specific image
+			$genders       = array( 'male', 'female', 'indeterminate' );
+			$random_gender = $genders[ array_rand( $genders ) ];
 
-            // Get image ID for this gender
-            $image_id = get_post_meta($persona->ID, 'persona_image_' . $random_gender, true);
+			// Get image ID for this gender
+			$image_id = get_post_meta( $persona->ID, 'persona_image_' . $random_gender, true );
 
-            if (!$image_id) {
-                // Fallback to featured image if gender-specific image not found
-                $image_id = get_post_thumbnail_id($persona);
-            }
+			if ( ! $image_id ) {
+				// Fallback to featured image if gender-specific image not found
+				$image_id = get_post_thumbnail_id( $persona );
+			}
 
-            $image_url = wp_get_attachment_image_url($image_id, 'large');
-            if (!$image_url) {
-                $image_url = plugin_dir_url(CME_PLUGIN_FILE) . 'assets/images/placeholder.png';
-            }
+			$image_url = wp_get_attachment_image_url( $image_id, 'large' );
+			if ( ! $image_url ) {
+				$image_url = plugin_dir_url( CME_PLUGIN_FILE ) . 'assets/images/placeholder.png';
+			}
 
-            // Output persona slide
-            echo '<div class="cme-persona-slide">';
-            echo '<div class="cme-persona-image-container">';
-            echo '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($title) . '" />';
-            echo '<div class="cme-persona-overlay">';
-            echo '<h3>' . esc_html($title) . '</h3>';
-            echo '<div class="cme-persona-excerpt">' . wp_kses_post($excerpt) . '</div>';
-            echo '</div>'; // overlay
-            echo '</div>'; // image container
-            echo '</div>'; // slide
-        }
+			// Output persona slide
+			echo '<div class="cme-persona-slide">';
+			echo '<div class="cme-persona-image-container">';
+			echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $title ) . '" />';
+			echo '<div class="cme-persona-overlay">';
+			echo '<h3>' . esc_html( $title ) . '</h3>';
+			echo '<div class="cme-persona-excerpt">' . wp_kses_post( $excerpt ) . '</div>';
+			echo '</div>'; // overlay
+			echo '</div>'; // image container
+			echo '</div>'; // slide
+		}
 
-        echo '</div>'; // rotator container
+		echo '</div>'; // rotator container
 
-        // Add inline script for rotating
-        ?>
-        <script>
-        (function() {
-            document.addEventListener('DOMContentLoaded', function() {
-                const rotator = document.getElementById('<?php echo esc_js($rotator_id); ?>');
-                const slides = rotator.querySelectorAll('.cme-persona-slide');
-                let currentSlideIndex = 0;
+		// Add inline script for rotating
+		?>
+		<script>
+		(function() {
+			document.addEventListener('DOMContentLoaded', function() {
+				const rotator = document.getElementById('<?php echo esc_js( $rotator_id ); ?>');
+				const slides = rotator.querySelectorAll('.cme-persona-slide');
+				let currentSlideIndex = 0;
 
-                // Hide all slides except the first one
-                for (let i = 1; i < slides.length; i++) {
-                    slides[i].style.display = 'none';
-                }
+				// Hide all slides except the first one
+				for (let i = 1; i < slides.length; i++) {
+					slides[i].style.display = 'none';
+				}
 
-                // Set up rotation if more than one slide
-                if (slides.length > 1) {
-                    setInterval(function() {
-                        slides[currentSlideIndex].style.display = 'none';
-                        currentSlideIndex = (currentSlideIndex + 1) % slides.length;
-                        slides[currentSlideIndex].style.display = 'block';
-                    }, <?php echo intval($atts['speed']); ?>);
-                }
-            });
-        })();
-        </script>
-        <?php
+				// Set up rotation if more than one slide
+				if (slides.length > 1) {
+					setInterval(function() {
+						slides[currentSlideIndex].style.display = 'none';
+						currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+						slides[currentSlideIndex].style.display = 'block';
+					}, <?php echo intval( $atts['speed'] ); ?>);
+				}
+			});
+		})();
+		</script>
+		<?php
 
-        // Return output buffer content
-        return ob_get_clean();
-    }
+		// Return output buffer content
+		return ob_get_clean();
+	}
 
-    /**
-     * Enqueue assets for the rotator.
-     *
-     * @since    1.0.0
-     * @return   void
-     */
-    private function enqueue_rotator_assets(): void {
-        // Add inline styles for the rotator
-        wp_add_inline_style('wp-block-library', '
+	/**
+	 * Enqueue assets for the rotator.
+	 *
+	 * @since    1.0.0
+	 * @return   void
+	 */
+	private function enqueue_rotator_assets(): void {
+		// Add inline styles for the rotator
+		wp_add_inline_style(
+			'wp-block-library',
+			'
             .cme-persona-rotator {
                 position: relative;
                 overflow: hidden;
@@ -174,6 +181,7 @@ class Shortcodes {
             .cme-persona-excerpt {
                 font-size: 14px;
             }
-        ');
-    }
+        '
+		);
+	}
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Cruise Made Easy Post Types and Media Tags
+ * Cruise Made Easy Post Types and Media Tags.
  *
  * @package     CME_CPT_Taxonomy
  * @author      Your Name
@@ -8,17 +8,17 @@
  * @license     GPL-2.0-or-later
  *
  * @wordpress-plugin
- * Plugin Name: Cruise Made Easy Post Types and Media Tags
- * Plugin URI: https://example.com/plugin
+ * Plugin Name: Cruise Made Easy Post Types and Media Tags.
+ * Plugin URI: https://example.com/plugin.
  * Description: Adds custom post types and a tag taxonomy for media library.
- * Version: 1.0.0
- * Author: Your Name
- * Author URI: https://example.com
- * Text Domain: cme-cpt-and-taxonomy
- * License: GPL v2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
- * Requires at least: 6.4
- * Requires PHP: 8.2
+ * Version: 1.0.0.
+ * Author: Your Name.
+ * Author URI: https://example.com.
+ * Text Domain: cme-cpt-and-taxonomy.
+ * License: GPL v2 or later.
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.txt.
+ * Requires at least: 6.4.
+ * Requires PHP: 8.2.
  */
 
 // If this file is called directly, abort.
@@ -119,12 +119,15 @@ add_filter(
 );
 
 // Create plugin placeholder directory for images
-register_activation_hook( CME_PLUGIN_FILE, function() {
-    // Create placeholder directory for images
-    $upload_dir = wp_upload_dir();
-    $placeholder_dir = $upload_dir['basedir'] . '/cme-placeholders';
+register_activation_hook(
+	CME_PLUGIN_FILE,
+	function () {
+		// Create placeholder directory for images
+		$upload_dir      = wp_upload_dir();
+		$placeholder_dir = $upload_dir['basedir'] . '/cme-placeholders';
 
-    if ( ! file_exists( $placeholder_dir ) ) {
-        wp_mkdir_p( $placeholder_dir );
-    }
-});
+		if ( ! file_exists( $placeholder_dir ) ) {
+			wp_mkdir_p( $placeholder_dir );
+		}
+	}
+);
