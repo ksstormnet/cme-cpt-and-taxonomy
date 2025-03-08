@@ -13,7 +13,7 @@ namespace CME_CPT_Taxonomy;
  *
  * This class handles all shortcode functionality.
  *
- * @since      1.0.0
+ * @since      1.0.3
  * @package    CME_CPT_Taxonomy
  */
 class Shortcodes {
