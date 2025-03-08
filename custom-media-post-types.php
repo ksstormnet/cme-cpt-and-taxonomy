@@ -11,7 +11,7 @@
  * Plugin Name: Cruise Made Easy Post Types and Media Tags
  * Plugin URI: https://cruisemadeeasy.com
  * Description: Adds custom post types and a tag taxonomy for media library.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Scott Temaat
  * Author URI: https://cruisemadeeasy.com
  * Text Domain: cme-cpt-and-taxonomy

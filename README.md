@@ -81,7 +81,7 @@ This plugin follows WordPress coding standards and uses modern PHP 8.2 features.
 
 ## Changelog
 
-### 1.0.0
+### 1.0.1
 
 - Initial release
 

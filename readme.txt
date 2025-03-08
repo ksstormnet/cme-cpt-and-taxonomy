@@ -3,7 +3,7 @@ Contributors: yourwordpressusername
 Tags: custom post types, media tags, cruise, media library
 Requires at least: 6.4
 Tested up to: 6.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 8.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -52,7 +52,7 @@ No, this plugin only adds functionality and doesn't alter your existing media fi
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.0.1 =
 * Initial release
 
 == Upgrade Notice ==
