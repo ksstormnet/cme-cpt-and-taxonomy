@@ -395,11 +395,12 @@ class Plugin {
      * @return   void
      */
     private function initialize_components(): void {
-        $this->custom_post_types = new Custom_Post_Types();
-        $this->taxonomies = new Taxonomies();
-        $this->admin = new Admin();
-        $this->shortcodes = new Shortcodes();
-        $this->settings = new Settings();
+        // Use fully qualified class names to avoid namespace issues
+        $this->custom_post_types = new \CME_CPT_Taxonomy\Custom_Post_Types();
+        $this->taxonomies = new \CME_CPT_Taxonomy\Taxonomies();
+        $this->admin = new \CME_CPT_Taxonomy\Admin();
+        $this->shortcodes = new \CME_CPT_Taxonomy\Shortcodes();
+        $this->settings = new \CME_CPT_Taxonomy\Settings();
     }
 
     /**
