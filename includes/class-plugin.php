@@ -1,65 +1,46 @@
 <?php
-/**
- * The core plugin class.
- *
- * @since      1.0.0
- * @package    CME_CPT_Taxonomy
- */
-
-namespace CME_CPT_Taxonomy;
-
-/**
- * The core plugin class.
- *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
- *
- * @since      1.0.0
- * @package    CME_CPT_Taxonomy
- */
 class Plugin {
+    /**
+     * The custom post types manager instance.
+     *
+     * @since    1.0.0
+     * @var      Custom_Post_Types
+     */
+    private readonly Custom_Post_Types $custom_post_types;
 
-	/**
-	 * The custom post types manager instance.
-	 *
-	 * @since    1.0.0
-	 * @var      Custom_Post_Types
-	 */
-	private readonly Custom_Post_Types $custom_post_types;
+    /**
+     * The taxonomies manager instance.
+     *
+     * @since    1.0.0
+     * @var      Taxonomies
+     */
+    private readonly Taxonomies $taxonomies;
 
-	/**
-	 * The taxonomies manager instance.
-	 *
-	 * @since    1.0.0
-	 * @var      Taxonomies
-	 */
-	private readonly Taxonomies $taxonomies;
+    /**
+     * The admin enhancements instance.
+     *
+     * @since    1.0.0
+     * @var      Admin
+     */
+    private readonly Admin $admin;
 
-	/**
-	 * The admin enhancements instance.
-	 *
-	 * @since    1.0.0
-	 * @var      Admin
-	 */
-	private readonly Admin $admin;
+    /**
+     * The shortcodes manager instance.
+     *
+     * @since    1.0.0
+     * @var      Shortcodes
+     */
+    private readonly Shortcodes $shortcodes;
 
-	/**
-	 * The shortcodes manager instance.
-	 *
-	 * @since    1.0.0
-	 * @var      Shortcodes
-	 */
-	private readonly Shortcodes $shortcodes;
-
-	/**
-	 * Initialize the class and set its properties.
-	 *
-	 * @since    1.0.0
-	 */
-	public function __construct() {
-		$this->load_dependencies();
-		$this->initialize_components();
-	}
+    /**
+     * Initialize the class and set its properties.
+     *
+     * @since    1.0.0
+     */
+    public function __construct() {
+        $this->load_dependencies();
+        $this->initialize_components();
+    }
 
 	/**
 	 * Load the required dependencies for this plugin.
