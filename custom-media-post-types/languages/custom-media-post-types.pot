@@ -1,0 +1,41 @@
+msgid "Custom Media Post Types"
+msgstr ""
+
+msgid "A custom post type for media items."
+msgstr ""
+
+msgid "Media Item"
+msgstr ""
+
+msgid "Media Items"
+msgstr ""
+
+msgid "A custom post type for media galleries."
+msgstr ""
+
+msgid "Media Gallery"
+msgstr ""
+
+msgid "Media Galleries"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Add New Tag"
+msgstr ""
+
+msgid "Edit Tag"
+msgstr ""
+
+msgid "Delete Tag"
+msgstr ""
+
+msgid "Are you sure you want to delete this tag?"
+msgstr ""
+
+msgid "No tags found."
+msgstr ""
+
+msgid "Tags for this post"
+msgstr ""

@@ -1,0 +1,86 @@
+/**
+ * Admin styles for Media Tags
+ *
+ * Enhances the Media Library with styling for tag management.
+ *
+ * @package CME_CPT_Taxonomy
+ */
+
+.media-tags-container {
+	margin-top: 8px;
+	margin-bottom: 8px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background: rgba(255, 255, 255, 0.9);
+	padding: 8px;
+	box-sizing: border-box;
+	border-top: 1px solid #ddd;
+	display: none;
+}
+
+.attachment:hover .media-tags-container {
+	display: block;
+}
+
+.media-tags-input {
+	width: 100%;
+	box-sizing: border-box;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 5px;
+}
+
+.media-tags-display {
+	max-height: 60px;
+	overflow-y: auto;
+	margin-bottom: 5px;
+}
+
+.media-tag {
+	display: inline-block;
+	background: #f1f1f1;
+	border-radius: 3px;
+	margin: 2px;
+	padding: 3px 8px;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.media-tag:hover {
+	background: #e0e0e0;
+}
+
+.media-tag-remove {
+	margin-left: 5px;
+	color: #a00;
+}
+
+.media-tag-remove:hover {
+	color: #dc3232;
+}
+
+.media-tag-actions {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 5px;
+}
+
+.media-tag-save {
+	margin-left: auto;
+}
+
+/* List view adjustments */
+.media-frame.mode-list .media-tags-container {
+	position: static;
+	background: transparent;
+	border-top: none;
+	display: block;
+	padding: 4px 0;
+}
+
+/* Media tag filter dropdown styling */
+#media-tag {
+	max-width: 200px;
+}
