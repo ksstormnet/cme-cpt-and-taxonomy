@@ -18,6 +18,7 @@ namespace CME_CPT_Taxonomy;
  * @package    CME_CPT_Taxonomy
  */
 class Plugin {
+
 	/**
 	 * The custom post types manager instance.
 	 *
@@ -43,6 +44,14 @@ class Plugin {
 	private readonly Admin $admin;
 
 	/**
+	 * The shortcodes manager instance.
+	 *
+	 * @since    1.0.0
+	 * @var      Shortcodes
+	 */
+	private readonly Shortcodes $shortcodes;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -62,6 +71,7 @@ class Plugin {
 		require_once CME_PLUGIN_DIR . 'includes/class-custom-post-types.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-taxonomies.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-admin.php';
+		require_once CME_PLUGIN_DIR . 'includes/class-shortcodes.php';
 	}
 
 	/**
@@ -74,6 +84,7 @@ class Plugin {
 		$this->custom_post_types = new Custom_Post_Types();
 		$this->taxonomies        = new Taxonomies();
 		$this->admin             = new Admin();
+		$this->shortcodes        = new Shortcodes();
 	}
 
 	/**
@@ -101,6 +112,7 @@ class Plugin {
 		$this->custom_post_types->register();
 		$this->taxonomies->register();
 		$this->admin->register();
+		$this->shortcodes->register();
 
 		// Register AJAX handler for getting attachment terms
 		add_action( 'wp_ajax_get_attachment_terms', array( $this, 'get_attachment_terms' ) );
