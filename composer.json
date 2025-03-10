@@ -1,6 +1,6 @@
 {
-    "name": "your-vendor/cme-cpt-and-taxonomy",
-    "description": "Cruise Made Easy Post Types and Media Tags",
+    "name": "ksstorm/cme-cpt-and-taxonomy",
+    "description": "WordPress plugin for managing custom post types and taxonomies",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "require": {
@@ -24,5 +24,10 @@
         "phpcs": "phpcs --standard=WordPress",
         "phpcbf": "phpcbf --standard=WordPress",
         "phpstan": "phpstan analyse"
+    },
+    "autoload": {
+        "psr-4": {
+            "CME\\CptAndTaxonomy\\": "includes/"
+        }
     }
 }

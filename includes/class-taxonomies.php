@@ -40,7 +40,7 @@ class Taxonomies {
 	 */
 	public function register(): void {
 		// Hook into the init action to register taxonomies.
-		add_action( 'init', array( $this, 'register_taxonomies' ) );
+		add_action( 'init', [ $this, 'register_taxonomies' ) ];
 	}
 
 	/**
@@ -53,9 +53,9 @@ class Taxonomies {
 		// Register custom taxonomy for the media library.
 		register_taxonomy(
 			$this->media_taxonomy,
-			array( 'attachment', 'persona' ),
-			array(
-				'labels'             => array(
+			[ 'attachment', 'persona' ],
+			[
+				'labels'             => [
 					'name'                       => _x( 'Media Tags', 'taxonomy general name', 'cme-cpt-and-taxonomy' ),
 					'singular_name'              => _x( 'Media Tag', 'taxonomy singular name', 'cme-cpt-and-taxonomy' ),
 					'search_items'               => __( 'Search Media Tags', 'cme-cpt-and-taxonomy' ),
@@ -79,7 +79,7 @@ class Taxonomies {
 				'show_in_rest'       => true,
 				'show_admin_column'  => true,
 				'query_var'          => true,
-				'rewrite'            => array( 'slug' => 'media-tag' ),
+				'rewrite'            => [ 'slug' => 'media-tag' ],
 				'show_in_menu'       => true,
 				'show_in_nav_menus'  => true,
 				'show_tagcloud'      => true,
@@ -88,8 +88,8 @@ class Taxonomies {
 		);
 
 		// Make taxonomy work with attachments
-		add_filter( 'attachment_fields_to_edit', array( $this, 'add_taxonomy_field' ), 10, 2 );
-		add_filter( 'attachment_fields_to_save', array( $this, 'save_taxonomy_field' ), 10, 2 );
+		add_filter( 'attachment_fields_to_edit', [ $this, 'add_taxonomy_field' ), 10, 2 ];
+		add_filter( 'attachment_fields_to_save', [ $this, 'save_taxonomy_field' ), 10, 2 ];
 	}
 
 	/**
@@ -108,7 +108,7 @@ class Taxonomies {
 		}
 
 		$terms  = get_the_terms( $post->ID, $this->media_taxonomy );
-		$values = array();
+		$values = [];
 
 		if ( ! empty( $terms ) ) {
 			foreach ( $terms as $term ) {
@@ -116,7 +116,7 @@ class Taxonomies {
 			}
 		}
 
-		$form_fields[ $this->media_taxonomy ] = array(
+		$form_fields[ $this->media_taxonomy ] = [
 			'label' => $taxonomy->labels->name,
 			'input' => 'text',
 			'value' => join( ', ', $values ),

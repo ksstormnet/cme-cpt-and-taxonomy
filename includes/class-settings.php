@@ -41,10 +41,10 @@ class Settings {
 	 */
 	public function register(): void {
 		// Add settings page
-		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
+		add_action( 'admin_menu', [ $this, 'add_settings_page' ) ];
 
 		// Register settings
-		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_init', [ $this, 'register_settings' ) ];
 	}
 
 	/**
@@ -57,10 +57,10 @@ class Settings {
 		add_submenu_page(
 			'options-general.php',
 			__( 'Customer Personas Rotator', 'cme-cpt-and-taxonomy' ),
-			__( 'Customer Personas', 'cme-cpt-and-taxonomy' ),
+			__( 'Personas', 'cme-cpt-and-taxonomy' ),
 			'manage_options',
 			'cme-persona-settings',
-			array( $this, 'render_settings_page' )
+			[ $this, 'render_settings_page' ]
 		);
 	}
 
@@ -75,9 +75,9 @@ class Settings {
 		register_setting(
 			'cme_persona_settings',
 			$this->option_name,
-			array(
-				'sanitize_callback' => array( $this, 'sanitize_settings' ),
-				'default'           => array(
+			[
+				'sanitize_callback' => [ $this, 'sanitize_settings' ],
+				'default'           => [
 					'default_limit' => 3,
 					'default_speed' => 5000,
 				),
@@ -88,7 +88,7 @@ class Settings {
 		add_settings_section(
 			'cme_persona_rotator_section',
 			__( 'Persona Rotator Settings', 'cme-cpt-and-taxonomy' ),
-			array( $this, 'render_section_description' ),
+			[ $this, 'render_section_description' ],
 			'cme-persona-settings'
 		);
 
@@ -96,19 +96,19 @@ class Settings {
 		add_settings_field(
 			'default_limit',
 			__( 'Default Number of Personas', 'cme-cpt-and-taxonomy' ),
-			array( $this, 'render_limit_field' ),
+			[ $this, 'render_limit_field' ],
 			'cme-persona-settings',
 			'cme_persona_rotator_section',
-			array( 'label_for' => 'default_limit' )
+			[ 'label_for' => 'default_limit' ]
 		);
 
 		add_settings_field(
 			'default_speed',
 			__( 'Default Rotation Speed (ms)', 'cme-cpt-and-taxonomy' ),
-			array( $this, 'render_speed_field' ),
+			[ $this, 'render_speed_field' ],
 			'cme-persona-settings',
 			'cme_persona_rotator_section',
-			array( 'label_for' => 'default_speed' )
+			[ 'label_for' => 'default_speed' ]
 		);
 	}
 
@@ -120,7 +120,7 @@ class Settings {
 	 * @return   array         The sanitized input.
 	 */
 	public function sanitize_settings( $input ): array {
-		$sanitized = array();
+		$sanitized = [];
 
 		// Sanitize limit
 		$sanitized['default_limit'] = isset( $input['default_limit'] ) ?
@@ -293,7 +293,7 @@ class Settings {
 	 * @return   array  The settings.
 	 */
 	public function get_settings(): array {
-		$defaults = array(
+		$defaults = [
 			'default_limit' => 3,
 			'default_speed' => 5000,
 		);
