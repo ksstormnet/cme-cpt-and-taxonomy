@@ -42,10 +42,10 @@ class Custom_Post_Types {
 		// Hook into the init action to register custom post types.
 		add_action( 'init', array( $this, 'register_post_types' ) );
 
-		// Add meta boxes for gender-specific images
+		// Add meta boxes for gender-specific images.
 		add_action( 'add_meta_boxes', array( $this, 'add_persona_meta_boxes' ) );
 
-		// Save meta box data
+		// Save meta box data.
 		add_action( 'save_post', array( $this, 'save_persona_meta' ) );
 	}
 
@@ -56,14 +56,14 @@ class Custom_Post_Types {
 	 * @return   void
 	 */
 	public function register_post_types(): void {
-		// Register Customer Persona post type
+		// Register Customer Persona post type.
 		register_post_type(
 			$this->persona_post_type,
 			array(
 				'labels'            => array(
 					'name'                  => _x( 'Customer Personas', 'Post type general name', 'cme-cpt-and-taxonomy' ),
 					'singular_name'         => _x( 'Customer Persona', 'Post type singular name', 'cme-cpt-and-taxonomy' ),
-					'menu_name'             => _x( 'Customer Personas', 'Admin Menu text', 'cme-cpt-and-taxonomy' ),
+					'menu_name'             => _x( 'Personas', 'Admin Menu text', 'cme-cpt-and-taxonomy' ),
 					'name_admin_bar'        => _x( 'Customer Persona', 'Add New on Toolbar', 'cme-cpt-and-taxonomy' ),
 					'add_new'               => __( 'Add New', 'cme-cpt-and-taxonomy' ),
 					'add_new_item'          => __( 'Add New Customer Persona', 'cme-cpt-and-taxonomy' ),
@@ -151,16 +151,16 @@ class Custom_Post_Types {
 			}
 		</style>
 
-		<p><?php _e( 'Select gender-specific images for this persona. Images will be automatically tagged with the gender and persona name.', 'cme-cpt-and-taxonomy' ); ?></p>
+		<p><?php esc_html_e( 'Select gender-specific images for this persona. Images will be automatically tagged with the gender and persona name.', 'cme-cpt-and-taxonomy' ); ?></p>
 
 		<div class="persona-gender-image">
-			<label><strong><?php _e( 'Male Image', 'cme-cpt-and-taxonomy' ); ?></strong></label><br>
+			<label><strong><?php esc_html_e( 'Male Image', 'cme-cpt-and-taxonomy' ); ?></strong></label><br>
 			<input type="hidden" name="persona_image_male" id="persona_image_male" value="<?php echo esc_attr( $male_image_id ); ?>">
 			<button type="button" class="button persona-upload-image" data-target="persona_image_male">
-				<?php _e( 'Select Image', 'cme-cpt-and-taxonomy' ); ?>
+				<?php esc_html_e( 'Select Image', 'cme-cpt-and-taxonomy' ); ?>
 			</button>
 			<button type="button" class="button persona-remove-image" data-target="persona_image_male" <?php echo empty( $male_image_id ) ? 'style="display:none;"' : ''; ?>>
-				<?php _e( 'Remove Image', 'cme-cpt-and-taxonomy' ); ?>
+				<?php esc_html_e( 'Remove Image', 'cme-cpt-and-taxonomy' ); ?>
 			</button>
 			<div class="persona-image-preview" id="persona_image_male_preview">
 				<?php if ( $male_image_id ) : ?>
@@ -170,13 +170,13 @@ class Custom_Post_Types {
 		</div>
 
 		<div class="persona-gender-image">
-			<label><strong><?php _e( 'Female Image', 'cme-cpt-and-taxonomy' ); ?></strong></label><br>
+			<label><strong><?php esc_html_e( 'Female Image', 'cme-cpt-and-taxonomy' ); ?></strong></label><br>
 			<input type="hidden" name="persona_image_female" id="persona_image_female" value="<?php echo esc_attr( $female_image_id ); ?>">
 			<button type="button" class="button persona-upload-image" data-target="persona_image_female">
-				<?php _e( 'Select Image', 'cme-cpt-and-taxonomy' ); ?>
+				<?php esc_html_e( 'Select Image', 'cme-cpt-and-taxonomy' ); ?>
 			</button>
 			<button type="button" class="button persona-remove-image" data-target="persona_image_female" <?php echo empty( $female_image_id ) ? 'style="display:none;"' : ''; ?>>
-				<?php _e( 'Remove Image', 'cme-cpt-and-taxonomy' ); ?>
+				<?php esc_html_e( 'Remove Image', 'cme-cpt-and-taxonomy' ); ?>
 			</button>
 			<div class="persona-image-preview" id="persona_image_female_preview">
 				<?php if ( $female_image_id ) : ?>
@@ -186,13 +186,13 @@ class Custom_Post_Types {
 		</div>
 
 		<div class="persona-gender-image">
-			<label><strong><?php _e( 'Indeterminate Gender Image', 'cme-cpt-and-taxonomy' ); ?></strong></label><br>
+			<label><strong><?php esc_html_e( 'Indeterminate Gender Image', 'cme-cpt-and-taxonomy' ); ?></strong></label><br>
 			<input type="hidden" name="persona_image_indeterminate" id="persona_image_indeterminate" value="<?php echo esc_attr( $indeterminate_image_id ); ?>">
 			<button type="button" class="button persona-upload-image" data-target="persona_image_indeterminate">
-				<?php _e( 'Select Image', 'cme-cpt-and-taxonomy' ); ?>
+				<?php esc_html_e( 'Select Image', 'cme-cpt-and-taxonomy' ); ?>
 			</button>
 			<button type="button" class="button persona-remove-image" data-target="persona_image_indeterminate" <?php echo empty( $indeterminate_image_id ) ? 'style="display:none;"' : ''; ?>>
-				<?php _e( 'Remove Image', 'cme-cpt-and-taxonomy' ); ?>
+				<?php esc_html_e( 'Remove Image', 'cme-cpt-and-taxonomy' ); ?>
 			</button>
 			<div class="persona-image-preview" id="persona_image_indeterminate_preview">
 				<?php if ( $indeterminate_image_id ) : ?>
@@ -203,23 +203,23 @@ class Custom_Post_Types {
 
 		<script>
 		jQuery(document).ready(function($) {
-			// Image upload functionality
+			// Image upload functionality.
 			$('.persona-upload-image').click(function(e) {
 				e.preventDefault();
 
 				const button = $(this);
 				const targetField = button.data('target');
 
-				// Create media frame
+				// Create media frame.
 				const mediaFrame = wp.media({
-					title: '<?php _e( 'Select or Upload Image', 'cme-cpt-and-taxonomy' ); ?>',
+					title: '<?php esc_html_e( 'Select or Upload Image', 'cme-cpt-and-taxonomy' ); ?>',
 					button: {
-						text: '<?php _e( 'Use this image', 'cme-cpt-and-taxonomy' ); ?>'
+						text: '<?php esc_html_e( 'Use this image', 'cme-cpt-and-taxonomy' ); ?>'
 					},
 					multiple: false
 				});
 
-				// When image selected, run callback
+				// When image selected, run callback.
 				mediaFrame.on('select', function() {
 					const attachment = mediaFrame.state().get('selection').first().toJSON();
 					$('#' + targetField).val(attachment.id);
@@ -227,11 +227,11 @@ class Custom_Post_Types {
 					button.next('.persona-remove-image').show();
 				});
 
-				// Open media frame
+				// Open media frame.
 				mediaFrame.open();
 			});
 
-			// Image removal functionality
+			// Image removal functionality.
 			$('.persona-remove-image').click(function(e) {
 				e.preventDefault();
 
@@ -255,66 +255,66 @@ class Custom_Post_Types {
 	 * @return   void
 	 */
 	public function save_persona_meta( int $post_id ): void {
-		// Check if our nonce is set
+		// Check if our nonce is set.
 		if ( ! isset( $_POST['persona_gender_images_nonce'] ) ) {
 			return;
 		}
 
-		// Verify the nonce
-		if ( ! wp_verify_nonce( $_POST['persona_gender_images_nonce'], 'persona_gender_images_nonce' ) ) {
+		// Verify the nonce.
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['persona_gender_images_nonce'] ) ), 'persona_gender_images_nonce' ) ) {
 			return;
 		}
 
-		// If this is an autosave, don't do anything
+		// If this is an autosave, don't do anything.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
 
-		// Check the user's permissions
+		// Check the user's permissions.
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return;
 		}
 
-		// Get the persona title for tagging
+		// Get the persona title for tagging.
 		$persona_title = get_the_title( $post_id );
 		$words         = explode( ' ', $persona_title );
 		$persona_slug  = '';
 
-		// Use first two words for the tag
+		// Use first two words for the tag.
 		if ( count( $words ) >= 2 ) {
 			$persona_slug = sanitize_title( $words[0] . ' ' . $words[1] );
 		} else {
 			$persona_slug = sanitize_title( $persona_title );
 		}
 
-		// Save male image
+		// Save male image.
 		if ( isset( $_POST['persona_image_male'] ) ) {
-			$male_image_id = sanitize_text_field( $_POST['persona_image_male'] );
+			$male_image_id = sanitize_text_field( wp_unslash( $_POST['persona_image_male'] ) );
 			update_post_meta( $post_id, 'persona_image_male', $male_image_id );
 
-			// Add tags to the image
+			// Add tags to the image.
 			if ( $male_image_id ) {
 				$this->add_tags_to_attachment( $male_image_id, array( 'male', $persona_slug ) );
 			}
 		}
 
-		// Save female image
+		// Save female image.
 		if ( isset( $_POST['persona_image_female'] ) ) {
-			$female_image_id = sanitize_text_field( $_POST['persona_image_female'] );
+			$female_image_id = sanitize_text_field( wp_unslash( $_POST['persona_image_female'] ) );
 			update_post_meta( $post_id, 'persona_image_female', $female_image_id );
 
-			// Add tags to the image
+			// Add tags to the image.
 			if ( $female_image_id ) {
 				$this->add_tags_to_attachment( $female_image_id, array( 'female', $persona_slug ) );
 			}
 		}
 
-		// Save indeterminate image
+		// Save indeterminate image.
 		if ( isset( $_POST['persona_image_indeterminate'] ) ) {
-			$indeterminate_image_id = sanitize_text_field( $_POST['persona_image_indeterminate'] );
+			$indeterminate_image_id = sanitize_text_field( wp_unslash( $_POST['persona_image_indeterminate'] ) );
 			update_post_meta( $post_id, 'persona_image_indeterminate', $indeterminate_image_id );
 
-			// Add tags to the image
+			// Add tags to the image.
 			if ( $indeterminate_image_id ) {
 				$this->add_tags_to_attachment( $indeterminate_image_id, array( 'indeterminate', $persona_slug ) );
 			}
@@ -330,13 +330,13 @@ class Custom_Post_Types {
 	 * @return   void
 	 */
 	private function add_tags_to_attachment( int $attachment_id, array $tags ): void {
-		// Get existing terms
+		// Get existing terms.
 		$existing_terms = wp_get_object_terms( $attachment_id, 'media_tag', array( 'fields' => 'names' ) );
 
-		// Merge with new tags and ensure uniqueness
+		// Merge with new tags and ensure uniqueness.
 		$all_tags = array_unique( array_merge( $existing_terms, $tags ) );
 
-		// Set the terms
+		// Set the terms.
 		wp_set_object_terms( $attachment_id, $all_tags, 'media_tag' );
 	}
 }

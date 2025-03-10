@@ -109,7 +109,7 @@ add_filter(
 	'plugin_action_links_' . plugin_basename( CME_PLUGIN_FILE ),
 	function ( $links ) {
 		// Add custom action links
-		$custom_links = array(
+		$custom_links = [
 			'<a href="' . admin_url( 'edit.php?post_type=persona' ) . '">' . __( 'Personas', 'cme-cpt-and-taxonomy' ) . '</a>',
 			'<a href="' . admin_url( 'edit-tags.php?taxonomy=media_tag&post_type=attachment' ) . '">' . __( 'Media Tags', 'cme-cpt-and-taxonomy' ) . '</a>',
 		);
