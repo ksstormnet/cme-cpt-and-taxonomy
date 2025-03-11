@@ -134,54 +134,6 @@ class Plugin {
 		// Add welcome notice
 		add_action( 'admin_notices', array( $this, 'display_welcome_notice' ) );
 	}
-
-	/**
-	 * AJAX handler for getting attachment terms.
-	 *
-	 * @since    1.0.0
-	 * @return   void
-	 */
-	public function get_attachment_terms(): void {
-		// Check nonce for security
-		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['nonce'] ) ), 'media-tags-nonce' ) ) {
-			wp_send_json_error( 'Invalid nonce' );
-		}
-
-		// Check permissions
-		if ( ! current_user_can( 'upload_files' ) ) {
-			wp_send_json_error( 'Permission denied' );
-		}
-
-		// Get attachment ID
-		$attachment_id = isset( $_GET['attachment_id'] ) ? intval( $_GET['attachment_id'] ) : 0;
-		if ( ! $attachment_id ) {
-			wp_send_json_error( 'Invalid attachment ID' );
-		}
-
-		// Get taxonomy
-		$taxonomy = isset( $_GET['taxonomy'] ) ? sanitize_key( $_GET['taxonomy'] ) : 'media_tag';
-
-		// Get terms
-		$terms = get_the_terms( $attachment_id, $taxonomy );
-
-		$formatted_terms = array();
-		if ( $terms && ! is_wp_error( $terms ) ) {
-			foreach ( $terms as $term ) {
-				$formatted_terms[] = array(
-					'term_id' => $term->term_id,
-					'name'    => $term->name,
-					'slug'    => $term->slug,
-				);
-			}
-		}
-
-		wp_send_json_success(
-			array(
-				'terms' => $formatted_terms,
-			)
-		);
-	}
-
 	/**
 	 * Display welcome notice for first-time users.
 	 *

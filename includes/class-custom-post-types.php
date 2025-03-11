@@ -151,7 +151,7 @@ class Custom_Post_Types {
 			}
 		</style>
 
-		<p><?php esc_html_e( 'Select gender-specific images for this persona. Images will be automatically tagged with the gender and persona name.', 'cme-cpt-and-taxonomy' ); ?></p>
+		<p><?php esc_html_e( 'Select gender-specific images for this persona.', 'cme-cpt-and-taxonomy' ); ?></p>
 
 		<div class="persona-gender-image">
 			<label><strong><?php esc_html_e( 'Male Image', 'cme-cpt-and-taxonomy' ); ?></strong></label><br>
@@ -291,52 +291,21 @@ class Custom_Post_Types {
 		if ( isset( $_POST['persona_image_male'] ) ) {
 			$male_image_id = sanitize_text_field( wp_unslash( $_POST['persona_image_male'] ) );
 			update_post_meta( $post_id, 'persona_image_male', $male_image_id );
-
-			// Add tags to the image.
-			if ( $male_image_id ) {
-				$this->add_tags_to_attachment( $male_image_id, array( 'male', $persona_slug ) );
-			}
+			// Media taxonomy functionality has been removed
 		}
 
 		// Save female image.
 		if ( isset( $_POST['persona_image_female'] ) ) {
 			$female_image_id = sanitize_text_field( wp_unslash( $_POST['persona_image_female'] ) );
 			update_post_meta( $post_id, 'persona_image_female', $female_image_id );
-
-			// Add tags to the image.
-			if ( $female_image_id ) {
-				$this->add_tags_to_attachment( $female_image_id, array( 'female', $persona_slug ) );
-			}
+			// Media taxonomy functionality has been removed
 		}
 
 		// Save indeterminate image.
 		if ( isset( $_POST['persona_image_indeterminate'] ) ) {
 			$indeterminate_image_id = sanitize_text_field( wp_unslash( $_POST['persona_image_indeterminate'] ) );
 			update_post_meta( $post_id, 'persona_image_indeterminate', $indeterminate_image_id );
-
-			// Add tags to the image.
-			if ( $indeterminate_image_id ) {
-				$this->add_tags_to_attachment( $indeterminate_image_id, array( 'indeterminate', $persona_slug ) );
-			}
+			// Media taxonomy functionality has been removed
 		}
-	}
-
-	/**
-	 * Add tags to an attachment.
-	 *
-	 * @since    1.0.0
-	 * @param    int   $attachment_id  The attachment ID.
-	 * @param    array $tags           Tags to add.
-	 * @return   void
-	 */
-	private function add_tags_to_attachment( int $attachment_id, array $tags ): void {
-		// Get existing terms.
-		$existing_terms = wp_get_object_terms( $attachment_id, 'media_tag', array( 'fields' => 'names' ) );
-
-		// Merge with new tags and ensure uniqueness.
-		$all_tags = array_unique( array_merge( $existing_terms, $tags ) );
-
-		// Set the terms.
-		wp_set_object_terms( $attachment_id, $all_tags, 'media_tag' );
 	}
 }
