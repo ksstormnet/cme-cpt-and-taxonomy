@@ -27,16 +27,16 @@ class Admin {
 	 */
 	public function register(): void {
 		// Enqueue scripts and styles for admin.
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ) ];
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
 		// Add AJAX handlers for tag management.
-		add_action( 'wp_ajax_update_media_tags', [ $this, 'ajax_update_media_tags' ) ];
+		add_action( 'wp_ajax_update_media_tags', [ $this, 'ajax_update_media_tags' ] );
 
 		// Add filter to Media Library
-		add_action( 'restrict_manage_posts', [ $this, 'add_media_tags_filter' ) ];
+		add_action( 'restrict_manage_posts', [ $this, 'add_media_tags_filter' ] );
 
 		// Filter attachments by custom taxonomy
-		add_filter( 'parse_query', [ $this, 'filter_attachments_by_taxonomy' ) ];
+		add_filter( 'parse_query', [ $this, 'filter_attachments_by_taxonomy' ] );
 	}
 
 	/**
@@ -73,7 +73,7 @@ class Admin {
 			[
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'media-tags-nonce' ),
-			)
+			]
 		);
 	}
 
@@ -113,7 +113,7 @@ class Admin {
 			[
 				'message' => 'Tags updated successfully',
 				'tags'    => get_the_terms( $attachment_id, 'media_tag' ),
-			)
+			]
 		);
 	}
 
@@ -146,7 +146,7 @@ class Admin {
 				'hierarchical'    => false,
 				'show_count'      => true,
 				'hide_empty'      => true,
-			)
+			]
 		);
 	}
 
@@ -180,8 +180,8 @@ class Admin {
 							'taxonomy' => $taxonomy,
 							'field'    => 'id',
 							'terms'    => [ $term_id ],
-						),
-					)
+						],
+					]
 				);
 			}
 		}

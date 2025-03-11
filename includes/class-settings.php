@@ -40,11 +40,11 @@ class Settings {
 	 * @return   void
 	 */
 	public function register(): void {
-		// Add settings page
-		add_action( 'admin_menu', [ $this, 'add_settings_page' ) ];
+		// Add settings page.
+		add_action( 'admin_menu', [ $this, 'add_settings_page' ] );
 
-		// Register settings
-		add_action( 'admin_init', [ $this, 'register_settings' ) ];
+		// Register settings.
+		add_action( 'admin_init', [ $this, 'register_settings' ] );
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Settings {
 	 * @return   void
 	 */
 	public function register_settings(): void {
-		// Register setting
+		// Register setting.
 		register_setting(
 			'cme_persona_settings',
 			$this->option_name,
@@ -80,11 +80,11 @@ class Settings {
 				'default'           => [
 					'default_limit' => 3,
 					'default_speed' => 5000,
-				),
-			)
+				],
+			]
 		);
 
-		// Add settings section
+		// Add settings section.
 		add_settings_section(
 			'cme_persona_rotator_section',
 			__( 'Persona Rotator Settings', 'cme-cpt-and-taxonomy' ),
@@ -92,7 +92,7 @@ class Settings {
 			'cme-persona-settings'
 		);
 
-		// Add settings fields
+		// Add settings fields.
 		add_settings_field(
 			'default_limit',
 			__( 'Default Number of Personas', 'cme-cpt-and-taxonomy' ),
@@ -122,20 +122,20 @@ class Settings {
 	public function sanitize_settings( $input ): array {
 		$sanitized = [];
 
-		// Sanitize limit
+		// Sanitize limit.
 		$sanitized['default_limit'] = isset( $input['default_limit'] ) ?
 			absint( $input['default_limit'] ) : 3;
 
-		// Ensure limit is at least 1
+		// Ensure limit is at least 1.
 		if ( $sanitized['default_limit'] < 1 ) {
 			$sanitized['default_limit'] = 1;
 		}
 
-		// Sanitize speed
+		// Sanitize speed.
 		$sanitized['default_speed'] = isset( $input['default_speed'] ) ?
 			absint( $input['default_speed'] ) : 5000;
 
-		// Ensure speed is at least 1000ms (1 second)
+		// Ensure speed is at least 1000ms (1 second).
 		if ( $sanitized['default_speed'] < 1000 ) {
 			$sanitized['default_speed'] = 1000;
 		}
@@ -296,7 +296,7 @@ class Settings {
 		$defaults = [
 			'default_limit' => 3,
 			'default_speed' => 5000,
-		);
+		];
 
 		$options = get_option( $this->option_name, $defaults );
 

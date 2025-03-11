@@ -1,0 +1,45 @@
+{
+  "name": "cme-cpt-and-taxonomy",
+  "version": "1.0.0",
+  "description": "A WordPress plugin that adds the Customer Persona custom post type and media library tagging functionality.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky",
+    "lint": "eslint . && stylelint '**/*.css'",
+    "format": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ksstormnet/cme-cpt-and-taxonomy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ksstormnet/cme-cpt-and-taxonomy/issues"
+  },
+  "homepage": "https://github.com/ksstormnet/cme-cpt-and-taxonomy#readme",
+  "devDependencies": {
+    "@wordpress/eslint-plugin": "^22.5.0",
+    "eslint": "^8.57.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.5.3",
+    "stylelint": "^16.15.0",
+    "stylelint-config-standard": "^37.0.0"
+  },
+  "lint-staged": {
+    "\"*": {
+      "js\"": "eslint --fix",
+      "jsx\"": "eslint --fix",
+      "ts\"": "eslint --fix",
+      "tsx\"": "eslint --fix",
+      "css\"": "stylelint --fix",
+      "scss\"": "stylelint --fix",
+      "json\"": "prettier --write",
+      "md\"": "prettier --write"
+    }
+  }
+}

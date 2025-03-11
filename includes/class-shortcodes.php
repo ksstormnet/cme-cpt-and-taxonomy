@@ -25,7 +25,7 @@ class Shortcodes {
 	 * @return   void
 	 */
 	public function register(): void {
-		add_shortcode( 'cme-persona-rotator', array( $this, 'persona_rotator_shortcode' ) );
+		add_shortcode( 'cme-persona-rotator', [ $this, 'persona_rotator_shortcode' ] );
 	}
 
 	/**
@@ -41,7 +41,7 @@ class Shortcodes {
 			[
 				'limit' => 3,    // Number of personas to show
 			'speed' => 5000, // Rotation speed in milliseconds
-		),
+		],
 			$atts
 		);
 
@@ -51,7 +51,7 @@ class Shortcodes {
 				'post_type'      => 'persona',
 			'posts_per_page' => intval( $atts['limit'] ),
 			'orderby'        => 'rand',
-		)
+		]
 		);
 
 		if ( empty( $personas ) ) {

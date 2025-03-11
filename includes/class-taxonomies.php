@@ -40,7 +40,7 @@ class Taxonomies {
 	 */
 	public function register(): void {
 		// Hook into the init action to register taxonomies.
-		add_action( 'init', [ $this, 'register_taxonomies' ) ];
+		add_action( 'init', [ $this, 'register_taxonomies' ] );
 	}
 
 	/**
@@ -56,24 +56,71 @@ class Taxonomies {
 			[ 'attachment', 'persona' ],
 			[
 				'labels'             => [
-					'name'                       => _x( 'Media Tags', 'taxonomy general name', 'cme-cpt-and-taxonomy' ),
-					'singular_name'              => _x( 'Media Tag', 'taxonomy singular name', 'cme-cpt-and-taxonomy' ),
-					'search_items'               => __( 'Search Media Tags', 'cme-cpt-and-taxonomy' ),
-					'popular_items'              => __( 'Popular Media Tags', 'cme-cpt-and-taxonomy' ),
-					'all_items'                  => __( 'All Media Tags', 'cme-cpt-and-taxonomy' ),
+					'name'                       => _x(
+						'Media Tags',
+						'taxonomy general name',
+						'cme-cpt-and-taxonomy'
+					),
+					'singular_name'              => _x(
+						'Media Tag',
+						'taxonomy singular name',
+						'cme-cpt-and-taxonomy'
+					),
+					'search_items'               => __(
+						'Search Media Tags',
+						'cme-cpt-and-taxonomy'
+					),
+					'popular_items'              => __(
+						'Popular Media Tags',
+						'cme-cpt-and-taxonomy'
+					),
+					'all_items'                  => __(
+						'All Media Tags',
+						'cme-cpt-and-taxonomy'
+					),
 					'parent_item'                => null,
 					'parent_item_colon'          => null,
-					'edit_item'                  => __( 'Edit Media Tag', 'cme-cpt-and-taxonomy' ),
-					'update_item'                => __( 'Update Media Tag', 'cme-cpt-and-taxonomy' ),
-					'add_new_item'               => __( 'Add New Media Tag', 'cme-cpt-and-taxonomy' ),
-					'new_item_name'              => __( 'New Media Tag Name', 'cme-cpt-and-taxonomy' ),
-					'separate_items_with_commas' => __( 'Separate media tags with commas', 'cme-cpt-and-taxonomy' ),
-					'add_or_remove_items'        => __( 'Add or remove media tags', 'cme-cpt-and-taxonomy' ),
-					'choose_from_most_used'      => __( 'Choose from the most used media tags', 'cme-cpt-and-taxonomy' ),
-					'not_found'                  => __( 'No media tags found.', 'cme-cpt-and-taxonomy' ),
-					'menu_name'                  => __( 'Media Tags', 'cme-cpt-and-taxonomy' ),
-					'back_to_items'              => __( '← Back to Media Tags', 'cme-cpt-and-taxonomy' ),
-				),
+					'edit_item'                  => __(
+						'Edit Media Tag',
+						'cme-cpt-and-taxonomy'
+					),
+					'update_item'                => __(
+						'Update Media Tag',
+						'cme-cpt-and-taxonomy'
+					),
+					'add_new_item'               => __(
+						'Add New Media Tag',
+						'cme-cpt-and-taxonomy'
+					),
+					'new_item_name'              => __(
+						'New Media Tag Name',
+						'cme-cpt-and-taxonomy'
+					),
+					'separate_items_with_commas' => __(
+						'Separate media tags with commas',
+						'cme-cpt-and-taxonomy'
+					),
+					'add_or_remove_items'        => __(
+						'Add or remove media tags',
+						'cme-cpt-and-taxonomy'
+					),
+					'choose_from_most_used'      => __(
+						'Choose from the most used media tags',
+						'cme-cpt-and-taxonomy'
+					),
+					'not_found'                  => __(
+						'No media tags found.',
+						'cme-cpt-and-taxonomy'
+					),
+					'menu_name'                  => __(
+						'Media Tags',
+						'cme-cpt-and-taxonomy'
+					),
+					'back_to_items'              => __(
+						'← Back to Media Tags',
+						'cme-cpt-and-taxonomy'
+					),
+				],
 				'hierarchical'       => false,
 				'show_ui'            => true,
 				'show_in_rest'       => true,
@@ -84,12 +131,12 @@ class Taxonomies {
 				'show_in_nav_menus'  => true,
 				'show_tagcloud'      => true,
 				'show_in_quick_edit' => true,
-			)
+			]
 		);
 
-		// Make taxonomy work with attachments
-		add_filter( 'attachment_fields_to_edit', [ $this, 'add_taxonomy_field' ), 10, 2 ];
-		add_filter( 'attachment_fields_to_save', [ $this, 'save_taxonomy_field' ), 10, 2 ];
+		// Make taxonomy work with attachments.
+		add_filter( 'attachment_fields_to_edit', [ $this, 'add_taxonomy_field' ], 10, 2 );
+		add_filter( 'attachment_fields_to_save', [ $this, 'save_taxonomy_field' ], 10, 2 );
 	}
 
 	/**
@@ -120,8 +167,9 @@ class Taxonomies {
 			'label' => $taxonomy->labels->name,
 			'input' => 'text',
 			'value' => join( ', ', $values ),
+			/* translators: %s: the lowercase taxonomy name (e.g. "media tags") */
 			'helps' => sprintf( __( 'Separate %s with commas.', 'cme-cpt-and-taxonomy' ), strtolower( $taxonomy->labels->name ) ),
-		);
+		];
 
 		return $form_fields;
 	}
@@ -144,7 +192,7 @@ class Taxonomies {
 
 			$terms = array_map( 'trim', explode( ',', $attachment[ $this->media_taxonomy ] ) );
 
-			// Set the terms for the attachment
+			// Set the terms for the attachment.
 			wp_set_object_terms( $post['ID'], $terms, $this->media_taxonomy, false );
 		}
 
