@@ -2,6 +2,9 @@
 /vendor/
 composer.lock
 
+# Node.js
+node_modules/
+
 # WordPress
 wp-config.php
 wp-content/uploads/
@@ -22,3 +25,10 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Shared workflow files (symlinks)
+/gh-workflow-commands.txt
+/git-commands-updated.txt
+/git-commands.txt
+/prepare-pr.sh
+/PULL_REQUEST_TEMPLATE.md

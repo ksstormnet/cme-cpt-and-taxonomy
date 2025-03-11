@@ -27,16 +27,16 @@ class Admin {
 	 */
 	public function register(): void {
 		// Enqueue scripts and styles for admin.
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
 		// Add AJAX handlers for tag management.
-		add_action( 'wp_ajax_update_media_tags', array( $this, 'ajax_update_media_tags' ) );
+		add_action( 'wp_ajax_update_media_tags', [ $this, 'ajax_update_media_tags' ] );
 
 		// Add filter to Media Library
-		add_action( 'restrict_manage_posts', array( $this, 'add_media_tags_filter' ) );
+		add_action( 'restrict_manage_posts', [ $this, 'add_media_tags_filter' ] );
 
 		// Filter attachments by custom taxonomy
-		add_filter( 'parse_query', array( $this, 'filter_attachments_by_taxonomy' ) );
+		add_filter( 'parse_query', [ $this, 'filter_attachments_by_taxonomy' ] );
 	}
 
 	/**
@@ -55,14 +55,14 @@ class Admin {
 		wp_enqueue_style(
 			'cme-media-tags-admin',
 			CME_PLUGIN_URL . 'assets/css/admin.css',
-			array(),
+			[],
 			CME_VERSION
 		);
 
 		wp_enqueue_script(
 			'cme-media-tags-admin',
 			CME_PLUGIN_URL . 'assets/js/admin.js',
-			array( 'jquery', 'wp-util' ),
+			[ 'jquery', 'wp-util' ],
 			CME_VERSION,
 			true
 		);
@@ -70,10 +70,10 @@ class Admin {
 		wp_localize_script(
 			'cme-media-tags-admin',
 			'cmeMediaTags',
-			array(
+			[
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'media-tags-nonce' ),
-			)
+			]
 		);
 	}
 
@@ -110,10 +110,10 @@ class Admin {
 
 		// Return success.
 		wp_send_json_success(
-			array(
+			[
 				'message' => 'Tags updated successfully',
 				'tags'    => get_the_terms( $attachment_id, 'media_tag' ),
-			)
+			]
 		);
 	}
 
@@ -137,7 +137,7 @@ class Admin {
 
 		$selected = isset( $_GET[ $taxonomy ] ) ? sanitize_text_field( wp_unslash( $_GET[ $taxonomy ] ) ) : '';
 		wp_dropdown_categories(
-			array(
+			[
 				'show_option_all' => sprintf( __( 'All %s', 'cme-cpt-and-taxonomy' ), $tax->labels->name ),
 				'taxonomy'        => $taxonomy,
 				'name'            => $taxonomy,
@@ -146,7 +146,7 @@ class Admin {
 				'hierarchical'    => false,
 				'show_count'      => true,
 				'hide_empty'      => true,
-			)
+			]
 		);
 	}
 
@@ -175,13 +175,13 @@ class Admin {
 			if ( $term && ! is_wp_error( $term ) ) {
 				$query->set(
 					'tax_query',
-					array(
-						array(
+					[
+						[
 							'taxonomy' => $taxonomy,
 							'field'    => 'id',
-							'terms'    => array( $term_id ),
-						),
-					)
+							'terms'    => [ $term_id ],
+						],
+					]
 				);
 			}
 		}

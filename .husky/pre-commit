@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run PHP CodeSniffer on PHP files
+echo "Running PHP CodeSniffer..."
+FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep "\.php$")
+if [ -n "$FILES" ]; then
+  vendor/bin/phpcs $FILES
+  if [ $? -ne 0 ]; then
+    echo "PHP CodeSniffer found issues. Fix them before committing."
+    exit 1
+  fi
+fi
+
+# Run ESLint, Stylelint, and Prettier using lint-staged
+echo "Running linters and formatters..."
+npx lint-staged
+
+# Exit with a non-zero status if any of the commands above fails
+if [ $? -ne 0 ]; then
+  echo "Linting failed. Fix the issues before committing."
+  exit 1
+fi
+
+echo "All checks passed!"

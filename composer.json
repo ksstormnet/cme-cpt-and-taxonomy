@@ -1,28 +1,47 @@
 {
-    "name": "your-vendor/cme-cpt-and-taxonomy",
-    "description": "Cruise Made Easy Post Types and Media Tags",
+    "name": "cme/custom-code-plugin",
+    "description": "Custom functionality plugin for Cruise Made Easy",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "require": {
-        "php": ">=8.2",
-        "composer/installers": "^2.0"
+        "php": ">=8.2"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.7",
-        "wp-coding-standards/wpcs": "^2.3",
+        "phpunit/phpunit": "^10.0",
+        "squizlabs/php_codesniffer": "^3.11",
+        "wp-coding-standards/wpcs": "^3.1",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "phpcompatibility/phpcompatibility-wp": "^2.1",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
-        "phpstan/phpstan": "^1.10"
+        "yoast/phpunit-polyfills": "^2.0"
     },
-    "config": {
-        "allow-plugins": {
-            "composer/installers": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
+    "autoload": {
+        "psr-4": {
+            "CME\\CustomCode\\": "includes/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CME\\CustomCode\\Tests\\": "tests/"
         }
     },
     "scripts": {
-        "phpcs": "phpcs --standard=WordPress",
-        "phpcbf": "phpcbf --standard=WordPress",
-        "phpstan": "phpstan analyse"
-    }
+        "phpcs": "phpcs --standard=phpcs.xml.dist",
+        "phpcbf": "phpcbf --standard=phpcs.xml.dist",
+        "test": "phpunit",
+        "test:coverage": "phpunit --coverage-html coverage",
+        "lint": [
+            "@phpcs"
+        ],
+        "fix": [
+            "@phpcbf"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "composer/installers": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

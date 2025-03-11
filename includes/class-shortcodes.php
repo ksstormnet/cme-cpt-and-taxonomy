@@ -25,7 +25,7 @@ class Shortcodes {
 	 * @return   void
 	 */
 	public function register(): void {
-		add_shortcode( 'cme-persona-rotator', array( $this, 'persona_rotator_shortcode' ) );
+		add_shortcode( 'cme-persona-rotator', [ $this, 'persona_rotator_shortcode' ] );
 	}
 
 	/**
@@ -38,20 +38,20 @@ class Shortcodes {
 	public function persona_rotator_shortcode( $atts ): string {
 		// Parse attributes
 		$atts = shortcode_atts(
-			array(
+			[
 				'limit' => 3,    // Number of personas to show
-				'speed' => 5000, // Rotation speed in milliseconds
-			),
+			'speed' => 5000, // Rotation speed in milliseconds
+		],
 			$atts
 		);
 
 		// Get all personas
 		$personas = get_posts(
-			array(
+			[
 				'post_type'      => 'persona',
-				'posts_per_page' => intval( $atts['limit'] ),
-				'orderby'        => 'rand',
-			)
+			'posts_per_page' => intval( $atts['limit'] ),
+			'orderby'        => 'rand',
+		]
 		);
 
 		if ( empty( $personas ) ) {

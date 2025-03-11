@@ -21,11 +21,11 @@ delete_transient( 'cme_cpt_taxonomy_flush_rewrite' );
 // If you want to clean all data on uninstall, uncomment these lines:
 /*
 // Get post types.
-$post_types = array('persona');
+$post_types = ['persona'];
 
 // Delete all posts for the custom post types.
 foreach ($post_types as $post_type) {
-	$posts = get_posts(array(
+	$posts = get_posts([
 		'post_type'      => $post_type,
 		'posts_per_page' => -1,
 		'post_status'    => 'any',
@@ -37,7 +37,7 @@ foreach ($post_types as $post_type) {
 }
 
 // Delete the taxonomy.
-$terms = get_terms(array(
+$terms = get_terms([
 	'taxonomy'   => 'media_tag',
 	'hide_empty' => false,
 ));
