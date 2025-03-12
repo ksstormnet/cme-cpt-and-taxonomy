@@ -212,9 +212,9 @@ class Custom_Post_Types {
 
 				// Create media frame.
 				const mediaFrame = wp.media({
-					title: '<?php esc_html_e( 'Select or Upload Image', 'cme-cpt-and-taxonomy' ); ?>',
+					title: '<?php esc_html_e( 'Select or Upload Image', 'cme-personas' ); ?>',
 					button: {
-						text: '<?php esc_html_e( 'Use this image', 'cme-cpt-and-taxonomy' ); ?>'
+						text: '<?php esc_html_e( 'Use this image', 'cme-personas' ); ?>'
 					},
 					multiple: false
 				});
