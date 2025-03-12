@@ -1,6 +1,6 @@
 <?php
 /**
- * CME Personas.
+ * Cruise Made Easy - Personas
  *
  * @package     CME_Personas
  * @author      Your Name
