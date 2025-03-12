@@ -1,54 +1,54 @@
-=== Cruise Made Easy Post Types and Media Tags ===
-Contributors: yourwordpressusername
-Tags: custom post types, media tags, cruise, media library
+=== Cruise Made Easy - Personas ===
+Contributors: ksstorm
+Tags: customer personas, content personalization, cruise, user experience
 Requires at least: 6.7.2
 Tested up to: 6.7.2
 Stable tag: 1.1.0
 Requires PHP: 8.3
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+License: Proprietary
+License URI: All rights reserved
 
-This plugin adds the Customer Persona custom post type and media library tagging functionality.
+Manages customer personas for personalized content delivery in cruise websites, enabling targeted experiences based on visitor preferences and travel styles.
 
 == Description ==
 
-Cruise Made Easy Post Types and Media Tags adds a Customer Persona custom post type for organizing customer personas and enhances the WordPress Media Library with a powerful tagging system.
+Cruise Made Easy Personas is central to the website's personalized user experience. It provides essential functionality for maintaining customer personas/niches that power the content personalization system. The plugin enables different content presentation based on visitor-selected personas, creating a customized experience for each user based on their preferences and travel style.
 
 Features:
 * Creates a Customer Persona custom post type
-* Adds Media Tags taxonomy to WordPress Media Library
-* Provides an enhanced interface for tagging media directly in the Media Library grid view
-* Allows filtering media by tags
+* Powers the content personalization system
+* Enables targeted content delivery based on visitor preferences
+* Creates a personalized user journey through the website
 
 == Installation ==
 
-1. Upload the `cme-cpt-and-taxonomy` folder to the `/wp-content/plugins/` directory
+1. Upload the `cme-personas` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Start using the Customer Persona post type and Media Tags
+3. Start using the Customer Persona post type to manage your customer personas
 
 == Frequently Asked Questions ==
 
-= How do I add tags to media? =
+= How do personas improve the user experience? =
 
-In the Media Library, hover over an item to see the tagging interface. You can add or remove tags directly from the edit form that appears.
+Personas allow visitors to identify their travel preferences and style, which the website uses to display personalized content tailored to their interests.
 
-= Can I filter media by tags? =
+= How does content personalization work? =
 
-Yes, use the dropdown filter above the Media Library to filter by specific tags.
+When a visitor selects a persona, the website dynamically adjusts content presentation to match their preferences, creating a more relevant browsing experience.
 
 = Does this plugin work with Gutenberg? =
 
 Yes, the Customer Persona post type is fully compatible with the WordPress block editor (Gutenberg).
 
-= Will this plugin affect my existing media? =
+= How does this plugin integrate with other Cruise Made Easy plugins? =
 
-No, this plugin only adds functionality and doesn't alter your existing media files or structure. It simply gives you more ways to organize them.
+This plugin forms the foundation of the personalization system and works with other CME plugins to deliver a cohesive, personalized user experience throughout the site.
 
 == Screenshots ==
 
-1. Media tagging interface in the grid view
-2. Media tags filter dropdown
-3. Customer Persona editing screen
+1. Customer Persona editing screen
+2. Persona selection interface for visitors
+3. Personalized content example
 
 == Changelog ==
 
@@ -64,5 +64,5 @@ No, this plugin only adds functionality and doesn't alter your existing media fi
 
 == Upgrade Notice ==
 
-= 1.0.0 =
-Initial version
+= 1.1.0 =
+Updates minimum PHP and WordPress requirements. Improves plugin description and documentation.
