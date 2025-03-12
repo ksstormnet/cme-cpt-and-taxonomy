@@ -2,7 +2,7 @@
 /**
  * Uninstall procedures.
  *
- * @package CME_CPT_Taxonomy
+ * @package CME_Personas
  */
 
 // If uninstall.php is not called by WordPress, exit.
@@ -11,11 +11,11 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 // Delete options created by the plugin.
-delete_option( 'cme_cpt_taxonomy_version' );
-delete_option( 'cme_cpt_taxonomy_welcome_shown' );
+delete_option( 'cme_personas_version' );
+delete_option( 'cme_personas_welcome_shown' );
 
 // Clean up any transients we've created.
-delete_transient( 'cme_cpt_taxonomy_flush_rewrite' );
+delete_transient( 'cme_personas_flush_rewrite' );
 
 // Note: We're not deleting posts or terms as that could result in data loss.
 // If you want to clean all data on uninstall, uncomment these lines:
