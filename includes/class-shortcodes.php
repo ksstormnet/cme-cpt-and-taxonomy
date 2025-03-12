@@ -3,10 +3,10 @@
  * Shortcodes functionality.
  *
  * @since      1.0.0
- * @package    CME_CPT_Taxonomy
+ * @package    CME_Personas
  */
 
-namespace CME_CPT_Taxonomy;
+namespace CME_Personas;
 
 /**
  * Shortcodes class.
@@ -14,7 +14,7 @@ namespace CME_CPT_Taxonomy;
  * This class handles all shortcode functionality.
  *
  * @since      1.0.3
- * @package    CME_CPT_Taxonomy
+ * @package    CME_Personas
  */
 class Shortcodes {
 
@@ -55,7 +55,7 @@ class Shortcodes {
 		);
 
 		if ( empty( $personas ) ) {
-			return '<p>' . __( 'No personas found.', 'cme-cpt-and-taxonomy' ) . '</p>';
+			return '<p>' . __( 'No personas found.', 'cme-personas' ) . '</p>';
 		}
 
 		// Start output buffer

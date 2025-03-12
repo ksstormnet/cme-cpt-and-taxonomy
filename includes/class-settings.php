@@ -3,10 +3,10 @@
  * Plugin settings page.
  *
  * @since      1.0.0
- * @package    CME_CPT_Taxonomy
+ * @package    CME_Personas
  */
 
-namespace CME_CPT_Taxonomy;
+namespace CME_Personas;
 
 /**
  * Settings class.
@@ -14,7 +14,7 @@ namespace CME_CPT_Taxonomy;
  * This class handles the plugin settings page.
  *
  * @since      1.0.0
- * @package    CME_CPT_Taxonomy
+ * @package    CME_Personas
  */
 class Settings {
 
@@ -56,8 +56,8 @@ class Settings {
 	public function add_settings_page(): void {
 		add_submenu_page(
 			'options-general.php',
-			__( 'Customer Personas Rotator', 'cme-cpt-and-taxonomy' ),
-			__( 'Personas', 'cme-cpt-and-taxonomy' ),
+			__( 'Customer Personas Rotator', 'cme-personas' ),
+			__( 'Personas', 'cme-personas' ),
 			'manage_options',
 			'cme-persona-settings',
 			[ $this, 'render_settings_page' ]
@@ -87,7 +87,7 @@ class Settings {
 		// Add settings section.
 		add_settings_section(
 			'cme_persona_rotator_section',
-			__( 'Persona Rotator Settings', 'cme-cpt-and-taxonomy' ),
+			__( 'Persona Rotator Settings', 'cme-personas' ),
 			[ $this, 'render_section_description' ],
 			'cme-persona-settings'
 		);
@@ -95,7 +95,7 @@ class Settings {
 		// Add settings fields.
 		add_settings_field(
 			'default_limit',
-			__( 'Default Number of Personas', 'cme-cpt-and-taxonomy' ),
+			__( 'Default Number of Personas', 'cme-personas' ),
 			[ $this, 'render_limit_field' ],
 			'cme-persona-settings',
 			'cme_persona_rotator_section',
@@ -104,7 +104,7 @@ class Settings {
 
 		add_settings_field(
 			'default_speed',
-			__( 'Default Rotation Speed (ms)', 'cme-cpt-and-taxonomy' ),
+			__( 'Default Rotation Speed (ms)', 'cme-personas' ),
 			[ $this, 'render_speed_field' ],
 			'cme-persona-settings',
 			'cme_persona_rotator_section',
@@ -151,7 +151,7 @@ class Settings {
 	 */
 	public function render_section_description(): void {
 		?>
-		<p><?php esc_html_e( 'Configure default settings for the persona rotator shortcode.', 'cme-cpt-and-taxonomy' ); ?></p>
+		<p><?php esc_html_e( 'Configure default settings for the persona rotator shortcode.', 'cme-personas' ); ?></p>
 		<?php
 	}
 
@@ -173,7 +173,7 @@ class Settings {
 				step="1"
 				class="small-text">
 		<p class="description">
-			<?php esc_html_e( 'The default number of personas to display in the rotator.', 'cme-cpt-and-taxonomy' ); ?>
+			<?php esc_html_e( 'The default number of personas to display in the rotator.', 'cme-personas' ); ?>
 		</p>
 		<?php
 	}
@@ -196,7 +196,7 @@ class Settings {
 				step="100"
 				class="small-text">
 		<p class="description">
-			<?php esc_html_e( 'The default rotation speed in milliseconds (1000 = 1 second).', 'cme-cpt-and-taxonomy' ); ?>
+			<?php esc_html_e( 'The default rotation speed in milliseconds (1000 = 1 second).', 'cme-personas' ); ?>
 		</p>
 		<?php
 	}
@@ -226,32 +226,32 @@ class Settings {
 
 			<hr>
 
-			<h2><?php esc_html_e( 'Using the Customer Persona Rotator', 'cme-cpt-and-taxonomy' ); ?></h2>
+			<h2><?php esc_html_e( 'Using the Customer Persona Rotator', 'cme-personas' ); ?></h2>
 
 			<div class="cme-settings-documentation">
-				<h3><?php esc_html_e( 'Basic Usage', 'cme-cpt-and-taxonomy' ); ?></h3>
-				<p><?php esc_html_e( 'To display the persona rotator, add this shortcode to any page or post:', 'cme-cpt-and-taxonomy' ); ?></p>
+				<h3><?php esc_html_e( 'Basic Usage', 'cme-personas' ); ?></h3>
+				<p><?php esc_html_e( 'To display the persona rotator, add this shortcode to any page or post:', 'cme-personas' ); ?></p>
 				<pre><code>[cme-persona-rotator]</code></pre>
 
-				<h3><?php esc_html_e( 'Advanced Usage', 'cme-cpt-and-taxonomy' ); ?></h3>
-				<p><?php esc_html_e( 'You can customize the rotator with these parameters:', 'cme-cpt-and-taxonomy' ); ?></p>
+				<h3><?php esc_html_e( 'Advanced Usage', 'cme-personas' ); ?></h3>
+				<p><?php esc_html_e( 'You can customize the rotator with these parameters:', 'cme-personas' ); ?></p>
 				<ul>
-					<li><strong>limit</strong>: <?php esc_html_e( 'Number of personas to display (default: value set above)', 'cme-cpt-and-taxonomy' ); ?></li>
-					<li><strong>speed</strong>: <?php esc_html_e( 'Rotation speed in milliseconds (default: value set above)', 'cme-cpt-and-taxonomy' ); ?></li>
+					<li><strong>limit</strong>: <?php esc_html_e( 'Number of personas to display (default: value set above)', 'cme-personas' ); ?></li>
+					<li><strong>speed</strong>: <?php esc_html_e( 'Rotation speed in milliseconds (default: value set above)', 'cme-personas' ); ?></li>
 				</ul>
 
-				<p><?php esc_html_e( 'Example with parameters:', 'cme-cpt-and-taxonomy' ); ?></p>
+				<p><?php esc_html_e( 'Example with parameters:', 'cme-personas' ); ?></p>
 				<pre><code>[cme-persona-rotator limit="5" speed="3000"]</code></pre>
 
-				<h3><?php esc_html_e( 'How It Works', 'cme-cpt-and-taxonomy' ); ?></h3>
-				<p><?php esc_html_e( 'The rotator randomly selects personas from your collection and displays them in rotation. For each persona, it randomly selects one gender-specific image (male, female, or indeterminate).', 'cme-cpt-and-taxonomy' ); ?></p>
-				<p><?php esc_html_e( 'To add gender-specific images to a persona, edit the persona and scroll down to the "Gender-Specific Images" section.', 'cme-cpt-and-taxonomy' ); ?></p>
+				<h3><?php esc_html_e( 'How It Works', 'cme-personas' ); ?></h3>
+				<p><?php esc_html_e( 'The rotator randomly selects personas from your collection and displays them in rotation. For each persona, it randomly selects one gender-specific image (male, female, or indeterminate).', 'cme-personas' ); ?></p>
+				<p><?php esc_html_e( 'To add gender-specific images to a persona, edit the persona and scroll down to the "Gender-Specific Images" section.', 'cme-personas' ); ?></p>
 
-				<h3><?php esc_html_e( 'Best Practices', 'cme-cpt-and-taxonomy' ); ?></h3>
+				<h3><?php esc_html_e( 'Best Practices', 'cme-personas' ); ?></h3>
 				<ul>
-					<li><?php esc_html_e( 'Use images of the same dimensions for all personas to maintain consistent appearance.', 'cme-cpt-and-taxonomy' ); ?></li>
-					<li><?php esc_html_e( 'Keep persona excerpts concise for better readability in the rotator overlay.', 'cme-cpt-and-taxonomy' ); ?></li>
-					<li><?php esc_html_e( 'For optimal performance, don\'t set the limit too high if you have many personas.', 'cme-cpt-and-taxonomy' ); ?></li>
+					<li><?php esc_html_e( 'Use images of the same dimensions for all personas to maintain consistent appearance.', 'cme-personas' ); ?></li>
+					<li><?php esc_html_e( 'Keep persona excerpts concise for better readability in the rotator overlay.', 'cme-personas' ); ?></li>
+					<li><?php esc_html_e( 'For optimal performance, don\'t set the limit too high if you have many personas.', 'cme-personas' ); ?></li>
 				</ul>
 			</div>
 
