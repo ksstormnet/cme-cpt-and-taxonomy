@@ -3,20 +3,20 @@
  * Cruise Made Easy - Personas
  *
  * @package     CME_Personas
- * @author      Your Name
- * @copyright   2025 Your Name or Company
- * @license     GPL-2.0-or-later
+ * @author      Sky+Sea LLC d/b/a KSstorm Media
+ * @copyright   2025 Sky+Sea LLC d/b/a KSstorm Media
+ * @license     Proprietary
  *
  * @wordpress-plugin
  * Plugin Name: Cruise Made Easy - Personas
  * Plugin URI: https://example.com/plugin.
- * Description: Adds custom persona post type management for Cruise Made Easy.
+ * Description: Manages customer personas for personalized content delivery in cruise websites, enabling targeted experiences based on visitor preferences and travel styles.
  * Version: 1.1.0.
- * Author: Your Name.
- * Author URI: https://example.com.
+ * Author: Sky+Sea LLC d/b/a KSstorm Media.
+ * Author URI: https://ksstorm.com.
  * Text Domain: cme-personas.
- * License: GPL v2 or later.
- * License URI: http://www.gnu.org/licenses/gpl-2.0.txt.
+ * License: Proprietary.
+ * License URI: All rights reserved.
  * Requires at least: 6.7.2.
  * Requires PHP: 8.3.
  */
