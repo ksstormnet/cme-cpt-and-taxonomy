@@ -1,61 +1,40 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Plugin Coding Standards">
-    <description>WordPress Coding Standards for custom WordPress plugin</description>
+<ruleset name="WordPress Coding Standards">
+    <description>CME Personas Plugin Coding Standards</description>
 
-    <!-- Set the memory limit to 256M -->
-    <ini name="memory_limit" value="256M"/>
+    <!-- Scan all files in directory -->
+    <file>.</file>
 
     <!-- Exclude paths -->
     <exclude-pattern>/vendor/*</exclude-pattern>
     <exclude-pattern>/node_modules/*</exclude-pattern>
-    <exclude-pattern>/.git/*</exclude-pattern>
+    <exclude-pattern>/tests/*</exclude-pattern>
     <exclude-pattern>/build/*</exclude-pattern>
-    <exclude-pattern>/dist/*</exclude-pattern>
-    <exclude-pattern>/assets/js/vendor/*</exclude-pattern>
-    <exclude-pattern>*.min.js</exclude-pattern>
-    <exclude-pattern>*.min.css</exclude-pattern>
-    <exclude-pattern>/.vscode/*</exclude-pattern>
-    <exclude-pattern>/deploy/*</exclude-pattern>
 
-    <!-- Include WordPress standards -->
-    <rule ref="WordPress">
-        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
-        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
-        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
-    </rule>
-
-    <!-- Include WordPress Core, Extra, Docs -->
-    <rule ref="WordPress-Core"/>
-    <rule ref="WordPress-Extra"/>
-    <rule ref="WordPress-Docs"/>
-
-    <!-- Verify that the text domain is set correctly. -->
-    <rule ref="WordPress.WP.I18n">
-        <properties>
-            <property name="text_domain" type="array">
-                <element value="cme-cpt-and-taxonomy"/>
-                <element value="default"/>
-            </property>
-        </properties>
-    </rule>
-
-    <!-- Verify that correct prefix is used for hooks. -->
-    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
-        <properties>
-            <property name="prefixes" type="array">
-                <element value="cme"/>
-            </property>
-        </properties>
-    </rule>
-
-    <!-- PHP version compatibility -->
-    <config name="testVersion" value="8.2-"/>
-
-    <!-- Show progress, show source codes in reports, show sniff codes -->
+    <!-- Show progress -->
     <arg value="ps"/>
     <arg name="colors"/>
     <arg name="extensions" value="php"/>
-    <arg name="basepath" value="."/>
-    <arg name="parallel" value="8"/>
+
+    <!-- Use WordPress standards -->
+    <rule ref="WordPress"/>
+
+    <!-- PHP version compatibility -->
+    <config name="testVersion" value="8.2-"/>
+    <rule ref="PHPCompatibility"/>
+
+    <!-- Allow short array syntax -->
+    <rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">
+        <severity>0</severity>
+    </rule>
+
+    <!-- Text domain -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="cme-personas"/>
+            </property>
+        </properties>
+    </rule>
 </ruleset>
 
