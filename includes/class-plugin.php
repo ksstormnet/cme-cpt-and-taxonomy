@@ -28,14 +28,6 @@ class Plugin {
 	private readonly Custom_Post_Types $custom_post_types;
 
 	/**
-	 * The taxonomies manager instance.
-	 *
-	 * @since    1.0.0
-	 * @var      Taxonomies
-	 */
-	private readonly Taxonomies $taxonomies;
-
-	/**
 	 * The admin enhancements instance.
 	 *
 	 * @since    1.0.0
@@ -77,7 +69,6 @@ class Plugin {
 	 */
 	private function load_dependencies(): void {
 		require_once CME_PLUGIN_DIR . 'includes/class-custom-post-types.php';
-		require_once CME_PLUGIN_DIR . 'includes/class-taxonomies.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-admin.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-shortcodes.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-settings.php';
@@ -91,7 +82,6 @@ class Plugin {
 	 */
 	private function initialize_components(): void {
 		$this->custom_post_types = new Custom_Post_Types();
-		$this->taxonomies        = new Taxonomies();
 		$this->admin             = new Admin();
 		$this->shortcodes        = new Shortcodes();
 		$this->settings          = new Settings();
@@ -120,13 +110,10 @@ class Plugin {
 	public function run(): void {
 		$this->load_textdomain();
 		$this->custom_post_types->register();
-		$this->taxonomies->register();
 		$this->admin->register();
 		$this->shortcodes->register();
 		$this->settings->register();
 
-		// Register AJAX handler for getting attachment terms
-		add_action( 'wp_ajax_get_attachment_terms', array( $this, 'get_attachment_terms' ) );
 
 		// Register AJAX handler for welcome notice
 		add_action( 'wp_ajax_cme_dismiss_welcome', array( $this, 'dismiss_welcome_notice' ) );
