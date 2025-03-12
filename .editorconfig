@@ -1,42 +1,23 @@
-# EditorConfig is awesome: https://editorconfig.org/
+# WordPress Coding Standards
+# https://make.wordpress.org/core/handbook/coding-standards/
 
-# top-most EditorConfig file
 root = true
 
-# Unix-style newlines with a newline ending every file
 [*]
+charset = utf-8
 end_of_line = lf
 insert_final_newline = true
-charset = utf-8
 trim_trailing_whitespace = true
 indent_style = tab
-indent_size = 4
 
-# YAML files
-[*.{yml,yaml}]
+[*.yml]
 indent_style = space
 indent_size = 2
 
-# JSON files
-[*.json]
-indent_style = space
-indent_size = 4
-
-# CSS, SCSS files
-[*.{css,scss}]
-indent_style = tab
-indent_size = 4
-
-# JS files
-[*.js]
-indent_style = tab
-indent_size = 4
-
-# PHP files follow WordPress coding standards
-[*.php]
-indent_style = tab
-indent_size = 4
-
-# Markdown files
 [*.md]
 trim_trailing_whitespace = false
+
+[*.{json,eslintrc,stylelintrc}]
+indent_style = space
+indent_size = 2
+

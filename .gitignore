@@ -26,9 +26,40 @@ Thumbs.db
 # Logs
 *.log
 
+# Build directory
+/build/
+/dist/
+
+# Testing
+/coverage/
+/tests/coverage/
+.phpunit.result.cache
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# NPM/Yarn
+.npm
+yarn-debug.log*
+yarn-error.log*
+.yarn-integrity
+
+# PHP CS Fixer
+.php_cs.cache
+.php-cs-fixer.cache
+
+# ESLint
+.eslintcache
+
+# Stylelint
+.stylelintcache
+
 # Shared workflow files (symlinks)
 /gh-workflow-commands.txt
 /git-commands-updated.txt
 /git-commands.txt
 /prepare-pr.sh
 /PULL_REQUEST_TEMPLATE.md
+

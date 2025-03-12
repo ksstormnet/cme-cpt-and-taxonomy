@@ -1,26 +1,41 @@
 {
-  "name": "cme-cpt-and-taxonomy",
+  "name": "cme-personas",
   "version": "1.0.0",
   "description": "A WordPress plugin that adds the Customer Persona custom post type and media library tagging functionality.",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky",
-    "lint": "eslint . && stylelint '**/*.css'",
+    "lint:js": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint:css": "stylelint '**/*.css'",
+    "lint:php": "phpcs",
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:php",
     "format": "prettier --write ."
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ],
+    "*.css": [
+      "stylelint --fix"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ],
+    "*.php": [
+      "phpcs"
+    ]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ksstormnet/cme-cpt-and-taxonomy.git"
+    "url": "git+https://github.com/ksstormnet/cme-personas.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/ksstormnet/cme-cpt-and-taxonomy/issues"
+    "url": "https://github.com/ksstormnet/cme-personas/issues"
   },
-  "homepage": "https://github.com/ksstormnet/cme-cpt-and-taxonomy#readme",
+  "homepage": "https://github.com/ksstormnet/cme-personas#readme",
   "devDependencies": {
     "@wordpress/eslint-plugin": "^22.5.0",
     "eslint": "^8.57.1",
@@ -29,17 +44,5 @@
     "prettier": "^3.5.3",
     "stylelint": "^16.15.0",
     "stylelint-config-standard": "^37.0.0"
-  },
-  "lint-staged": {
-    "\"*": {
-      "js\"": "eslint --fix",
-      "jsx\"": "eslint --fix",
-      "ts\"": "eslint --fix",
-      "tsx\"": "eslint --fix",
-      "css\"": "stylelint --fix",
-      "scss\"": "stylelint --fix",
-      "json\"": "prettier --write",
-      "md\"": "prettier --write"
-    }
   }
 }
