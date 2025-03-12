@@ -2,7 +2,7 @@
 /**
  * Custom Post Types registration.
  *
- * @since      1.0.0
+ * @since      1.1.0
  * @package    CME_Personas
  */
 
@@ -13,7 +13,7 @@ namespace CME_Personas;
  *
  * This class handles registration of custom post types.
  *
- * @since      1.0.0
+ * @since      1.1.0
  * @package    CME_Personas
  */
 class Custom_Post_Types {
@@ -291,21 +291,21 @@ class Custom_Post_Types {
 		if ( isset( $_POST['persona_image_male'] ) ) {
 			$male_image_id = sanitize_text_field( wp_unslash( $_POST['persona_image_male'] ) );
 			update_post_meta( $post_id, 'persona_image_male', $male_image_id );
-			// Media taxonomy functionality has been removed
+			// Media taxonomy functionality has been removed.
 		}
 
 		// Save female image.
 		if ( isset( $_POST['persona_image_female'] ) ) {
 			$female_image_id = sanitize_text_field( wp_unslash( $_POST['persona_image_female'] ) );
 			update_post_meta( $post_id, 'persona_image_female', $female_image_id );
-			// Media taxonomy functionality has been removed
+			// Media taxonomy functionality has been removed.
 		}
 
 		// Save indeterminate image.
 		if ( isset( $_POST['persona_image_indeterminate'] ) ) {
 			$indeterminate_image_id = sanitize_text_field( wp_unslash( $_POST['persona_image_indeterminate'] ) );
 			update_post_meta( $post_id, 'persona_image_indeterminate', $indeterminate_image_id );
-			// Media taxonomy functionality has been removed
+			// Media taxonomy functionality has been removed.
 		}
 	}
 }

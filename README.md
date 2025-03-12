@@ -1,10 +1,10 @@
 # Cruise Made Easy - Personas
 
-A WordPress plugin that adds the Customer Persona custom post type for organizing customer information.
+A WordPress plugin that manages customer personas for personalized content delivery in cruise websites, enabling targeted experiences based on visitor preferences and travel styles.
 
 ## Description
 
-Cruise Made Easy Personas adds a Customer Persona custom post type for organizing and managing customer personas in your WordPress site.
+Cruise Made Easy Personas is at the core of the website's personalized user experience system. It provides functionality for maintaining customer personas/niches that power the content personalization system. The plugin enables different content presentation based on visitor-selected personas, creating a tailored browsing experience for each user.
 
 ### Features
 
@@ -46,26 +46,20 @@ The plugin provides a standard WordPress post editing experience. You can use cu
 
 ## Development
 
-This plugin follows WordPress coding standards and uses modern PHP 8.2 features.
+This plugin follows WordPress coding standards and uses modern PHP 8.3 features.
 
 ### Requirements for Development
 
-- PHP 8.2+
+- PHP 8.3+
 - Composer (for development dependencies)
-
-### Contributing
-
-1.  Fork the repository
-2.  Create a feature branch
-3.  Submit a pull request
 
 ## Changelog
 
-### 2.0.0
+### 1.1.0
 
-- Major update: Renamed plugin to "Cruise Made Easy Personas"
-- Removed media tags functionality (now available in a separate plugin)
-- Focused exclusively on Customer Persona management
+- Updated minimum PHP version requirement to 8.3
+- Updated minimum WordPress version requirement to 6.7.2
+- Updated version numbers and documentation throughout
 
 ### 1.0.1
 
@@ -73,4 +67,4 @@ This plugin follows WordPress coding standards and uses modern PHP 8.2 features.
 
 ## License
 
-This plugin is licensed under the GPL v2 or later.
+This plugin is proprietary software owned by Sky+Sea LLC d/b/a KSstorm Media. All rights reserved.
