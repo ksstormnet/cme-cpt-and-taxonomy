@@ -11,14 +11,14 @@
  * Plugin Name: Cruise Made Easy - Personas
  * Plugin URI: https://example.com/plugin.
  * Description: Adds custom persona post type management for Cruise Made Easy.
- * Version: 1.0.0.
+ * Version: 1.1.0.
  * Author: Your Name.
  * Author URI: https://example.com.
  * Text Domain: cme-personas.
  * License: GPL v2 or later.
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt.
- * Requires at least: 6.4.
- * Requires PHP: 8.2.
+ * Requires at least: 6.7.2.
+ * Requires PHP: 8.3.
  */
 
 // If this file is called directly, abort.
@@ -28,13 +28,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Check WordPress version.
 global $wp_version;
-if ( version_compare( $wp_version, '6.4', '<' ) ) {
+if ( version_compare( $wp_version, '6.7.2', '<' ) ) {
 	add_action(
 		'admin_notices',
 		function () {
 			?>
 		<div class="notice notice-error">
-			<p><?php esc_html_e( 'CME Personas requires WordPress version 6.4 or higher.', 'cme-personas' ); ?></p>
+			<p><?php esc_html_e( 'CME Personas requires WordPress version 6.7.2 or higher.', 'cme-personas' ); ?></p>
 		</div>
 			<?php
 		}
@@ -43,13 +43,13 @@ if ( version_compare( $wp_version, '6.4', '<' ) ) {
 }
 
 // Check PHP version.
-if ( version_compare( PHP_VERSION, '8.2', '<' ) ) {
+if ( version_compare( PHP_VERSION, '8.3', '<' ) ) {
 	add_action(
 		'admin_notices',
 		function () {
 			?>
 		<div class="notice notice-error">
-			<p><?php esc_html_e( 'CME Personas requires PHP version 8.2 or higher.', 'cme-personas' ); ?></p>
+			<p><?php esc_html_e( 'CME Personas requires PHP version 8.3 or higher.', 'cme-personas' ); ?></p>
 		</div>
 			<?php
 		}
@@ -60,7 +60,7 @@ if ( version_compare( PHP_VERSION, '8.2', '<' ) ) {
 /**
  * Define plugin constants.
  */
-define( 'CME_VERSION', '1.0.0' );
+define( 'CME_VERSION', '1.1.0' );
 define( 'CME_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CME_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CME_PLUGIN_FILE', __FILE__ );
@@ -109,9 +109,9 @@ add_filter(
 	'plugin_action_links_' . plugin_basename( CME_PLUGIN_FILE ),
 	function ( $links ) {
 		// Add custom action links.
-		$custom_links = [
+		$custom_links = array(
 			'<a href="' . admin_url( 'edit.php?post_type=persona' ) . '">' . __( 'Personas', 'cme-personas' ) . '</a>',
-		];
+		);
 
 		return array_merge( $custom_links, $links );
 	}

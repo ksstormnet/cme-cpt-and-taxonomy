@@ -2,7 +2,7 @@
 /**
  * Plugin settings page.
  *
- * @since      1.0.0
+ * @since      1.1.0
  * @package    CME_Personas
  */
 
@@ -13,7 +13,7 @@ namespace CME_Personas;
  *
  * This class handles the plugin settings page.
  *
- * @since      1.0.0
+ * @since      1.1.0
  * @package    CME_Personas
  */
 class Settings {
@@ -41,10 +41,10 @@ class Settings {
 	 */
 	public function register(): void {
 		// Add settings page.
-		add_action( 'admin_menu', [ $this, 'add_settings_page' ] );
+		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 
 		// Register settings.
-		add_action( 'admin_init', [ $this, 'register_settings' ] );
+		add_action( 'admin_init', array( $this, 'register_settings' ) );
 	}
 
 	/**
@@ -60,7 +60,7 @@ class Settings {
 			__( 'Personas', 'cme-personas' ),
 			'manage_options',
 			'cme-persona-settings',
-			[ $this, 'render_settings_page' ]
+			array( $this, 'render_settings_page' )
 		);
 	}
 
@@ -75,20 +75,20 @@ class Settings {
 		register_setting(
 			'cme_persona_settings',
 			$this->option_name,
-			[
-				'sanitize_callback' => [ $this, 'sanitize_settings' ],
-				'default'           => [
+			array(
+				'sanitize_callback' => array( $this, 'sanitize_settings' ),
+				'default'           => array(
 					'default_limit' => 3,
 					'default_speed' => 5000,
-				],
-			]
+				),
+			)
 		);
 
 		// Add settings section.
 		add_settings_section(
 			'cme_persona_rotator_section',
 			__( 'Persona Rotator Settings', 'cme-personas' ),
-			[ $this, 'render_section_description' ],
+			array( $this, 'render_section_description' ),
 			'cme-persona-settings'
 		);
 
@@ -96,19 +96,19 @@ class Settings {
 		add_settings_field(
 			'default_limit',
 			__( 'Default Number of Personas', 'cme-personas' ),
-			[ $this, 'render_limit_field' ],
+			array( $this, 'render_limit_field' ),
 			'cme-persona-settings',
 			'cme_persona_rotator_section',
-			[ 'label_for' => 'default_limit' ]
+			array( 'label_for' => 'default_limit' )
 		);
 
 		add_settings_field(
 			'default_speed',
 			__( 'Default Rotation Speed (ms)', 'cme-personas' ),
-			[ $this, 'render_speed_field' ],
+			array( $this, 'render_speed_field' ),
 			'cme-persona-settings',
 			'cme_persona_rotator_section',
-			[ 'label_for' => 'default_speed' ]
+			array( 'label_for' => 'default_speed' )
 		);
 	}
 
@@ -120,7 +120,7 @@ class Settings {
 	 * @return   array         The sanitized input.
 	 */
 	public function sanitize_settings( $input ): array {
-		$sanitized = [];
+		$sanitized = array();
 
 		// Sanitize limit.
 		$sanitized['default_limit'] = isset( $input['default_limit'] ) ?
@@ -293,10 +293,10 @@ class Settings {
 	 * @return   array  The settings.
 	 */
 	public function get_settings(): array {
-		$defaults = [
+		$defaults = array(
 			'default_limit' => 3,
 			'default_speed' => 5000,
-		];
+		);
 
 		$options = get_option( $this->option_name, $defaults );
 

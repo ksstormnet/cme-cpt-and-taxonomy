@@ -2,7 +2,7 @@
 /**
  * The core plugin class.
  *
- * @since      1.0.0
+ * @since      1.1.0
  * @package    CME_Personas
  */
 
@@ -14,7 +14,7 @@ namespace CME_Personas;
  * This is used to define internationalization, admin-specific hooks, and
  * public-facing site hooks.
  *
- * @since      1.0.0
+ * @since      1.1.0
  * @package    CME_Personas
  */
 class Plugin {
@@ -114,11 +114,10 @@ class Plugin {
 		$this->shortcodes->register();
 		$this->settings->register();
 
-
-		// Register AJAX handler for welcome notice
+		// Register AJAX handler for welcome notice.
 		add_action( 'wp_ajax_cme_dismiss_welcome', array( $this, 'dismiss_welcome_notice' ) );
 
-		// Add welcome notice
+		// Add welcome notice.
 		add_action( 'admin_notices', array( $this, 'display_welcome_notice' ) );
 	}
 	/**
@@ -128,12 +127,12 @@ class Plugin {
 	 * @return   void
 	 */
 	public function display_welcome_notice(): void {
-		// Only show to admins
+		// Only show to admins.
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
-		// Check if we've shown this before
+		// Check if we've shown this before.
 		if ( get_option( 'cme_cpt_taxonomy_welcome_shown' ) ) {
 			return;
 		}

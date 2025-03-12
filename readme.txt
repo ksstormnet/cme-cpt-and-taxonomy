@@ -1,10 +1,10 @@
 === Cruise Made Easy Post Types and Media Tags ===
 Contributors: yourwordpressusername
 Tags: custom post types, media tags, cruise, media library
-Requires at least: 6.4
-Tested up to: 6.4
-Stable tag: 1.0.1
-Requires PHP: 8.2
+Requires at least: 6.7.2
+Tested up to: 6.7.2
+Stable tag: 1.1.0
+Requires PHP: 8.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,13 @@ No, this plugin only adds functionality and doesn't alter your existing media fi
 3. Customer Persona editing screen
 
 == Changelog ==
+
+= 1.1.0 =
+* Updated minimum PHP version requirement to 8.3
+* Updated minimum WordPress version requirement to 6.7.2
+* Updated version numbers and documentation throughout
+
+
 
 = 1.0.1 =
 * Initial release

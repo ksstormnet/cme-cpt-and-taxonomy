@@ -2,7 +2,7 @@
 /**
  * Shortcodes functionality.
  *
- * @since      1.0.0
+ * @since      1.1.0
  * @package    CME_Personas
  */
 
@@ -25,7 +25,7 @@ class Shortcodes {
 	 * @return   void
 	 */
 	public function register(): void {
-		add_shortcode( 'cme-persona-rotator', [ $this, 'persona_rotator_shortcode' ] );
+		add_shortcode( 'cme-persona-rotator', array( $this, 'persona_rotator_shortcode' ) );
 	}
 
 	/**
@@ -36,54 +36,54 @@ class Shortcodes {
 	 * @return   string          Shortcode output.
 	 */
 	public function persona_rotator_shortcode( $atts ): string {
-		// Parse attributes
+		// Parse attributes.
 		$atts = shortcode_atts(
-			[
-				'limit' => 3,    // Number of personas to show
-			'speed' => 5000, // Rotation speed in milliseconds
-		],
+			array(
+				'limit' => 3,    // Number of personas to show.
+				'speed' => 5000, // Rotation speed in milliseconds.
+			),
 			$atts
 		);
 
-		// Get all personas
+		// Get all personas.
 		$personas = get_posts(
-			[
+			array(
 				'post_type'      => 'persona',
-			'posts_per_page' => intval( $atts['limit'] ),
-			'orderby'        => 'rand',
-		]
+				'posts_per_page' => intval( $atts['limit'] ),
+				'orderby'        => 'rand',
+			)
 		);
 
 		if ( empty( $personas ) ) {
 			return '<p>' . __( 'No personas found.', 'cme-personas' ) . '</p>';
 		}
 
-		// Start output buffer
+		// Start output buffer.
 		ob_start();
 
-		// Enqueue necessary styles and scripts
+		// Enqueue necessary styles and scripts.
 		$this->enqueue_rotator_assets();
 
-		// Generate a unique ID for this rotator instance
+		// Generate a unique ID for this rotator instance.
 		$rotator_id = 'cme-persona-rotator-' . wp_rand();
 
-		// Open rotator container
+		// Open rotator container.
 		echo '<div id="' . esc_attr( $rotator_id ) . '" class="cme-persona-rotator">';
 
 		foreach ( $personas as $persona ) {
-			// Get persona data
+			// Get persona data.
 			$title   = get_the_title( $persona );
 			$excerpt = get_the_excerpt( $persona );
 
-			// Get gender-specific image
+			// Get gender-specific image.
 			$genders       = array( 'male', 'female', 'indeterminate' );
 			$random_gender = $genders[ array_rand( $genders ) ];
 
-			// Get image ID for this gender
+			// Get image ID for this gender.
 			$image_id = get_post_meta( $persona->ID, 'persona_image_' . $random_gender, true );
 
 			if ( ! $image_id ) {
-				// Fallback to featured image if gender-specific image not found
+				// Fallback to featured image if gender-specific image not found.
 				$image_id = get_post_thumbnail_id( $persona );
 			}
 
@@ -92,21 +92,21 @@ class Shortcodes {
 				$image_url = plugin_dir_url( CME_PLUGIN_FILE ) . 'assets/images/placeholder.png';
 			}
 
-			// Output persona slide
+			// Output persona slide.
 			echo '<div class="cme-persona-slide">';
 			echo '<div class="cme-persona-image-container">';
 			echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $title ) . '" />';
 			echo '<div class="cme-persona-overlay">';
 			echo '<h3>' . esc_html( $title ) . '</h3>';
 			echo '<div class="cme-persona-excerpt">' . wp_kses_post( $excerpt ) . '</div>';
-			echo '</div>'; // overlay
-			echo '</div>'; // image container
-			echo '</div>'; // slide
+			echo '</div>'; // overlay.
+			echo '</div>'; // image container.
+			echo '</div>'; // slide.
 		}
 
-		echo '</div>'; // rotator container
+		echo '</div>'; // rotator container.
 
-		// Add inline script for rotating
+		// Add inline script for rotating.
 		?>
 		<script>
 		(function() {
@@ -115,12 +115,12 @@ class Shortcodes {
 				const slides = rotator.querySelectorAll('.cme-persona-slide');
 				let currentSlideIndex = 0;
 
-				// Hide all slides except the first one
+				// Hide all slides except the first one.
 				for (let i = 1; i < slides.length; i++) {
 					slides[i].style.display = 'none';
 				}
 
-				// Set up rotation if more than one slide
+				// Set up rotation if more than one slide.
 				if (slides.length > 1) {
 					setInterval(function() {
 						slides[currentSlideIndex].style.display = 'none';
@@ -133,7 +133,7 @@ class Shortcodes {
 		</script>
 		<?php
 
-		// Return output buffer content
+		// Return output buffer content.
 		return ob_get_clean();
 	}
 
@@ -144,7 +144,7 @@ class Shortcodes {
 	 * @return   void
 	 */
 	private function enqueue_rotator_assets(): void {
-		// Add inline styles for the rotator
+		// Add inline styles for the rotator.
 		wp_add_inline_style(
 			'wp-block-library',
 			'
