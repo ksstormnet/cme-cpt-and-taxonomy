@@ -1,41 +1,29 @@
-# Cruise Made Easy Post Types and Media Tags
+# Cruise Made Easy - Personas
 
-A WordPress plugin that adds the Customer Persona custom post type and media library tagging functionality.
+A WordPress plugin that adds the Customer Persona custom post type for organizing customer information.
 
 ## Description
 
-Cruise Made Easy Post Types and Media Tags adds a Customer Persona custom post type for organizing customer personas and enhances the WordPress Media Library with a powerful tagging system.
+Cruise Made Easy Personas adds a Customer Persona custom post type for organizing and managing customer personas in your WordPress site.
 
 ### Features
 
 - Creates a Customer Persona custom post type
-- Adds Media Tags taxonomy to WordPress Media Library
-- Provides an enhanced interface for tagging media directly in the Media Library grid view
-- Allows filtering media by tags
+- Provides a structured way to organize customer information
+- Fully compatible with the WordPress block editor
 
 ## Requirements
 
-- WordPress 6.4 or higher
-- PHP 8.2 or higher
+- WordPress 6.7.2 or higher
+- PHP 8.3 or higher
 
 ## Installation
 
-1.  Upload the `cme-cpt-and-taxonomy` folder to the `/wp-content/plugins/` directory
+1.  Upload the `cme-personas` folder to the `/wp-content/plugins/` directory
 2.  Activate the plugin through the 'Plugins' menu in WordPress
-3.  Start using the Customer Persona post type and Media Tags
+3.  Start using the Customer Persona post type
 
 ## Usage
-
-### Media Tags
-
-After activation, you can add tags to your media files:
-
-1.  Go to Media Library
-2.  Hover over an image in grid view to see the tagging interface
-3.  Add tags separated by commas
-4.  Click "Save" to apply the tags
-
-To filter media by tags, use the dropdown filter that appears above the Media Library.
 
 ### Customer Personas
 
@@ -48,21 +36,13 @@ To create a new customer persona:
 
 ## Frequently Asked Questions
 
-### How do I add tags to media?
-
-In the Media Library, hover over an item to see the tagging interface. You can add or remove tags directly from the edit form that appears.
-
-### Can I filter media by tags?
-
-Yes, use the dropdown filter above the Media Library to filter by specific tags.
-
 ### Does this plugin work with Gutenberg?
 
 Yes, the Customer Persona post type is fully compatible with the WordPress block editor (Gutenberg).
 
-### Will this plugin affect my existing media?
+### Can I customize the fields for Customer Personas?
 
-No, this plugin only adds functionality and doesn't alter your existing media files or structure. It simply gives you more ways to organize them.
+The plugin provides a standard WordPress post editing experience. You can use custom fields or extend the functionality with custom blocks.
 
 ## Development
 
@@ -80,6 +60,12 @@ This plugin follows WordPress coding standards and uses modern PHP 8.2 features.
 3.  Submit a pull request
 
 ## Changelog
+
+### 2.0.0
+
+- Major update: Renamed plugin to "Cruise Made Easy Personas"
+- Removed media tags functionality (now available in a separate plugin)
+- Focused exclusively on Customer Persona management
 
 ### 1.0.1
 

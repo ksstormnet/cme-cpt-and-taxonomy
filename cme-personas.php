@@ -1,20 +1,20 @@
 <?php
 /**
- * Cruise Made Easy Post Types and Media Tags.
+ * CME Personas.
  *
- * @package     CME_CPT_Taxonomy
+ * @package     CME_Personas
  * @author      Your Name
  * @copyright   2025 Your Name or Company
  * @license     GPL-2.0-or-later
  *
  * @wordpress-plugin
- * Plugin Name: Cruise Made Easy Post Types and Media Tags.
+ * Plugin Name: CME Personas.
  * Plugin URI: https://example.com/plugin.
- * Description: Adds custom post types and a tag taxonomy for media library.
+ * Description: Adds custom persona post type management for Cruise Made Easy.
  * Version: 1.0.0.
  * Author: Your Name.
  * Author URI: https://example.com.
- * Text Domain: cme-cpt-and-taxonomy.
+ * Text Domain: cme-personas.
  * License: GPL v2 or later.
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt.
  * Requires at least: 6.4.
@@ -34,7 +34,7 @@ if ( version_compare( $wp_version, '6.4', '<' ) ) {
 		function () {
 			?>
 		<div class="notice notice-error">
-			<p><?php esc_html_e( 'Cruise Made Easy Post Types and Media Tags requires WordPress version 6.4 or higher.', 'cme-cpt-and-taxonomy' ); ?></p>
+			<p><?php esc_html_e( 'CME Personas requires WordPress version 6.4 or higher.', 'cme-personas' ); ?></p>
 		</div>
 			<?php
 		}
@@ -49,7 +49,7 @@ if ( version_compare( PHP_VERSION, '8.2', '<' ) ) {
 		function () {
 			?>
 		<div class="notice notice-error">
-			<p><?php esc_html_e( 'Cruise Made Easy Post Types and Media Tags requires PHP version 8.2 or higher.', 'cme-cpt-and-taxonomy' ); ?></p>
+			<p><?php esc_html_e( 'CME Personas requires PHP version 8.2 or higher.', 'cme-personas' ); ?></p>
 		</div>
 			<?php
 		}
@@ -75,21 +75,21 @@ require_once CME_PLUGIN_DIR . 'includes/class-plugin.php';
  *
  * @since 1.0.0
  */
-function cme_run_cme_cpt_taxonomy() {
-	$plugin = new CME_CPT_Taxonomy\Plugin();
+function cme_run_cme_personas() {
+	$plugin = new CME_Personas\Plugin();
 	$plugin->run();
 }
-cme_run_cme_cpt_taxonomy();
+cme_run_cme_personas();
 
 // Add activation hook to flush rewrite rules.
 register_activation_hook(
 	CME_PLUGIN_FILE,
 	function () {
 		// Save plugin version.
-		update_option( 'cme_cpt_taxonomy_version', CME_VERSION );
+		update_option( 'cme_personas_version', CME_VERSION );
 
 		// Schedule a rewrite flush.
-		set_transient( 'cme_cpt_taxonomy_flush_rewrite', 1, 30 );
+		set_transient( 'cme_personas_flush_rewrite', 1, 30 );
 	}
 );
 
@@ -97,8 +97,8 @@ register_activation_hook(
 add_action(
 	'admin_init',
 	function () {
-		if ( get_transient( 'cme_cpt_taxonomy_flush_rewrite' ) ) {
-			delete_transient( 'cme_cpt_taxonomy_flush_rewrite' );
+		if ( get_transient( 'cme_personas_flush_rewrite' ) ) {
+			delete_transient( 'cme_personas_flush_rewrite' );
 			flush_rewrite_rules();
 		}
 	}
@@ -110,8 +110,7 @@ add_filter(
 	function ( $links ) {
 		// Add custom action links.
 		$custom_links = [
-			'<a href="' . admin_url( 'edit.php?post_type=persona' ) . '">' . __( 'Personas', 'cme-cpt-and-taxonomy' ) . '</a>',
-			'<a href="' . admin_url( 'edit-tags.php?taxonomy=media_tag&post_type=attachment' ) . '">' . __( 'Media Tags', 'cme-cpt-and-taxonomy' ) . '</a>',
+			'<a href="' . admin_url( 'edit.php?post_type=persona' ) . '">' . __( 'Personas', 'cme-personas' ) . '</a>',
 		];
 
 		return array_merge( $custom_links, $links );
