@@ -8,7 +8,7 @@
  * @license     GPL-2.0-or-later
  *
  * @wordpress-plugin
- * Plugin Name: CME Personas.
+ * Plugin Name: Cruise Made Easy - Personas
  * Plugin URI: https://example.com/plugin.
  * Description: Adds custom persona post type management for Cruise Made Easy.
  * Version: 1.0.0.
