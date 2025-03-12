@@ -3,10 +3,10 @@
  * The core plugin class.
  *
  * @since      1.0.0
- * @package    CME_CPT_Taxonomy
+ * @package    CME_Personas
  */
 
-namespace CME_CPT_Taxonomy;
+namespace CME_Personas;
 
 /**
  * The core plugin class.
@@ -15,7 +15,7 @@ namespace CME_CPT_Taxonomy;
  * public-facing site hooks.
  *
  * @since      1.0.0
- * @package    CME_CPT_Taxonomy
+ * @package    CME_Personas
  */
 class Plugin {
 
@@ -105,7 +105,7 @@ class Plugin {
 	 */
 	public function load_textdomain(): void {
 		load_plugin_textdomain(
-			'cme-cpt-and-taxonomy',
+			'cme-personas',
 			false,
 			dirname( plugin_basename( CME_PLUGIN_FILE ) ) . '/languages/'
 		);
@@ -153,12 +153,11 @@ class Plugin {
 
 		?>
 		<div class="notice notice-info is-dismissible cme-welcome-notice">
-			<h3><?php esc_html_e( 'Thank you for installing Cruise Made Easy Post Types and Media Tags!', 'cme-cpt-and-taxonomy' ); ?></h3>
-			<p><?php esc_html_e( 'You can now start using Customer Personas and organize your Media Library with tags.', 'cme-cpt-and-taxonomy' ); ?></p>
+			<h3><?php esc_html_e( 'Thank you for installing Cruise Made Easy Personas!', 'cme-personas' ); ?></h3>
+			<p><?php esc_html_e( 'You can now start using Customer Personas.', 'cme-personas' ); ?></p>
 			<p>
-				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=persona' ) ); ?>" class="button button-primary"><?php esc_html_e( 'Manage Personas', 'cme-cpt-and-taxonomy' ); ?></a>
-				<a href="<?php echo esc_url( admin_url( 'upload.php' ) ); ?>" class="button"><?php esc_html_e( 'Go to Media Library', 'cme-cpt-and-taxonomy' ); ?></a>
-				<a href="#" class="cme-dismiss-welcome button" data-nonce="<?php echo esc_attr( wp_create_nonce( 'cme_dismiss_welcome' ) ); ?>"><?php esc_html_e( 'Dismiss', 'cme-cpt-and-taxonomy' ); ?></a>
+				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=persona' ) ); ?>" class="button button-primary"><?php esc_html_e( 'Manage Personas', 'cme-personas' ); ?></a>
+				<a href="#" class="cme-dismiss-welcome button" data-nonce="<?php echo esc_attr( wp_create_nonce( 'cme_dismiss_welcome' ) ); ?>"><?php esc_html_e( 'Dismiss', 'cme-personas' ); ?></a>
 			</p>
 		</div>
 		<script>

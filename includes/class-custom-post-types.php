@@ -3,10 +3,10 @@
  * Custom Post Types registration.
  *
  * @since      1.0.0
- * @package    CME_CPT_Taxonomy
+ * @package    CME_Personas
  */
 
-namespace CME_CPT_Taxonomy;
+namespace CME_Personas;
 
 /**
  * Custom Post Types class.
@@ -14,7 +14,7 @@ namespace CME_CPT_Taxonomy;
  * This class handles registration of custom post types.
  *
  * @since      1.0.0
- * @package    CME_CPT_Taxonomy
+ * @package    CME_Personas
  */
 class Custom_Post_Types {
 	/**
@@ -61,24 +61,24 @@ class Custom_Post_Types {
 			$this->persona_post_type,
 			array(
 				'labels'            => array(
-					'name'                  => _x( 'Customer Personas', 'Post type general name', 'cme-cpt-and-taxonomy' ),
-					'singular_name'         => _x( 'Customer Persona', 'Post type singular name', 'cme-cpt-and-taxonomy' ),
-					'menu_name'             => _x( 'Personas', 'Admin Menu text', 'cme-cpt-and-taxonomy' ),
-					'name_admin_bar'        => _x( 'Customer Persona', 'Add New on Toolbar', 'cme-cpt-and-taxonomy' ),
-					'add_new'               => __( 'Add New', 'cme-cpt-and-taxonomy' ),
-					'add_new_item'          => __( 'Add New Customer Persona', 'cme-cpt-and-taxonomy' ),
-					'new_item'              => __( 'New Customer Persona', 'cme-cpt-and-taxonomy' ),
-					'edit_item'             => __( 'Edit Customer Persona', 'cme-cpt-and-taxonomy' ),
-					'view_item'             => __( 'View Customer Persona', 'cme-cpt-and-taxonomy' ),
-					'all_items'             => __( 'All Customer Personas', 'cme-cpt-and-taxonomy' ),
-					'search_items'          => __( 'Search Customer Personas', 'cme-cpt-and-taxonomy' ),
-					'parent_item_colon'     => __( 'Parent Customer Personas:', 'cme-cpt-and-taxonomy' ),
-					'not_found'             => __( 'No customer personas found.', 'cme-cpt-and-taxonomy' ),
-					'not_found_in_trash'    => __( 'No customer personas found in Trash.', 'cme-cpt-and-taxonomy' ),
-					'featured_image'        => _x( 'Customer Persona Image', 'Overrides the "Featured Image" phrase', 'cme-cpt-and-taxonomy' ),
-					'set_featured_image'    => _x( 'Set persona image', 'Overrides the "Set featured image" phrase', 'cme-cpt-and-taxonomy' ),
-					'remove_featured_image' => _x( 'Remove persona image', 'Overrides the "Remove featured image" phrase', 'cme-cpt-and-taxonomy' ),
-					'use_featured_image'    => _x( 'Use as persona image', 'Overrides the "Use as featured image" phrase', 'cme-cpt-and-taxonomy' ),
+					'name'                  => _x( 'Customer Personas', 'Post type general name', 'cme-personas' ),
+					'singular_name'         => _x( 'Customer Persona', 'Post type singular name', 'cme-personas' ),
+					'menu_name'             => _x( 'Personas', 'Admin Menu text', 'cme-personas' ),
+					'name_admin_bar'        => _x( 'Customer Persona', 'Add New on Toolbar', 'cme-personas' ),
+					'add_new'               => __( 'Add New', 'cme-personas' ),
+					'add_new_item'          => __( 'Add New Customer Persona', 'cme-personas' ),
+					'new_item'              => __( 'New Customer Persona', 'cme-personas' ),
+					'edit_item'             => __( 'Edit Customer Persona', 'cme-personas' ),
+					'view_item'             => __( 'View Customer Persona', 'cme-personas' ),
+					'all_items'             => __( 'All Customer Personas', 'cme-personas' ),
+					'search_items'          => __( 'Search Customer Personas', 'cme-personas' ),
+					'parent_item_colon'     => __( 'Parent Customer Personas:', 'cme-personas' ),
+					'not_found'             => __( 'No customer personas found.', 'cme-personas' ),
+					'not_found_in_trash'    => __( 'No customer personas found in Trash.', 'cme-personas' ),
+					'featured_image'        => _x( 'Customer Persona Image', 'Overrides the "Featured Image" phrase', 'cme-personas' ),
+					'set_featured_image'    => _x( 'Set persona image', 'Overrides the "Set featured image" phrase', 'cme-personas' ),
+					'remove_featured_image' => _x( 'Remove persona image', 'Overrides the "Remove featured image" phrase', 'cme-personas' ),
+					'use_featured_image'    => _x( 'Use as persona image', 'Overrides the "Use as featured image" phrase', 'cme-personas' ),
 				),
 				'public'            => true,
 				'show_ui'           => true,
@@ -106,7 +106,7 @@ class Custom_Post_Types {
 	public function add_persona_meta_boxes(): void {
 		add_meta_box(
 			'persona_gender_images',
-			__( 'Gender-Specific Images', 'cme-cpt-and-taxonomy' ),
+			__( 'Gender-Specific Images', 'cme-personas' ),
 			array( $this, 'render_persona_gender_images_metabox' ),
 			$this->persona_post_type,
 			'normal',
@@ -151,16 +151,16 @@ class Custom_Post_Types {
 			}
 		</style>
 
-		<p><?php esc_html_e( 'Select gender-specific images for this persona.', 'cme-cpt-and-taxonomy' ); ?></p>
+		<p><?php esc_html_e( 'Select gender-specific images for this persona.', 'cme-personas' ); ?></p>
 
 		<div class="persona-gender-image">
-			<label><strong><?php esc_html_e( 'Male Image', 'cme-cpt-and-taxonomy' ); ?></strong></label><br>
+			<label><strong><?php esc_html_e( 'Male Image', 'cme-personas' ); ?></strong></label><br>
 			<input type="hidden" name="persona_image_male" id="persona_image_male" value="<?php echo esc_attr( $male_image_id ); ?>">
 			<button type="button" class="button persona-upload-image" data-target="persona_image_male">
-				<?php esc_html_e( 'Select Image', 'cme-cpt-and-taxonomy' ); ?>
+				<?php esc_html_e( 'Select Image', 'cme-personas' ); ?>
 			</button>
 			<button type="button" class="button persona-remove-image" data-target="persona_image_male" <?php echo empty( $male_image_id ) ? 'style="display:none;"' : ''; ?>>
-				<?php esc_html_e( 'Remove Image', 'cme-cpt-and-taxonomy' ); ?>
+				<?php esc_html_e( 'Remove Image', 'cme-personas' ); ?>
 			</button>
 			<div class="persona-image-preview" id="persona_image_male_preview">
 				<?php if ( $male_image_id ) : ?>
@@ -170,13 +170,13 @@ class Custom_Post_Types {
 		</div>
 
 		<div class="persona-gender-image">
-			<label><strong><?php esc_html_e( 'Female Image', 'cme-cpt-and-taxonomy' ); ?></strong></label><br>
+			<label><strong><?php esc_html_e( 'Female Image', 'cme-personas' ); ?></strong></label><br>
 			<input type="hidden" name="persona_image_female" id="persona_image_female" value="<?php echo esc_attr( $female_image_id ); ?>">
 			<button type="button" class="button persona-upload-image" data-target="persona_image_female">
-				<?php esc_html_e( 'Select Image', 'cme-cpt-and-taxonomy' ); ?>
+				<?php esc_html_e( 'Select Image', 'cme-personas' ); ?>
 			</button>
 			<button type="button" class="button persona-remove-image" data-target="persona_image_female" <?php echo empty( $female_image_id ) ? 'style="display:none;"' : ''; ?>>
-				<?php esc_html_e( 'Remove Image', 'cme-cpt-and-taxonomy' ); ?>
+				<?php esc_html_e( 'Remove Image', 'cme-personas' ); ?>
 			</button>
 			<div class="persona-image-preview" id="persona_image_female_preview">
 				<?php if ( $female_image_id ) : ?>
@@ -186,13 +186,13 @@ class Custom_Post_Types {
 		</div>
 
 		<div class="persona-gender-image">
-			<label><strong><?php esc_html_e( 'Indeterminate Gender Image', 'cme-cpt-and-taxonomy' ); ?></strong></label><br>
+			<label><strong><?php esc_html_e( 'Indeterminate Gender Image', 'cme-personas' ); ?></strong></label><br>
 			<input type="hidden" name="persona_image_indeterminate" id="persona_image_indeterminate" value="<?php echo esc_attr( $indeterminate_image_id ); ?>">
 			<button type="button" class="button persona-upload-image" data-target="persona_image_indeterminate">
-				<?php esc_html_e( 'Select Image', 'cme-cpt-and-taxonomy' ); ?>
+				<?php esc_html_e( 'Select Image', 'cme-personas' ); ?>
 			</button>
 			<button type="button" class="button persona-remove-image" data-target="persona_image_indeterminate" <?php echo empty( $indeterminate_image_id ) ? 'style="display:none;"' : ''; ?>>
-				<?php esc_html_e( 'Remove Image', 'cme-cpt-and-taxonomy' ); ?>
+				<?php esc_html_e( 'Remove Image', 'cme-personas' ); ?>
 			</button>
 			<div class="persona-image-preview" id="persona_image_indeterminate_preview">
 				<?php if ( $indeterminate_image_id ) : ?>
