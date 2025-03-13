@@ -115,7 +115,7 @@ class Frontend {
 			// Frontend CSS.
 			wp_enqueue_style(
 				'cme-personas-frontend',
-				plugin_dir_url( \CME_PERSONAS_FILE ) . 'public/css/personas.css',
+				plugin_dir_url( \CME_PERSONAS_FILE ) . 'public/css/personas-frontend.css',
 				array(),
 				\CME_PERSONAS_VERSION,
 				'all'
@@ -124,7 +124,7 @@ class Frontend {
 			// Frontend JS.
 			wp_enqueue_script(
 				'cme-personas-frontend',
-				plugin_dir_url( \CME_PERSONAS_FILE ) . 'public/js/personas.js',
+				plugin_dir_url( \CME_PERSONAS_FILE ) . 'public/js/personas-frontend.js',
 				array( 'jquery' ),
 				\CME_PERSONAS_VERSION,
 				true
