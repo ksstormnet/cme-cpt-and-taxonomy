@@ -303,6 +303,9 @@ class Frontend {
 	/**
 	 * AJAX handler for switching personas.
 	 *
+	 * This method validates the request, changes the user's persona preference,
+	 * and returns JSON response with success or error messages.
+	 *
 	 * @since    1.3.0
 	 */
 	public function ajax_switch_persona() {

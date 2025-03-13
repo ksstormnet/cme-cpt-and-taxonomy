@@ -85,19 +85,10 @@ class Dashboard {
 			null
 		);
 
-		// Future pages can be added here.
-
-		/*
-		Example:
-		add_submenu_page(
-			'cme-personas-dashboard',
-			__( 'Personas Settings', 'cme-personas' ),
-			__( 'Settings', 'cme-personas' ),
-			'manage_options',
-			'cme-personas-settings',
-			array( $this, 'render_settings_page' )
-		);
-		*/
+		// Future pages can be added here. Additional submenu items could include
+		// settings, help, or analytics pages when implemented in future versions.
+		// Note: Other potential admin pages could be added with add_submenu_page(),
+		// similar to how a settings page would work with the render_settings_page method.
 	}
 
 	/**
