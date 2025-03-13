@@ -78,7 +78,7 @@ class Dashboard {
 		// Add top level menu page.
 		add_menu_page(
 			__( 'Personas Dashboard', 'cme-personas' ),
-			__( 'Personas', 'cme-personas' ),
+			__( 'Persona Dashboard', 'cme-personas' ),
 			'manage_options',
 			'cme-personas-dashboard',
 			array( $this, 'render_dashboard_page' ),
@@ -86,9 +86,10 @@ class Dashboard {
 			25
 		);
 
-		// Add submenu pages.
-		// We don't add the dashboard as a submenu since it's the main page
+		// Remove default first submenu item that WordPress automatically creates.
+		remove_submenu_page( 'cme-personas-dashboard', 'cme-personas-dashboard' );
 
+		// Add custom submenu pages.
 		add_submenu_page(
 			'cme-personas-dashboard',
 			__( 'Manage Personas', 'cme-personas' ),
