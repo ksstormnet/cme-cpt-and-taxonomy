@@ -1,6 +1,6 @@
 {
   "name": "cme-personas",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A WordPress plugin that adds the Customer Persona custom post type and media library tagging functionality.",
   "scripts": {
     "prepare": "npx husky",

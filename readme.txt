@@ -3,7 +3,7 @@ Contributors: ksstorm
 Tags: customer personas, content personalization, cruise, user experience
 Requires at least: 6.7.2
 Tested up to: 6.7.2
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 Requires PHP: 8.3
 License: Proprietary
 License URI: All rights reserved
@@ -56,6 +56,16 @@ This plugin forms the foundation of the personalization system and works with ot
 
 == Changelog ==
 
+= 1.4.0 =
+* Improved dashboard UI with dedicated styling
+* Renamed menu title from "Personas" to "Persona Dashboard" for clarity
+* Added global submenu control method for better menu management
+* Fixed dashboard black background issue
+* Fixed redundant submenu items appearing in admin menu
+* Enhanced menu structure without submenu items
+* Optimized CSS loading with conditional enqueuing
+* Fixed metabox styling inconsistencies
+
 = 1.3.0 =
 * Added block editor (Gutenberg) integration with sidebar plugin
 * Implemented AJAX handler for content preview and checking
@@ -86,6 +96,9 @@ This plugin forms the foundation of the personalization system and works with ot
 * Initial release with persona management functionality
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+Improves dashboard UI and menu structure, fixing styling issues and enhancing admin usability.
 
 = 1.3.0 =
 Adds block editor integration, enhanced preview functionality, and UI improvements for better content management.
