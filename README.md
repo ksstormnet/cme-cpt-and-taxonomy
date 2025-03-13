@@ -11,6 +11,9 @@ Cruise Made Easy Personas is at the core of the website's personalized user expe
 - Creates a Customer Persona custom post type
 - Provides a structured way to organize customer information
 - Fully compatible with the WordPress block editor
+- Personalized content delivery based on user persona
+- Cache management system for improved performance
+- Secure handling of user preferences
 
 ## Requirements
 
@@ -55,15 +58,26 @@ This plugin follows WordPress coding standards and uses modern PHP 8.3 features.
 
 ## Changelog
 
-### 1.1.0
+### 1.2.0 (March 13, 2025)
 
+- Added cache management system with WordPress cache API integration
+- Implemented in-memory caching for database queries
+- Added cache invalidation when content is updated
+- Improved error handling in content retrieval methods
+- Fixed PHP linting issues and improved code documentation
+- Enhanced security with proper input sanitization
+
+### 1.1.0 (February 15, 2025)
+
+- Added persona content personalization system
+- Core API for retrieving persona-specific content
+- Admin UI for managing persona content variations
 - Updated minimum PHP version requirement to 8.3
 - Updated minimum WordPress version requirement to 6.7.2
-- Updated version numbers and documentation throughout
 
-### 1.0.1
+### 1.0.0 (January 20, 2025)
 
-- Initial release
+- Initial release with persona management functionality
 
 ## License
 

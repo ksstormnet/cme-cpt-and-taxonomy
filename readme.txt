@@ -3,7 +3,7 @@ Contributors: ksstorm
 Tags: customer personas, content personalization, cruise, user experience
 Requires at least: 6.7.2
 Tested up to: 6.7.2
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 Requires PHP: 8.3
 License: Proprietary
 License URI: All rights reserved
@@ -19,6 +19,8 @@ Features:
 * Powers the content personalization system
 * Enables targeted content delivery based on visitor preferences
 * Creates a personalized user journey through the website
+* Efficient caching for improved performance
+* Secure handling of user preferences and data
 
 == Installation ==
 
@@ -52,17 +54,28 @@ This plugin forms the foundation of the personalization system and works with ot
 
 == Changelog ==
 
+= 1.2.0 =
+* Added cache management system with WordPress cache API integration
+* Implemented in-memory caching for database queries
+* Added cache invalidation when content is updated
+* Improved error handling in content retrieval methods
+* Fixed PHP linting issues and improved code documentation
+* Enhanced security with proper input sanitization
+
 = 1.1.0 =
+* Added persona content personalization system
+* Core API for retrieving persona-specific content
+* Admin UI for managing persona content variations
 * Updated minimum PHP version requirement to 8.3
 * Updated minimum WordPress version requirement to 6.7.2
-* Updated version numbers and documentation throughout
 
-
-
-= 1.0.1 =
-* Initial release
+= 1.0.0 =
+* Initial release with persona management functionality
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+Adds caching system for improved performance, better security, and code quality improvements.
 
 = 1.1.0 =
 Updates minimum PHP and WordPress requirements. Improves plugin description and documentation.
