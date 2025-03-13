@@ -5,6 +5,28 @@ All notable changes to the CME Personas plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2025-03-13
+
+### Added
+
+- Dedicated dashboard.css file for admin dashboard styling
+- Global submenu control method for better menu management
+- New hook to completely remove all submenu items
+
+### Changed
+
+- Renamed menu title from "Personas" to "Persona Dashboard" for clarity
+- Improved dashboard UI with dedicated styling
+- Enhanced menu structure without submenu items
+- Optimized CSS loading with conditional enqueuing
+
+### Fixed
+
+- Fixed dashboard black background issue
+- Fixed redundant submenu items appearing in admin menu
+- Fixed CSS styling issues in dashboard panels
+- Fixed metabox styling inconsistencies
+
 ## [1.3.0] - 2025-03-13
 
 ### Added
