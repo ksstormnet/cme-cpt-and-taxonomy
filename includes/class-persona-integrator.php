@@ -98,10 +98,20 @@ class Persona_Integrator {
 	 * @return   void
 	 */
 	private function includes() {
-		// Core classes.
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-persona-manager.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-persona-content.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-personas-api.php';
+		// Core classes - only include if they're not already included by the autoloader.
+		$base_path = plugin_dir_path( dirname( __FILE__ ) ) . 'includes/';
+
+		if ( ! class_exists('\\CME_Personas\\Persona_Manager') ) {
+			require_once $base_path . 'class-persona-manager.php';
+		}
+
+		if ( ! class_exists('\\CME_Personas\\Persona_Content') ) {
+			require_once $base_path . 'class-persona-content.php';
+		}
+
+		if ( ! class_exists('\\CME_Personas\\Personas_API') ) {
+			require_once $base_path . 'class-personas-api.php';
+		}
 	}
 
 	/**

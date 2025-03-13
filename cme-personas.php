@@ -32,8 +32,11 @@ define( 'CME_PERSONAS_FILE', __FILE__ );
 define( 'CME_PERSONAS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CME_PERSONAS_URL', plugin_dir_url( __FILE__ ) );
 
-// Load the autoloader.
-require_once CME_PERSONAS_PATH . 'vendor/autoload.php';
+// Load the autoloader if it exists.
+$autoloader_path = CME_PERSONAS_PATH . 'vendor/autoload.php';
+if (file_exists($autoloader_path)) {
+    require_once $autoloader_path;
+}
 
 // Include the main integrator class.
 require_once CME_PERSONAS_PATH . 'includes/class-persona-integrator.php';
