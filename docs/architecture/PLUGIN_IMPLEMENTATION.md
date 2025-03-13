@@ -5,20 +5,20 @@ This document outlines the complete implementation plan for creating a dedicated
 ## Table of Contents
 
 - [Personas Plugin Implementation Plan](#personas-plugin-implementation-plan)
-	- [Table of Contents](#table-of-contents)
-	- [Overview](#overview)
-	- [Plugin Architecture](#plugin-architecture)
-	- [Phase 1: Core Infrastructure](#phase-1-core-infrastructure)
-		- [Tasks](#tasks)
-		- [Deliverables](#deliverables)
-		- [Core Classes](#core-classes)
-			- [Persona Manager Class](#persona-manager-class)
-			- [Persona Content Class](#persona-content-class)
-	- [Phase 2: Admin UI](#phase-2-admin-ui)
-		- [Tasks](#tasks-1)
-		- [Deliverables](#deliverables-1)
-		- [Admin UI Implementation](#admin-ui-implementation)
-			- [Admin Class](#admin-class)
+    - [Table of Contents](#table-of-contents)
+    - [Overview](#overview)
+    - [Plugin Architecture](#plugin-architecture)
+    - [Phase 1: Core Infrastructure](#phase-1-core-infrastructure)
+        - [Tasks](#tasks)
+        - [Deliverables](#deliverables)
+        - [Core Classes](#core-classes)
+            - [Persona Manager Class](#persona-manager-class)
+            - [Persona Content Class](#persona-content-class)
+    - [Phase 2: Admin UI](#phase-2-admin-ui)
+        - [Tasks](#tasks-1)
+        - [Deliverables](#deliverables-1)
+        - [Admin UI Implementation](#admin-ui-implementation)
+            - [Admin Class](#admin-class)
 
 ## Overview
 
@@ -67,19 +67,21 @@ wp-content/plugins/personas/
 ### Tasks
 
 1. **Create Plugin Scaffold**
-   - Set up plugin directory structure
-   - Create main plugin file with metadata
-   - Implement activation/deactivation hooks
+
+    - Set up plugin directory structure
+    - Create main plugin file with metadata
+    - Implement activation/deactivation hooks
 
 2. **Create Persona Management Class**
-   - Define available personas
-   - Implement persona detection from GTM/cookies
-   - Add functions to get/set current persona
+
+    - Define available personas
+    - Implement persona detection from GTM/cookies
+    - Add functions to get/set current persona
 
 3. **Implement Storage System**
-   - Create functions to save/retrieve persona variations
-   - Define schema for structured content storage
-   - Add metadata registration for persona content
+    - Create functions to save/retrieve persona variations
+    - Define schema for structured content storage
+    - Add metadata registration for persona content
 
 ### Deliverables
 
@@ -557,18 +559,20 @@ class Personas_Content {
 ### Tasks
 
 1. **Create Admin Settings Page**
-   - Implement plugin configuration
-   - Add persona management
-   - Create GTM integration settings
+
+    - Implement plugin configuration
+    - Add persona management
+    - Create GTM integration settings
 
 2. **Implement Gutenberg Integration**
-   - Create meta box for post editor
-   - Implement tabbed interface for personas
-   - Add block content editors
+
+    - Create meta box for post editor
+    - Implement tabbed interface for personas
+    - Add block content editors
 
 3. **Add Media Management**
-   - Implement featured image selection
-   - Add media selection for blocks
+    - Implement featured image selection
+    - Add media selection for blocks
 
 ### Deliverables
 
@@ -942,3 +946,4 @@ class Personas_Admin {
                 // Title
                 if (!empty($data['title'])) {
                     $variations['title'] = sanitize_text_
+```

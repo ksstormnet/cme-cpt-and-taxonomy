@@ -1,0 +1,62 @@
+/**
+ * Personas Frontend Styles
+ *
+ * @package    CME_Personas
+ * @version    1.1.0
+ */
+
+/* Persona Switcher */
+.persona-switcher {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+}
+
+.persona-switcher label {
+    margin-right: 1rem;
+    font-weight: bold;
+}
+
+.persona-switcher select {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+/* Persona-specific content */
+.persona-content {
+    position: relative;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 4px solid #0073aa;
+    background-color: #f9f9f9;
+}
+
+.persona-content::before {
+    content: attr(data-persona);
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    background-color: #0073aa;
+    color: white;
+    border-radius: 0 0 0 4px;
+}
+
+/* Responsive styles */
+@media screen and (width <= 600px) {
+    .persona-switcher {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .persona-switcher label {
+        margin-bottom: 0.5rem;
+    }
+}
