@@ -61,7 +61,7 @@ class Dashboard {
 		if ( 'toplevel_page_cme-personas-dashboard' === $hook ) {
 			wp_enqueue_style(
 				'cme-personas-dashboard',
-				CME_PERSONAS_URL . 'admin/css/personas-dashboard.css',
+				CME_PERSONAS_URL . 'admin/css/dashboard.css',
 				array(),
 				CME_PERSONAS_VERSION,
 				'all'
@@ -86,8 +86,8 @@ class Dashboard {
 			25
 		);
 
-		// We need to add a callback for removing the default submenu items after they're created.
-		// WordPress automatically adds the main menu as a submenu item too, which we don't want.
+		// We need to add a callback for removing the default submenu items after they're created
+		// WordPress automatically adds the main menu as a submenu item too, which we don't want
 		add_action( 'admin_menu', array( $this, 'adjust_submenus' ), 999 );
 
 		// Future pages can be added here. Additional submenu items could include
