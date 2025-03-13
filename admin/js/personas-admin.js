@@ -2,7 +2,7 @@
  * Personas Admin Scripts
  *
  * @param {Function} $ - jQuery function
- * @version 1.1.0
+ * @version 1.2.0
  */
 
 /* global cmePersonasAdmin, tinymce */
@@ -21,8 +21,48 @@
 			// Initialize the persona content editor tabs.
 			this.initPersonaContentTabs();
 
+			// Initialize Gutenberg integration if the block editor is present
+			this.initBlockEditorIntegration();
+
 			// Add AJAX handlers for content operations.
 			this.setupAjaxHandlers();
+		},
+
+		/**
+		 * Initialize integration with the Gutenberg block editor.
+		 */
+		initBlockEditorIntegration() {
+			// Check if we're in the block editor
+			if (
+				typeof window.wp !== 'undefined' &&
+				window.wp.data &&
+				window.wp.data.select('core/editor')
+			) {
+				// Listen for document changes
+				window.wp.data.subscribe(() => {
+					const isSavingPost = window.wp.data
+						.select('core/editor')
+						.isSavingPost();
+					const isAutosavingPost = window.wp.data
+						.select('core/editor')
+						.isAutosavingPost();
+
+					// Only proceed if we're actually saving the post (not autosaving)
+					if (isSavingPost && !isAutosavingPost) {
+						// Clear any cached persona content
+						if (window.localStorage) {
+							const keys = Object.keys(window.localStorage);
+							const personaKeysPattern = /^cme_persona_content_/;
+
+							keys.forEach((key) => {
+								if (personaKeysPattern.test(key)) {
+									window.localStorage.removeItem(key);
+								}
+							});
+						}
+					}
+				});
+			}
 		},
 
 		/**
@@ -115,7 +155,7 @@
 				},
 				success(response) {
 					if (response.success && response.data) {
-						// Create a dialog to show the preview.
+						// Create a styled dialog to show the preview.
 						const $dialog = $(
 							'<div class="cme-persona-preview-dialog"></div>'
 						);
@@ -124,19 +164,55 @@
 						// Append the dialog to the body.
 						$('body').append($dialog);
 
-						// Initialize the dialog.
+						// Get the persona name for display
+						const personaName =
+							cmePersonasAdmin.personas[persona] || persona;
+
+						// Initialize the dialog with enhanced styling.
 						$dialog.dialog({
 							title: cmePersonasAdmin.i18n.previewTitle.replace(
 								'%s',
-								persona
+								personaName
 							),
 							width: 800,
 							height: 600,
 							modal: true,
-							buttons: {
-								[cmePersonasAdmin.i18n.closeButton]() {
-									$(this).dialog('close');
+							dialogClass: 'wp-dialog cme-preview-dialog',
+							buttons: [
+								{
+									text: cmePersonasAdmin.i18n.closeButton,
+									class: 'button button-primary',
+									click() {
+										$(this).dialog('close');
+									},
 								},
+							],
+							open() {
+								// Add header to the preview
+								const $header = $(
+									'<div class="cme-preview-header"></div>'
+								);
+
+								$header.append(
+									'<span class="cme-preview-badge">' +
+										cmePersonasAdmin.i18n.previewBadge.replace(
+											'%s',
+											personaName
+										) +
+										'</span>'
+								);
+								$dialog.prepend($header);
+
+								// Apply styling for WordPress admin UI
+								$('.ui-dialog-titlebar').addClass(
+									'wp-dialog-titlebar'
+								);
+								$('.ui-dialog-title').addClass(
+									'wp-dialog-title'
+								);
+								$('.ui-dialog-buttonpane').addClass(
+									'wp-dialog-buttonpane'
+								);
 							},
 							close() {
 								$(this).dialog('destroy').remove();
