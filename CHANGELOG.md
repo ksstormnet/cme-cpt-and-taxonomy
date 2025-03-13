@@ -5,6 +5,28 @@ All notable changes to the CME Personas plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2025-03-13
+
+### Added
+
+- Block editor (Gutenberg) integration with sidebar plugin
+- AJAX handler for persona content preview and checking
+- Enhanced preview dialog with improved styling
+- Personalized content viewer in the block editor
+
+### Changed
+
+- Improved admin UI with better visual feedback
+- Enhanced jQuery dialog integration for previews
+- Updated admin JavaScript to support both classic and block editors
+- Optimized content management workflow
+
+### Fixed
+
+- Styling inconsistencies in the admin interface
+- Preview functionality issues in different contexts
+- Cache invalidation for persona-specific content
+
 ## [1.2.0] - 2025-03-13
 
 ### Added
