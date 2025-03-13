@@ -2,7 +2,7 @@
  * Personas Admin Styles
  *
  * @package    CME_Personas
- * @version    1.1.0
+ * @version    1.2.0
  */
 
 /* Meta Box Tabs */
@@ -142,4 +142,115 @@
     color: #666;
     font-style: italic;
     margin-top: 0.5rem;
+}
+
+/* Preview Dialog Styling */
+.cme-preview-dialog {
+    padding: 0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.cme-persona-preview-dialog {
+    padding: 1rem;
+    background: #fff;
+}
+
+.cme-preview-header {
+    margin: -1rem -1rem 1rem;
+    padding: 0.75rem 1rem;
+    background: #f8f8f8;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.cme-preview-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background: #0073aa;
+    color: #fff;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Style the preview content sections */
+.cme-persona-preview h2 {
+    margin-top: 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+    font-size: 1.5em;
+}
+
+.cme-persona-excerpt,
+.cme-persona-content {
+    margin-bottom: 1.5rem;
+}
+
+.cme-persona-excerpt h3,
+.cme-persona-content h3 {
+    margin-top: 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.cme-persona-excerpt-content {
+    font-style: italic;
+    padding: 0.8rem;
+    background: #f9f9f9;
+    border-left: 4px solid #0073aa;
+}
+
+.cme-persona-content-wrapper {
+    padding: 0.8rem;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+}
+
+/* Style the dialog UI elements to match WordPress */
+.wp-dialog-titlebar {
+    background: #fcfcfc;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.wp-dialog-title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.wp-dialog-buttonpane {
+    background: #fcfcfc;
+    border-top: 1px solid #dfdfdf;
+}
+
+/* Block Editor Integration */
+.wp-block .persona-content-indicator {
+    display: inline-block;
+    padding: 4px 8px;
+    margin-left: 8px;
+    background: #0073aa;
+    color: #fff;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.edit-post-sidebar .persona-selector {
+    padding: 16px;
+    border-top: 1px solid #e2e4e7;
+    border-bottom: 1px solid #e2e4e7;
+}
+
+.edit-post-sidebar .persona-selector h2 {
+    margin-top: 0;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.edit-post-sidebar .personas-list {
+    margin-bottom: 8px;
+}
+
+.edit-post-sidebar .persona-option {
+    margin-bottom: 8px;
 }

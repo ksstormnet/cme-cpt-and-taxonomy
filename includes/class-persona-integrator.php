@@ -84,6 +84,9 @@ class Persona_Integrator {
 		$this->persona_content = Persona_Content::get_instance();
 		$this->personas_api    = Personas_API::get_instance();
 
+		// Initialize Ajax Handler.
+		Ajax_Handler::get_instance();
+
 		// Set up hooks.
 		$this->setup_hooks();
 
@@ -110,6 +113,10 @@ class Persona_Integrator {
 
 		if ( ! class_exists( '\\CME_Personas\\Personas_API' ) ) {
 			require_once $base_path . 'class-personas-api.php';
+		}
+
+		if ( ! class_exists( '\\CME_Personas\\Ajax_Handler' ) ) {
+			require_once $base_path . 'class-ajax-handler.php';
 		}
 	}
 
@@ -287,6 +294,9 @@ class Persona_Integrator {
 	 * @since    1.1.0
 	 */
 	public function admin_assets() {
+		// Get current screen.
+		$screen = get_current_screen();
+
 		// Admin CSS.
 		wp_register_style(
 			'cme-personas-admin',
@@ -300,7 +310,7 @@ class Persona_Integrator {
 		wp_register_script(
 			'cme-personas-admin',
 			plugin_dir_url( \CME_PERSONAS_FILE ) . 'admin/js/personas-admin.js',
-			array( 'jquery' ),
+			array( 'jquery', 'jquery-ui-dialog' ),
 			\CME_PERSONAS_VERSION,
 			true
 		);
@@ -308,6 +318,43 @@ class Persona_Integrator {
 		// Enqueue admin assets.
 		wp_enqueue_style( 'cme-personas-admin' );
 		wp_enqueue_script( 'cme-personas-admin' );
+
+		// Enqueue jQuery UI styles for admin.
+		wp_enqueue_style( 'wp-jquery-ui-dialog' );
+
+		// Register and enqueue block editor integration for edit screens.
+		if ( $screen && ( 'post' === $screen->base || 'page' === $screen->base ) && 'edit' === $screen->action ) {
+			// Check if block editor is active.
+			if ( function_exists( 'use_block_editor_for_post' ) && use_block_editor_for_post( get_the_ID() ) ) {
+				$this->enqueue_block_editor_assets();
+			}
+		}
+	}
+
+	/**
+	 * Enqueue block editor assets.
+	 *
+	 * @since    1.2.0
+	 */
+	private function enqueue_block_editor_assets() {
+		// Block editor integration.
+		wp_enqueue_script(
+			'cme-personas-block-editor',
+			plugin_dir_url( \CME_PERSONAS_FILE ) . 'admin/js/block-editor.js',
+			array(
+				'wp-plugins',
+				'wp-edit-post',
+				'wp-element',
+				'wp-components',
+				'wp-data',
+				'wp-core-data',
+				'wp-api-fetch',
+				'wp-i18n',
+				'cme-personas-admin',
+			),
+			\CME_PERSONAS_VERSION,
+			true
+		);
 
 		// Pass data to script.
 		wp_localize_script(
@@ -317,6 +364,15 @@ class Persona_Integrator {
 				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'cme_personas_admin_nonce' ),
 				'personas' => $this->persona_manager->get_all_personas(),
+				'i18n'     => array(
+					'confirmDelete' => __( 'Are you sure you want to delete the content for this persona? This cannot be undone.', 'cme-personas' ),
+					/* translators: %s: Persona name */
+					'previewTitle'  => __( 'Preview: %s Persona Content', 'cme-personas' ),
+					/* translators: %s: Persona name */
+					'previewBadge'  => __( '%s Persona View', 'cme-personas' ),
+					'closeButton'   => __( 'Close', 'cme-personas' ),
+					'previewError'  => __( 'Error loading preview. Please try again.', 'cme-personas' ),
+				),
 			)
 		);
 	}
