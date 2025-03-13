@@ -49,6 +49,15 @@ class Admin {
 			'all'
 		);
 
+		// Enqueue dashboard CSS
+		wp_enqueue_style(
+			'cme-personas-dashboard',
+			plugin_dir_url( CME_PERSONAS_FILE ) . 'admin/css/personas-dashboard.css',
+			array(),
+			CME_PERSONAS_VERSION,
+			'all'
+		);
+
 		// Enqueue the admin menu fix script
 		wp_enqueue_script(
 			'cme-personas-admin-menu-fix',

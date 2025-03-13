@@ -1,0 +1,171 @@
+/**
+ * Dashboard Styles for Persona administration
+ *
+ * @package    CME_Personas
+ * @version    1.3.0
+ */
+
+/* Dashboard Main Area */
+.cme-personas-dashboard {
+  margin: 20px 0;
+}
+
+.cme-personas-dashboard .welcome-panel {
+  padding-bottom: 23px;
+}
+
+.cme-personas-dashboard .welcome-panel h2 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.cme-personas-dashboard .welcome-panel-content {
+  margin-left: 13px;
+  max-width: 1500px;
+}
+
+.cme-personas-dashboard .about-description {
+  margin: 1em 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* Stats Boxes */
+.cme-persona-count {
+  padding-left: 26px;
+  background: transparent url('../images/icon-persona-16.png') no-repeat left center;
+}
+
+.cme-personas-dashboard .count {
+  display: inline-block;
+  min-width: 18px;
+  padding: 0 2px;
+  height: 18px;
+  border-radius: 9px;
+  background-color: #72aee6;
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.6;
+  text-align: center;
+  margin-right: 5px;
+}
+
+/* Quick Actions Box */
+.cme-personas-quick-actions {
+  margin-top: 20px;
+}
+
+.cme-personas-quick-actions h3 {
+  margin-top: 0;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.cme-personas-quick-actions ul {
+  padding: 0 12px;
+}
+
+.cme-personas-quick-actions .button-secondary {
+  margin-right: 5px;
+}
+
+/* Recent Posts */
+.cme-personas-dashboard .inside ul {
+  margin: 0;
+}
+
+.cme-personas-dashboard .inside ul li {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.cme-personas-dashboard .inside ul li:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.cme-personas-dashboard .post-date {
+  display: inline-block;
+  margin-left: 8px;
+  color: #777;
+}
+
+/* Columns Layout */
+.cme-personas-dashboard .metabox-holder {
+  clear: both;
+  margin-top: 20px;
+}
+
+.postbox .hndle {
+  cursor: default !important;
+}
+
+/* Statistics Section */
+.persona-stats {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.persona-stat-box {
+  width: 46%;
+  margin-right: 2%;
+  margin-bottom: 15px;
+  padding: 15px;
+  background: #fff;
+  border: 1px solid #ccd0d4;
+  box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
+}
+
+.persona-stat-box h3 {
+  margin-top: 0;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.persona-stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+/* Dashboard Widget Section */
+.persona-dashboard-widget {
+  margin-bottom: 20px;
+}
+
+.persona-dashboard-widget-header {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+  background: #f5f5f5;
+}
+
+.persona-dashboard-widget-content {
+  padding: 12px;
+}
+
+/* Documentation Section */
+.cme-personas-docs {
+  margin-top: 20px;
+  padding: 15px;
+  background: #fff;
+  border-left: 4px solid #007cba;
+}
+
+.cme-personas-docs h3 {
+  margin-top: 0;
+}
+
+/* Media Queries */
+@media screen and (width <= 782px) {
+  .persona-stat-box,
+  .postbox-container {
+    width: 100% !important;
+    margin-right: 0 !important;
+  }
+}
