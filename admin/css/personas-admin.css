@@ -2,8 +2,19 @@
  * Personas Admin Styles
  *
  * @package    CME_Personas
- * @version    1.2.0
+ * @version    1.3.0
  */
+
+/* Hide submenu items for the Customer Personas menu, but keep the main menu */
+#adminmenu .wp-submenu a[href="edit.php?post_type=persona"] {
+    /* Keep the main "Customer Personas" submenu item visible */
+}
+
+#adminmenu .wp-submenu a[href*="post-new.php?post_type=persona"],
+#adminmenu .wp-submenu a[href*="edit-tags.php?taxonomy=persona"],
+#adminmenu .wp-submenu a[href*="post_type=persona"]:not([href="edit.php?post_type=persona"]) {
+    display: none !important;
+}
 
 /* Meta Box Tabs */
 .cme-persona-content-tabs {
