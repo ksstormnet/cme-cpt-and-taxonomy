@@ -5,6 +5,31 @@ All notable changes to the CME Personas plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2025-03-13
+
+### Added
+
+- Frontend integration for persona content display
+- New shortcodes for conditional content based on personas
+- Persona switcher shortcode for the frontend
+- Comprehensive documentation for frontend integration
+- Block editor integration for persona content preview
+
+### Changed
+
+- Improved code linting across all languages (PHP, JS, CSS, Markdown)
+- Enhanced dashboard UI with better organization
+- Updated React components to follow modern patterns
+- Refined JavaScript with better error handling
+
+### Fixed
+
+- PHP linting issues in Dashboard and Frontend classes
+- JavaScript errors in block editor integration
+- CSS formatting and consistency issues
+- Markdown linting in documentation files
+- Fixed code that was incorrectly scanning node_modules and vendor directories
+
 ## [1.2.0] - 2025-03-13
 
 ### Added
