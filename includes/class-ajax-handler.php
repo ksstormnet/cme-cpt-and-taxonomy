@@ -60,6 +60,47 @@ class Ajax_Handler {
 		// Register AJAX handlers.
 		add_action( 'wp_ajax_cme_preview_persona_content', array( $this, 'preview_persona_content' ) );
 		add_action( 'wp_ajax_cme_check_persona_content', array( $this, 'check_persona_content' ) );
+
+		// Frontend AJAX handlers for both logged-in and non-logged-in users
+		add_action( 'wp_ajax_cme_get_persona_content', array( $this, 'get_persona_content' ) );
+		add_action( 'wp_ajax_nopriv_cme_get_persona_content', array( $this, 'get_persona_content' ) );
+	}
+
+	/**
+	 * Get persona-specific content via AJAX.
+	 *
+	 * @since    1.4.0
+	 */
+	public function get_persona_content() {
+		// Check nonce.
+		if ( ! check_ajax_referer( 'cme_personas_nonce', 'nonce', false ) ) {
+			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'cme-personas' ) ) );
+		}
+
+		// Get parameters.
+		$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
+		$field = isset( $_POST['field'] ) ? sanitize_key( $_POST['field'] ) : 'content';
+		$persona = isset( $_POST['persona'] ) ? sanitize_key( $_POST['persona'] ) : '';
+
+		if ( empty( $post_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid post ID.', 'cme-personas' ) ) );
+		}
+
+		// Get content manager.
+		$content_manager = Persona_Content::get_instance();
+		$api = Personas_API::get_instance();
+
+		// Get the content.
+		$content = $api->get_content( $post_id, 'post', $field, $persona );
+
+		// Return result.
+		wp_send_json_success(
+			array(
+				'content' => $content,
+				'field' => $field,
+				'persona' => $persona,
+			)
+		);
 	}
 
 	/**

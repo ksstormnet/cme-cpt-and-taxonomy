@@ -84,8 +84,9 @@ class Persona_Integrator {
 		$this->persona_content = Persona_Content::get_instance();
 		$this->personas_api    = Personas_API::get_instance();
 
-		// Initialize Ajax Handler.
+		// Initialize handlers.
 		Ajax_Handler::get_instance();
+		Frontend::get_instance();
 
 		// Set up hooks.
 		$this->setup_hooks();
@@ -117,6 +118,10 @@ class Persona_Integrator {
 
 		if ( ! class_exists( '\\CME_Personas\\Ajax_Handler' ) ) {
 			require_once $base_path . 'class-ajax-handler.php';
+		}
+
+		if ( ! class_exists( '\\CME_Personas\\Frontend' ) ) {
+			require_once $base_path . 'class-frontend.php';
 		}
 	}
 
@@ -220,7 +225,7 @@ class Persona_Integrator {
 		// Frontend CSS.
 		wp_register_style(
 			'cme-personas',
-			plugin_dir_url( \CME_PERSONAS_FILE ) . 'public/css/personas.css',
+			plugin_dir_url( \CME_PERSONAS_FILE ) . 'public/css/personas-frontend.css',
 			array(),
 			\CME_PERSONAS_VERSION,
 			'all'
@@ -229,7 +234,7 @@ class Persona_Integrator {
 		// Frontend JS.
 		wp_register_script(
 			'cme-personas',
-			plugin_dir_url( \CME_PERSONAS_FILE ) . 'public/js/personas.js',
+			plugin_dir_url( \CME_PERSONAS_FILE ) . 'public/js/personas-frontend.js',
 			array( 'jquery' ),
 			\CME_PERSONAS_VERSION,
 			true
@@ -247,6 +252,7 @@ class Persona_Integrator {
 				'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
 				'nonce'          => wp_create_nonce( 'cme_personas_nonce' ),
 				'currentPersona' => $this->persona_manager->get_current_persona(),
+				'reloadOnSwitch' => apply_filters( 'cme_personas_reload_on_switch', false ),
 			)
 		);
 	}
