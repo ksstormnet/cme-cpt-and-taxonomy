@@ -3,7 +3,7 @@ Contributors: ksstorm
 Tags: customer personas, content personalization, cruise, user experience
 Requires at least: 6.7.2
 Tested up to: 6.7.2
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 Requires PHP: 8.3
 License: Proprietary
 License URI: All rights reserved
@@ -21,6 +21,8 @@ Features:
 * Creates a personalized user journey through the website
 * Efficient caching for improved performance
 * Secure handling of user preferences and data
+* Block editor (Gutenberg) integration for content management
+* Enhanced preview capabilities for persona-specific content
 
 == Installation ==
 
@@ -40,7 +42,7 @@ When a visitor selects a persona, the website dynamically adjusts content presen
 
 = Does this plugin work with Gutenberg? =
 
-Yes, the Customer Persona post type is fully compatible with the WordPress block editor (Gutenberg).
+Yes, the plugin is fully compatible with the WordPress block editor (Gutenberg). We offer a dedicated sidebar panel for managing persona-specific content directly in the block editor interface.
 
 = How does this plugin integrate with other Cruise Made Easy plugins? =
 
@@ -53,6 +55,17 @@ This plugin forms the foundation of the personalization system and works with ot
 3. Personalized content example
 
 == Changelog ==
+
+= 1.3.0 =
+* Added block editor (Gutenberg) integration with sidebar plugin
+* Implemented AJAX handler for content preview and checking
+* Enhanced preview dialog with improved styling
+* Added personalized content viewer in the block editor
+* Improved admin UI with better visual feedback
+* Enhanced jQuery dialog integration for previews
+* Updated admin JavaScript to support both classic and block editors
+* Fixed styling inconsistencies in the admin interface
+* Fixed preview functionality issues in different contexts
 
 = 1.2.0 =
 * Added cache management system with WordPress cache API integration
@@ -73,6 +86,9 @@ This plugin forms the foundation of the personalization system and works with ot
 * Initial release with persona management functionality
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+Adds block editor integration, enhanced preview functionality, and UI improvements for better content management.
 
 = 1.2.0 =
 Adds caching system for improved performance, better security, and code quality improvements.
