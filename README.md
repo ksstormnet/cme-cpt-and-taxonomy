@@ -14,6 +14,8 @@ The CME Personas plugin adds a custom post type for managing customer personas, 
 - Personalized content delivery based on user persona
 - Cache management system for improved performance
 - Secure handling of user preferences
+- Block editor sidebar for managing persona content
+- Enhanced preview capabilities for persona content
 
 ## Documentation
 
@@ -40,7 +42,7 @@ To create a new customer persona:
 
 ### Does this plugin work with Gutenberg?
 
-Yes, the Customer Persona post type is fully compatible with the WordPress block editor (Gutenberg).
+Yes, the plugin is fully compatible with the WordPress block editor (Gutenberg). We offer a dedicated sidebar panel for managing persona-specific content directly in the block editor interface.
 
 ### Can I customize the fields for Customer Personas?
 
@@ -49,6 +51,17 @@ The plugin provides a standard WordPress post editing experience. You can use cu
 ## Development
 
 This project follows strict coding standards and uses Git hooks to ensure code quality.
+
+### 1.3.0 (March 13, 2025)
+
+- Added block editor (Gutenberg) integration with sidebar plugin
+- Implemented AJAX handler for content preview and checking
+- Enhanced preview dialog with improved styling
+- Added personalized content viewer in the block editor
+- Improved admin UI with better visual feedback
+- Enhanced jQuery dialog integration for previews
+- Updated admin JavaScript to support both classic and block editors
+- Fixed styling inconsistencies in the admin interface
 
 ### 1.2.0 (March 13, 2025)
 
