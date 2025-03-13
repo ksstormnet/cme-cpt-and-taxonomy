@@ -47,6 +47,26 @@ class Dashboard {
 	 */
 	private function __construct() {
 		add_action( 'admin_menu', array( $this, 'register_dashboard_page' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+	}
+
+	/**
+	 * Enqueue dashboard specific styles.
+	 *
+	 * @since    1.3.0
+	 * @param    string $hook    Current admin page.
+	 */
+	public function enqueue_styles( $hook ) {
+		// Only load on our dashboard page.
+		if ( 'toplevel_page_cme-personas-dashboard' === $hook ) {
+			wp_enqueue_style(
+				'cme-personas-dashboard',
+				CME_PERSONAS_URL . 'admin/css/dashboard.css',
+				array(),
+				CME_PERSONAS_VERSION,
+				'all'
+			);
+		}
 	}
 
 	/**
@@ -67,14 +87,7 @@ class Dashboard {
 		);
 
 		// Add submenu pages.
-		add_submenu_page(
-			'cme-personas-dashboard',
-			__( 'Personas Dashboard', 'cme-personas' ),
-			__( 'Dashboard', 'cme-personas' ),
-			'manage_options',
-			'cme-personas-dashboard',
-			array( $this, 'render_dashboard_page' )
-		);
+		// We don't add the dashboard as a submenu since it's the main page
 
 		add_submenu_page(
 			'cme-personas-dashboard',
