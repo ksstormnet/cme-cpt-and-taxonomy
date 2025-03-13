@@ -260,14 +260,14 @@ class Personas_API {
 	 *
 	 * @since     1.1.0
 	 * @param     int    $entity_id       The entity ID (e.g., post ID).
-	 * @param     string $entity_type     The entity type (default: 'post').
 	 * @param     string $content_field   The content field name.
 	 * @param     mixed  $content         The content to store.
 	 * @param     string $persona_id      The persona ID.
+	 * @param     string $entity_type     The entity type (default: 'post').
 	 * @return    bool                    Whether the content was set successfully.
 	 */
-	public function set_content( $entity_id, $entity_type = 'post', $content_field, $content, $persona_id ) {
-		return $this->persona_content->set_content( $entity_id, $entity_type, $content_field, $content, $persona_id );
+	public function set_content( $entity_id, $content_field, $content, $persona_id, $entity_type = 'post' ) {
+		return $this->persona_content->set_content( $entity_id, $content_field, $content, $persona_id, $entity_type );
 	}
 
 	/**
