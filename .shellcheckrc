@@ -1,0 +1,29 @@
+# Enforce use of double brackets for tests
+enable=SC2292
+
+# Warn about single bracket tests
+enable=SC2039
+
+# Warn about non-double quoted variables
+enable=SC2086
+
+# Suggest adding braces to prevent globbing and word splitting
+enable=SC2206
+
+# Enforce quoting variables in printf statements
+enable=SC2059
+
+# Prefer [[ ]] over [ ] for tests in bash scripts
+enable=SC2166
+
+# Always quote variables unless in for loops, casing, etc.
+enable=SC2046
+
+# Prefer ${var} over $var for variable references
+enable=SC2250
+
+# Warn about command substitution without quotes
+enable=SC2046
+
+# Prefer shellcheck_directive shell=bash over #!/bin/bash for more consistent standards
+shell=bash
