@@ -81,6 +81,11 @@ class Plugin {
 		require_once CME_PLUGIN_DIR . 'includes/class-dashboard.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-shortcodes.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-settings.php';
+
+		// Load frontend class to ensure shortcodes are registered
+		if (file_exists(CME_PLUGIN_DIR . 'includes/class-frontend.php')) {
+			require_once CME_PLUGIN_DIR . 'includes/class-frontend.php';
+		}
 	}
 
 	/**
@@ -95,6 +100,11 @@ class Plugin {
 		$this->dashboard         = Dashboard::get_instance();
 		$this->shortcodes        = new Shortcodes();
 		$this->settings          = new Settings();
+
+		// Make sure Frontend is initialized if it exists
+		if (class_exists('\\CME_Personas\\Frontend')) {
+			Frontend::get_instance();
+		}
 	}
 
 	/**
@@ -123,6 +133,9 @@ class Plugin {
 		$this->admin->register();
 		$this->shortcodes->register();
 		$this->settings->register();
+
+		// Make sure the integrator is initialized early
+		\CME_Personas\Persona_Integrator::get_instance();
 
 		// Register AJAX handler for welcome notice.
 		add_action( 'wp_ajax_cme_dismiss_welcome', array( $this, 'dismiss_welcome_notice' ) );
