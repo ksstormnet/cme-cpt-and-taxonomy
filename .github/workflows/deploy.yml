@@ -1,11 +1,14 @@
 name: Deploy to Production
 
 on:
-  push:
-    branches: [ main ]
+  pull_request:
+    types: [closed]
+    branches: [main]
 
 jobs:
   deploy:
+    # Only run if the PR was merged and the head branch was 'dev'
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'dev'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
