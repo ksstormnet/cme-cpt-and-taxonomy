@@ -1,6 +1,6 @@
 # Persona Content System Guide
 
-This guide provides a comprehensive overview of the CME Cruises persona content system, explaining how it works, how to use it, and how to extend it.
+This guide provides a comprehensive overview of the CME Personas plugin explaining how it works, how to use it, and how to extend it.
 
 ## What is the Persona System?
 
@@ -8,55 +8,42 @@ The persona system enables the creation and delivery of tailored content for dif
 
 ### Supported Personas
 
-The system supports four primary personas:
+The system supports multiple personas, with common examples including:
 
 1. **Default** - Standard content shown to unidentified visitors
-2. **Easy-Breezy Cruiser** - Casual cruisers looking for relaxation and simplicity
-3. **Luxe Seafarer** - Luxury-focused travelers seeking premium experiences
-4. **Thrill Seeker** - Adventure-oriented cruisers interested in activities and exploration
+2. **Easy-Breezy** - Casual visitors looking for simplicity
+3. **Luxe** - Luxury-focused visitors seeking premium experiences
+4. **Thrill Seeker** - Adventure-oriented visitors interested in activities
 
 ## Content Management
 
 ### Admin Interface
 
-The persona content system provides a tabbed interface in the WordPress admin for managing content variations:
-
-*Note: See [Persona Tabs Illustration Description](../assets/persona-tabs-illustration.txt) for a textual description of the interface.*
+The persona content system provides a tabbed interface in the WordPress admin for managing content variations.
 
 Each tab contains a full Gutenberg block editor instance allowing for complete flexibility in creating persona-specific content.
 
 ### Key Features
 
-- **Full Block Editor Support**: Create rich, visually distinct content for each persona
+- **Persona Management**: Create and manage customer personas
+- **Gender-Specific Images**: Associate different images with personas based on gender
+- **Full Block Editor Support**: Create rich, visually distinct content for each persona (planned)
 - **Default Fallback**: Default content displays when persona-specific content is not available
-- **Preview Mode**: Preview content as it will appear to different personas
-- **Field-Level Variations**: Customize individual fields or entire content blocks
+- **Preview Mode**: Preview content as it will appear to different personas (planned)
+- **Field-Level Variations**: Customize individual fields or entire content blocks (planned)
 
 ## Technical Implementation
 
 ### Content Storage
 
-Persona content is stored in a dedicated table structure:
+Persona content will be stored in a structured way:
 
-```sql
-CREATE TABLE cme_persona_content (
-  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  entity_id bigint(20) unsigned NOT NULL,
-  entity_type varchar(20) NOT NULL,
-  persona_id varchar(50) NOT NULL,
-  content_field varchar(50) NOT NULL,
-  content_data longtext NOT NULL,
-  date_modified datetime NOT NULL,
-  PRIMARY KEY (id),
-  KEY entity_persona (entity_id, entity_type, persona_id)
-);
-```
-
-This design allows for efficient retrieval of specific content variations while maintaining flexibility across different entity types.
+1. **Current Implementation**: Uses post meta for storing basic persona data and gender-specific images
+2. **Planned Enhancement**: More sophisticated storage with Redis caching for performance
 
 ### Persona Detection
 
-The system detects visitor personas through several methods:
+The system will detect visitor personas through several methods:
 
 1. **Cookie-Based**: Stores visitor's selected persona in a cookie
 2. **URL Parameter**: Allows specifying persona via `?persona=xyz` parameter
@@ -67,15 +54,14 @@ The system detects visitor personas through several methods:
 
 ### Creating Persona Content
 
-1. Edit a cruise, ship, or destination
-2. Navigate to the persona content section
-3. Select the appropriate persona tab
-4. Create custom content specific to that persona
-5. Save the entity
+1. Create a persona via the custom post type
+2. Add gender-specific images
+3. In future updates: Create custom content specific to that persona
+4. Save the entity
 
 ### Previewing Persona Content
 
-1. While editing content, use the "Preview as Persona" dropdown
+1. While editing content, use the "Preview as Persona" dropdown (planned)
 2. Select the desired persona to preview
 3. View the full rendered page as that persona would see it
 4. Switch between personas to compare experiences
@@ -93,7 +79,7 @@ For effective persona-based content:
 
 ### Displaying Persona Content
 
-The system automatically handles content switching on the frontend:
+The system will handle content switching on the frontend (planned):
 
 ```php
 // Example of displaying persona-aware content
@@ -103,7 +89,7 @@ echo apply_filters('the_content', $content);
 
 ### Custom Template Integration
 
-For custom templates, use the dedicated functions:
+For custom templates, developers will be able to use dedicated functions (planned):
 
 ```php
 // Get persona-specific content for an entity
@@ -122,14 +108,12 @@ function cme_switch_persona($persona);
 
 To add new personas:
 
-1. Use the Personas settings page in the admin
-2. Add the new persona key and name
-3. Update database
-4. Update frontend detection logic
+1. Use the WordPress admin to create new Persona posts
+2. Add gender-specific images for the persona
 
 ### Custom Field Integration
 
-To add persona support to custom fields:
+To add persona support to custom fields (planned):
 
 ```php
 // Register a custom field for persona content
@@ -143,7 +127,7 @@ function register_persona_custom_field($field_key, $entity_type) {
 
 ### Hooks and Filters
 
-The persona system provides several hooks for extension:
+The persona system will provide several hooks for extension (planned):
 
 ```php
 // Modify detected persona

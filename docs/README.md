@@ -1,34 +1,32 @@
-# CME Cruises Documentation
+# CME Personas Documentation
 
-This directory contains the official documentation for the CME Cruises WordPress plugin version 0.2.0 and above.
+This directory contains the official documentation for the CME Personas WordPress plugin.
 
 ## Documentation Structure
 
-- **[Architecture](./architecture/)**: System design, data models, component interactions, and integration plans
+- **[Architecture](./architecture/)**: System design, data models, and component interactions
 - **[Development](./development/)**: Development workflows, standards, and procedures
 - **[Guides](./guides/)**: Feature-specific guides and tutorials
-- **[Personas](./personas/)**: Documentation for the standalone Personas plugin
 
 ## Core Features
 
-The CME Cruises plugin provides the following core functionality:
+The CME Personas plugin provides the following core functionality:
 
-1. **Cruise Management**: Store and present cruise itineraries with deck plans, ports of call, and pricing
-2. **Ship Profiles**: Detailed information about cruise ships including amenities and specifications
-3. **Destination Information**: Rich content about cruise destinations with local information
-4. **Persona Content System**: Tailored content for different visitor types/personas
-5. **NCL Content Scraper**: Automated scraping and importing of cruise information
+1. **Persona Management**: Create and manage customer personas
+2. **Gender-Specific Images**: Associate different images with personas based on gender
+3. **Content Personalization**: Planned expansion for delivering tailored content
+4. **Admin Interface**: Simple management of persona data 
 
-## Personas Implementation
+## Planned Expansions
 
-The Personas functionality is being developed as a standalone WordPress plugin for better separation of concerns and reusability. Key documentation:
+The Personas plugin is being expanded to include content personalization capabilities:
 
-- **[Personas Plugin Implementation Plan](./personas/PLUGIN_IMPLEMENTATION.md)**: Design for the standalone plugin
-- **[Integration Plan](./architecture/PERSONAS_INTEGRATION_PLAN.md)**: How Cruise Made Easy integrates with the Personas plugin
+- **Redis-Based Caching**: Efficient content delivery system
+- **Block-Level Personalization**: Customize individual blocks for different personas
+- **Persona Detection**: Various methods to identify the active persona
+- **Frontend Integration**: Template functions, shortcodes, and APIs
 
-## Version Information
-
-This documentation applies to CME Cruises v0.2.0 and later. For historical documentation relating to earlier versions, see the `/legacy/docs` directory.
+See the [Implementation Plan](./architecture/IMPLEMENTATION_PLAN.md) for details about upcoming features.
 
 ## Getting Started
 
@@ -36,7 +34,7 @@ For new developers, we recommend starting with:
 
 1. [Architecture Overview](./architecture/OVERVIEW.md) - Understand the system design
 2. [Development Workflow](./development/WORKFLOW.md) - Set up your development environment
-3. [Persona System Guide](./guides/PERSONAS.md) - Learn about the persona content system
+3. [Personas Guide](./guides/PERSONAS.md) - Learn about using the persona system
 
 ## Contributing to Documentation
 
@@ -49,4 +47,4 @@ When contributing to this documentation:
 
 ## License
 
-This documentation and the CME Cruises plugin are proprietary to Sky+Sea LLC d/b/a KSStorm Media.
+This documentation and the CME Personas plugin are proprietary.
