@@ -82,8 +82,8 @@ class Plugin {
 		require_once CME_PLUGIN_DIR . 'includes/class-shortcodes.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-settings.php';
 
-		// Load frontend class to ensure shortcodes are registered
-		if (file_exists(CME_PLUGIN_DIR . 'includes/class-frontend.php')) {
+		// Load frontend class to ensure shortcodes are registered.
+		if ( file_exists( CME_PLUGIN_DIR . 'includes/class-frontend.php' ) ) {
 			require_once CME_PLUGIN_DIR . 'includes/class-frontend.php';
 		}
 	}
@@ -101,8 +101,8 @@ class Plugin {
 		$this->shortcodes        = new Shortcodes();
 		$this->settings          = new Settings();
 
-		// Make sure Frontend is initialized if it exists
-		if (class_exists('\\CME_Personas\\Frontend')) {
+		// Make sure Frontend is initialized if it exists.
+		if ( class_exists( '\\CME_Personas\\Frontend' ) ) {
 			Frontend::get_instance();
 		}
 	}
@@ -134,7 +134,7 @@ class Plugin {
 		$this->shortcodes->register();
 		$this->settings->register();
 
-		// Make sure the integrator is initialized early
+		// Make sure the integrator is initialized early.
 		\CME_Personas\Persona_Integrator::get_instance();
 
 		// Register AJAX handler for welcome notice.
