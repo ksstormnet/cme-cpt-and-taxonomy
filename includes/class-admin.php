@@ -40,7 +40,7 @@ class Admin {
 	 * @return void
 	 */
 	public function enqueue_scripts( string $hook ): void {
-		// Enqueue admin CSS for all admin pages
+		// Enqueue admin CSS for all admin pages.
 		wp_enqueue_style(
 			'cme-personas-admin',
 			plugin_dir_url( CME_PERSONAS_FILE ) . 'admin/css/personas-admin.css',
@@ -49,7 +49,7 @@ class Admin {
 			'all'
 		);
 
-		// Enqueue dashboard CSS
+		// Enqueue dashboard CSS.
 		wp_enqueue_style(
 			'cme-personas-dashboard',
 			plugin_dir_url( CME_PERSONAS_FILE ) . 'admin/css/personas-dashboard.css',
@@ -58,7 +58,7 @@ class Admin {
 			'all'
 		);
 
-		// Enqueue the admin menu fix script
+		// Enqueue the admin menu fix script.
 		wp_enqueue_script(
 			'cme-personas-admin-menu-fix',
 			plugin_dir_url( CME_PERSONAS_FILE ) . 'admin/js/admin-menu-fix.js',
@@ -67,7 +67,7 @@ class Admin {
 			true
 		);
 
-		// Add dashboard styles for dashboard page
+		// Add dashboard styles for dashboard page.
 		if ( 'toplevel_page_cme-personas-dashboard' === $hook ) {
 			wp_enqueue_style( 'dashboard' );
 			wp_enqueue_script( 'dashboard' );

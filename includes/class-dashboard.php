@@ -55,7 +55,7 @@ class Dashboard {
 	 * @since    1.3.0
 	 */
 	public function register_dashboard_page() {
-		// Add top level menu page
+		// Add top level menu page.
 		add_menu_page(
 			__( 'Personas Dashboard', 'cme-personas' ),
 			__( 'Personas', 'cme-personas' ),
@@ -66,7 +66,7 @@ class Dashboard {
 			25
 		);
 
-		// Add submenu pages
+		// Add submenu pages.
 		add_submenu_page(
 			'cme-personas-dashboard',
 			__( 'Personas Dashboard', 'cme-personas' ),
@@ -85,8 +85,10 @@ class Dashboard {
 			null
 		);
 
-		// Future pages can be added here
-		/* Example:
+		// Future pages can be added here.
+
+		/*
+		Example:
 		add_submenu_page(
 			'cme-personas-dashboard',
 			__( 'Personas Settings', 'cme-personas' ),
@@ -104,16 +106,18 @@ class Dashboard {
 	 * @since    1.3.0
 	 */
 	public function render_dashboard_page() {
-		// Get counts
+		// Get counts.
 		$persona_count = wp_count_posts( 'persona' )->publish;
 
-		// Get recent personas
-		$recent_personas = get_posts( array(
-			'post_type'      => 'persona',
-			'posts_per_page' => 5,
-			'orderby'        => 'date',
-			'order'          => 'DESC',
-		) );
+		// Get recent personas.
+		$recent_personas = get_posts(
+			array(
+				'post_type'      => 'persona',
+				'posts_per_page' => 5,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
 		?>
 		<div class="wrap cme-personas-dashboard">
 			<h1><?php esc_html_e( 'Personas Dashboard', 'cme-personas' ); ?></h1>
@@ -126,7 +130,7 @@ class Dashboard {
 						<div class="welcome-panel-column">
 							<h3><?php esc_html_e( 'Get Started', 'cme-personas' ); ?></h3>
 							<ul>
-								<li><?php echo sprintf( '<a href="%s" class="button button-primary button-hero">%s</a>', esc_url( admin_url( 'edit.php?post_type=persona' ) ), esc_html__( 'Manage Personas', 'cme-personas' ) ); ?></li>
+								<li><?php printf( '<a href="%s" class="button button-primary button-hero">%s</a>', esc_url( admin_url( 'edit.php?post_type=persona' ) ), esc_html__( 'Manage Personas', 'cme-personas' ) ); ?></li>
 							</ul>
 						</div>
 						<div class="welcome-panel-column">
@@ -156,11 +160,16 @@ class Dashboard {
 							<div class="main">
 								<ul>
 									<li class="persona-count">
-										<?php echo sprintf(
-											/* translators: %s: number of personas */
-											_n( '%s Persona', '%s Personas', $persona_count, 'cme-personas' ),
-											'<span class="count">' . number_format_i18n( $persona_count ) . '</span>'
-										); ?>
+										<?php
+										echo wp_kses(
+											sprintf(
+												/* translators: %s: number of personas */
+												_n( '%s Persona', '%s Personas', $persona_count, 'cme-personas' ),
+												'<span class="count">' . esc_html( number_format_i18n( $persona_count ) ) . '</span>'
+											),
+											array( 'span' => array( 'class' => array() ) )
+										);
+										?>
 									</li>
 								</ul>
 							</div>
@@ -202,6 +211,6 @@ class Dashboard {
 	 * @since    1.3.0
 	 */
 	public function render_settings_page() {
-		// Will be implemented in future versions
+		// Will be implemented in future versions.
 	}
 }
