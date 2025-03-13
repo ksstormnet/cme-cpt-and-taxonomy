@@ -157,13 +157,13 @@ class Personas_API {
 		$current_persona = $this->get_current_persona();
 
 		// Build the switcher HTML.
-		$html = '<div class="' . esc_attr( $atts['class'] ) . '">';
+		$html  = '<div class="' . esc_attr( $atts['class'] ) . '">';
 		$html .= '<label>' . esc_html( $atts['label'] ) . '</label>';
 		$html .= '<select id="persona-switcher" data-current="' . esc_attr( $current_persona ) . '">';
 
 		foreach ( $personas as $id => $name ) {
 			$selected = selected( $id, $current_persona, false );
-			$html .= '<option value="' . esc_attr( $id ) . '"' . $selected . '>' . esc_html( $name ) . '</option>';
+			$html    .= '<option value="' . esc_attr( $id ) . '"' . $selected . '>' . esc_html( $name ) . '</option>';
 		}
 
 		$html .= '</select>';

@@ -82,7 +82,7 @@ class Persona_Integrator {
 		// Initialize instances.
 		$this->persona_manager = Persona_Manager::get_instance();
 		$this->persona_content = Persona_Content::get_instance();
-		$this->personas_api = Personas_API::get_instance();
+		$this->personas_api    = Personas_API::get_instance();
 
 		// Set up hooks.
 		$this->setup_hooks();
@@ -95,21 +95,20 @@ class Persona_Integrator {
 	 * Include required files.
 	 *
 	 * @since    1.1.0
-	 * @return   void
 	 */
 	private function includes() {
 		// Core classes - only include if they're not already included by the autoloader.
-		$base_path = plugin_dir_path( dirname( __FILE__ ) ) . 'includes/';
+		$base_path = plugin_dir_path( __DIR__ ) . 'includes/';
 
-		if ( ! class_exists('\\CME_Personas\\Persona_Manager') ) {
+		if ( ! class_exists( '\\CME_Personas\\Persona_Manager' ) ) {
 			require_once $base_path . 'class-persona-manager.php';
 		}
 
-		if ( ! class_exists('\\CME_Personas\\Persona_Content') ) {
+		if ( ! class_exists( '\\CME_Personas\\Persona_Content' ) ) {
 			require_once $base_path . 'class-persona-content.php';
 		}
 
-		if ( ! class_exists('\\CME_Personas\\Personas_API') ) {
+		if ( ! class_exists( '\\CME_Personas\\Personas_API' ) ) {
 			require_once $base_path . 'class-personas-api.php';
 		}
 	}
@@ -118,7 +117,6 @@ class Persona_Integrator {
 	 * Set up hooks.
 	 *
 	 * @since    1.1.0
-	 * @return   void
 	 */
 	private function setup_hooks() {
 		// Hook into activation.
@@ -145,61 +143,60 @@ class Persona_Integrator {
 	 * Set up global functions.
 	 *
 	 * @since    1.1.0
-	 * @return   void
 	 */
 	private function setup_global_functions() {
-		/**
-		 * Get the current persona.
-		 *
-		 * @since     1.1.0
-		 * @return    string    The current persona identifier.
-		 */
 		if ( ! function_exists( 'cme_get_current_persona' ) ) {
+			/**
+			 * Get the current persona.
+			 *
+			 * @since     1.1.0
+			 * @return    string    The current persona identifier.
+			 */
 			function cme_get_current_persona() {
 				$api = Personas_API::get_instance();
 				return $api->get_current_persona();
 			}
 		}
 
-		/**
-		 * Set the active persona.
-		 *
-		 * @since     1.1.0
-		 * @param     string $persona_id    The persona identifier to set.
-		 * @param     bool   $set_cookie    Whether to set a cookie for the persona.
-		 * @return    bool                  Whether the persona was set successfully.
-		 */
 		if ( ! function_exists( 'cme_set_persona' ) ) {
+			/**
+			 * Set the active persona.
+			 *
+			 * @since     1.1.0
+			 * @param     string $persona_id    The persona identifier to set.
+			 * @param     bool   $set_cookie    Whether to set a cookie for the persona.
+			 * @return    bool                  Whether the persona was set successfully.
+			 */
 			function cme_set_persona( $persona_id, $set_cookie = true ) {
 				$api = Personas_API::get_instance();
 				return $api->set_persona( $persona_id, $set_cookie );
 			}
 		}
 
-		/**
-		 * Get persona-specific content for an entity.
-		 *
-		 * @since     1.1.0
-		 * @param     int    $entity_id       The entity ID (e.g., post ID).
-		 * @param     string $entity_type     The entity type (default: 'post').
-		 * @param     string $content_field   The content field name (default: 'content').
-		 * @param     string $persona_id      The persona ID (null for current).
-		 * @return    mixed                   The persona-specific content, or original content if not found.
-		 */
 		if ( ! function_exists( 'cme_get_persona_content' ) ) {
+			/**
+			 * Get persona-specific content for an entity.
+			 *
+			 * @since     1.1.0
+			 * @param     int    $entity_id       The entity ID (e.g., post ID).
+			 * @param     string $entity_type     The entity type (default: 'post').
+			 * @param     string $content_field   The content field name (default: 'content').
+			 * @param     string $persona_id      The persona ID (null for current).
+			 * @return    mixed                   The persona-specific content, or original content if not found.
+			 */
 			function cme_get_persona_content( $entity_id, $entity_type = 'post', $content_field = 'content', $persona_id = null ) {
 				$api = Personas_API::get_instance();
 				return $api->get_content( $entity_id, $entity_type, $content_field, $persona_id );
 			}
 		}
 
-		/**
-		 * Get all available personas.
-		 *
-		 * @since     1.1.0
-		 * @return    array    Array of available personas in format [id => name].
-		 */
 		if ( ! function_exists( 'cme_get_all_personas' ) ) {
+			/**
+			 * Get all available personas.
+			 *
+			 * @since     1.1.0
+			 * @return    array    Array of available personas in format [id => name].
+			 */
 			function cme_get_all_personas() {
 				$api = Personas_API::get_instance();
 				return $api->get_all_personas();
@@ -211,7 +208,6 @@ class Persona_Integrator {
 	 * Register assets.
 	 *
 	 * @since    1.1.0
-	 * @return   void
 	 */
 	public function register_assets() {
 		// Frontend CSS.
@@ -241,8 +237,8 @@ class Persona_Integrator {
 			'cme-personas',
 			'cmePersonas',
 			array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce' => wp_create_nonce( 'cme_personas_nonce' ),
+				'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
+				'nonce'          => wp_create_nonce( 'cme_personas_nonce' ),
 				'currentPersona' => $this->persona_manager->get_current_persona(),
 			)
 		);
@@ -252,7 +248,6 @@ class Persona_Integrator {
 	 * Activation hook.
 	 *
 	 * @since    1.1.0
-	 * @return   void
 	 */
 	public function activate() {
 		// Nothing to do yet.
@@ -262,7 +257,6 @@ class Persona_Integrator {
 	 * Deactivation hook.
 	 *
 	 * @since    1.1.0
-	 * @return   void
 	 */
 	public function deactivate() {
 		// Nothing to do yet.
@@ -272,7 +266,6 @@ class Persona_Integrator {
 	 * Uninstall hook.
 	 *
 	 * @since    1.1.0
-	 * @return   void
 	 */
 	public static function uninstall() {
 		// Nothing to do yet.
@@ -282,7 +275,6 @@ class Persona_Integrator {
 	 * Admin initialization.
 	 *
 	 * @since    1.1.0
-	 * @return   void
 	 */
 	public function admin_init() {
 		// Add admin assets.
@@ -293,7 +285,6 @@ class Persona_Integrator {
 	 * Register admin assets.
 	 *
 	 * @since    1.1.0
-	 * @return   void
 	 */
 	public function admin_assets() {
 		// Admin CSS.
@@ -323,8 +314,8 @@ class Persona_Integrator {
 			'cme-personas-admin',
 			'cmePersonasAdmin',
 			array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce' => wp_create_nonce( 'cme_personas_admin_nonce' ),
+				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'cme_personas_admin_nonce' ),
 				'personas' => $this->persona_manager->get_all_personas(),
 			)
 		);
@@ -334,7 +325,6 @@ class Persona_Integrator {
 	 * Register meta boxes.
 	 *
 	 * @since    1.1.0
-	 * @return   void
 	 */
 	public function register_meta_boxes() {
 		// Get post types that support persona content.
@@ -358,7 +348,6 @@ class Persona_Integrator {
 	 *
 	 * @since    1.1.0
 	 * @param    \WP_Post $post    The post object.
-	 * @return   void
 	 */
 	public function render_persona_content_meta_box( $post ) {
 		// Add nonce for security.
@@ -398,7 +387,9 @@ class Persona_Integrator {
 
 			// Output panel.
 			echo '<div class="cme-persona-tab-panel" data-persona="' . esc_attr( $id ) . '">';
-			echo '<h3>' . esc_html( sprintf( __( 'Content for %s', 'cme-personas' ), $name ) ) . '</h3>';
+			/* translators: %s: Persona name */
+			$content_heading = sprintf( __( 'Content for %s', 'cme-personas' ), $name );
+			echo '<h3>' . esc_html( $content_heading ) . '</h3>';
 
 			// Title.
 			echo '<div class="cme-persona-field">';
@@ -410,11 +401,15 @@ class Persona_Integrator {
 			echo '<div class="cme-persona-field">';
 			echo '<label for="cme_persona_' . esc_attr( $id ) . '_content">' . esc_html__( 'Content', 'cme-personas' ) . '</label>';
 			$content = $variations['content'] ?? '';
-			wp_editor( $content, 'cme_persona_' . esc_attr( $id ) . '_content', array(
-				'textarea_name' => 'cme_persona_content[' . esc_attr( $id ) . '][content]',
-				'media_buttons' => true,
-				'textarea_rows' => 10,
-			) );
+			wp_editor(
+				$content,
+				'cme_persona_' . esc_attr( $id ) . '_content',
+				array(
+					'textarea_name' => 'cme_persona_content[' . esc_attr( $id ) . '][content]',
+					'media_buttons' => true,
+					'textarea_rows' => 10,
+				)
+			);
 			echo '</div>';
 
 			// Excerpt.
@@ -452,6 +447,8 @@ class Persona_Integrator {
 
 				// Delete button.
 				$('.cme-persona-delete').on('click', function() {
+					/* eslint-disable no-alert */
+					// translators: Confirmation message when deleting persona content
 					if (confirm('<?php echo esc_js( __( 'Are you sure you want to delete the content for this persona? This cannot be undone.', 'cme-personas' ) ); ?>')) {
 						var persona = $(this).data('persona');
 						$('#cme_persona_' + persona + '_title').val('');
@@ -463,6 +460,7 @@ class Persona_Integrator {
 						}
 						$('#cme_persona_' + persona + '_excerpt').val('');
 					}
+					/* eslint-enable no-alert */
 				});
 			});
 		</script>
@@ -474,7 +472,6 @@ class Persona_Integrator {
 	 *
 	 * @since    1.1.0
 	 * @param    int $post_id    The post ID.
-	 * @return   void
 	 */
 	public function save_persona_content( $post_id ) {
 		// Check if nonce is set.
@@ -483,7 +480,8 @@ class Persona_Integrator {
 		}
 
 		// Verify nonce.
-		if ( ! wp_verify_nonce( $_POST['cme_persona_content_nonce'], 'cme_persona_content_meta_box' ) ) {
+		$nonce = sanitize_text_field( wp_unslash( $_POST['cme_persona_content_nonce'] ) );
+		if ( ! wp_verify_nonce( $nonce, 'cme_persona_content_meta_box' ) ) {
 			return;
 		}
 
@@ -497,10 +495,8 @@ class Persona_Integrator {
 			if ( ! current_user_can( 'edit_page', $post_id ) ) {
 				return;
 			}
-		} else {
-			if ( ! current_user_can( 'edit_post', $post_id ) ) {
-				return;
-			}
+		} elseif ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
 		}
 
 		// Get all personas.
@@ -510,17 +506,19 @@ class Persona_Integrator {
 		unset( $personas['default'] );
 
 		// Get submitted content.
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$submitted_content = isset( $_POST['cme_persona_content'] ) ? $_POST['cme_persona_content'] : array();
+		$submitted_content = array();
+		if ( isset( $_POST['cme_persona_content'] ) ) {
+			$submitted_content = map_deep( wp_unslash( $_POST['cme_persona_content'] ), 'sanitize_text_field' );
+		}
 
 		// Process each persona.
 		foreach ( $personas as $id => $name ) {
 			if ( isset( $submitted_content[ $id ] ) ) {
 				// Sanitize content.
 				$content = array(
-					'title' => isset( $submitted_content[ $id ]['title'] ) ? sanitize_text_field( wp_unslash( $submitted_content[ $id ]['title'] ) ) : '',
-					'content' => isset( $submitted_content[ $id ]['content'] ) ? wp_kses_post( wp_unslash( $submitted_content[ $id ]['content'] ) ) : '',
-					'excerpt' => isset( $submitted_content[ $id ]['excerpt'] ) ? sanitize_textarea_field( wp_unslash( $submitted_content[ $id ]['excerpt'] ) ) : '',
+					'title'   => isset( $submitted_content[ $id ]['title'] ) ? sanitize_text_field( $submitted_content[ $id ]['title'] ) : '',
+					'content' => isset( $submitted_content[ $id ]['content'] ) ? wp_kses_post( $submitted_content[ $id ]['content'] ) : '',
+					'excerpt' => isset( $submitted_content[ $id ]['excerpt'] ) ? sanitize_textarea_field( $submitted_content[ $id ]['excerpt'] ) : '',
 				);
 
 				// Only save if not empty.

@@ -99,8 +99,8 @@ class Persona_Manager {
 	 */
 	public function initialize() {
 		// Initialize any required settings or options.
-		$this->cookie_name = apply_filters( 'cme_persona_cookie_name', $this->cookie_name );
-		$this->url_param = apply_filters( 'cme_persona_url_param', $this->url_param );
+		$this->cookie_name       = apply_filters( 'cme_persona_cookie_name', $this->cookie_name );
+		$this->url_param         = apply_filters( 'cme_persona_url_param', $this->url_param );
 		$this->cookie_expiration = apply_filters( 'cme_persona_cookie_expiration', $this->cookie_expiration );
 	}
 
@@ -185,7 +185,7 @@ class Persona_Manager {
 
 		// Add each persona to the array.
 		foreach ( $persona_posts as $persona ) {
-			$key = sanitize_title( $persona->post_title );
+			$key              = sanitize_title( $persona->post_title );
 			$personas[ $key ] = $persona->post_title;
 		}
 
@@ -314,9 +314,9 @@ class Persona_Manager {
 	public function get_persona_details( $persona_id ) {
 		if ( 'default' === $persona_id ) {
 			return array(
-				'id'    => 'default',
-				'title' => __( 'Default', 'cme-personas' ),
-				'slug'  => 'default',
+				'id'      => 'default',
+				'title'   => __( 'Default', 'cme-personas' ),
+				'slug'    => 'default',
 				'post_id' => null,
 			);
 		}

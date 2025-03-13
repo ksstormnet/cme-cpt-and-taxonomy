@@ -15,7 +15,7 @@ The CME Personas plugin provides the following core functionality:
 1. **Persona Management**: Create and manage customer personas
 2. **Gender-Specific Images**: Associate different images with personas based on gender
 3. **Content Personalization**: Planned expansion for delivering tailored content
-4. **Admin Interface**: Simple management of persona data 
+4. **Admin Interface**: Simple management of persona data
 
 ## Planned Expansions
 

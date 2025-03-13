@@ -92,7 +92,7 @@ class Persona_Content {
 		// Get the current persona if none specified.
 		if ( null === $persona_id ) {
 			$persona_manager = Persona_Manager::get_instance();
-			$persona_id = $persona_manager->get_current_persona();
+			$persona_id      = $persona_manager->get_current_persona();
 		}
 
 		// If it's the default persona, return the original content.
@@ -148,7 +148,7 @@ class Persona_Content {
 	 * @return    array                   The content variations.
 	 */
 	public function get_content_variations( $entity_id, $entity_type, $persona_id ) {
-		$meta_key = $this->get_meta_key( $entity_type, $persona_id );
+		$meta_key   = $this->get_meta_key( $entity_type, $persona_id );
 		$variations = get_post_meta( $entity_id, $meta_key, true );
 
 		return is_array( $variations ) ? $variations : array();
@@ -166,6 +166,11 @@ class Persona_Content {
 	 */
 	public function save_content_variations( $entity_id, $entity_type, $persona_id, $variations ) {
 		$meta_key = $this->get_meta_key( $entity_type, $persona_id );
+
+		// Clear any related caches.
+		$cache_key = 'cme_personas_' . $entity_id . '_' . $entity_type;
+		wp_cache_delete( $cache_key, 'cme_personas' );
+
 		return update_post_meta( $entity_id, $meta_key, $variations );
 	}
 
@@ -242,9 +247,9 @@ class Persona_Content {
 	 * Filter post excerpt to show persona-specific excerpt.
 	 *
 	 * @since     1.1.0
-	 * @param     string $excerpt    The excerpt.
-	 * @param     int    $post_id    The post ID or post object.
-	 * @return    string             The filtered excerpt.
+	 * @param     string  $excerpt  The excerpt.
+	 * @param     WP_Post $post     The post object.
+	 * @return    string            The filtered excerpt.
 	 */
 	public function filter_excerpt( $excerpt, $post = null ) {
 		// Skip admin or if no post.
@@ -277,28 +282,24 @@ class Persona_Content {
 	 * @return    bool                    Whether the content was deleted successfully.
 	 */
 	public function delete_all_content( $entity_id, $entity_type = 'post' ) {
-		global $wpdb;
+		// Generate a cache key and delete the cache.
+		$cache_key = 'cme_personas_' . $entity_id . '_' . $entity_type;
+		wp_cache_delete( $cache_key, 'cme_personas' );
 
-		$meta_key_pattern = $this->meta_key_prefix . $entity_type . '_%';
+		// Get all personas with content for this entity.
+		$personas = $this->get_personas_with_content( $entity_id, $entity_type );
 
-		// Use $wpdb to delete all matching meta keys.
-		$result = $wpdb->delete(
-			$wpdb->postmeta,
-			array(
-				'post_id'    => $entity_id,
-				'meta_key'   => $meta_key_pattern,
-			),
-			array(
-				'%d',
-				'%s',
-			)
-		);
-
-		if ( false === $result ) {
-			return false;
+		// Delete each persona's content.
+		$success = true;
+		foreach ( $personas as $persona_id ) {
+			$meta_key = $this->get_meta_key( $entity_type, $persona_id );
+			$result   = delete_post_meta( $entity_id, $meta_key );
+			if ( ! $result ) {
+				$success = false;
+			}
 		}
 
-		return true;
+		return $success;
 	}
 
 	/**
@@ -310,25 +311,29 @@ class Persona_Content {
 	 * @return    array                   Array of persona IDs.
 	 */
 	public function get_personas_with_content( $entity_id, $entity_type = 'post' ) {
-		global $wpdb;
+		// Generate a cache key.
+		$cache_key = 'cme_personas_' . $entity_id . '_' . $entity_type;
 
-		$meta_key_pattern = $this->meta_key_prefix . $entity_type . '_%';
+		// Try to get cached result.
+		$personas = wp_cache_get( $cache_key, 'cme_personas' );
 
-		// Get all meta keys matching the pattern.
-		$meta_keys = $wpdb->get_col(
-			$wpdb->prepare(
-				"SELECT meta_key FROM $wpdb->postmeta WHERE post_id = %d AND meta_key LIKE %s",
-				$entity_id,
-				$meta_key_pattern
-			)
-		);
+		if ( false === $personas ) {
+			// Use get_post_meta without specific key to get all post meta.
+			$all_post_meta = get_post_meta( $entity_id );
+			$meta_prefix   = $this->meta_key_prefix . $entity_type . '_';
+			$prefix_length = strlen( $meta_prefix );
 
-		// Extract the persona IDs from the meta keys.
-		$personas = array();
-		$prefix_length = strlen( $this->meta_key_prefix . $entity_type . '_' );
+			$personas = array();
 
-		foreach ( $meta_keys as $key ) {
-			$personas[] = substr( $key, $prefix_length );
+			// Filter meta keys that match our prefix.
+			foreach ( $all_post_meta as $key => $value ) {
+				if ( 0 === strpos( $key, $meta_prefix ) ) {
+					$personas[] = substr( $key, $prefix_length );
+				}
+			}
+
+			// Cache the result.
+			wp_cache_set( $cache_key, $personas, 'cme_personas', HOUR_IN_SECONDS );
 		}
 
 		return $personas;
@@ -346,7 +351,7 @@ class Persona_Content {
 		// Get the current persona if none specified.
 		if ( null === $persona_id ) {
 			$persona_manager = Persona_Manager::get_instance();
-			$persona_id = $persona_manager->get_current_persona();
+			$persona_id      = $persona_manager->get_current_persona();
 		}
 
 		// If it's the default persona, return the original content.

@@ -19,9 +19,9 @@ Cruise Made Easy Personas is at the core of the website's personalized user expe
 
 ## Installation
 
-1.  Upload the `cme-personas` folder to the `/wp-content/plugins/` directory
-2.  Activate the plugin through the 'Plugins' menu in WordPress
-3.  Start using the Customer Persona post type
+1. Upload the `cme-personas` folder to the `/wp-content/plugins/` directory
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. Start using the Customer Persona post type
 
 ## Usage
 
@@ -29,10 +29,10 @@ Cruise Made Easy Personas is at the core of the website's personalized user expe
 
 To create a new customer persona:
 
-1.  Go to "Customer Personas" in the admin menu
-2.  Click "Add New"
-3.  Add title, excerpt, and featured image
-4.  Publish your persona
+1. Go to "Customer Personas" in the admin menu
+2. Click "Add New"
+3. Add title, excerpt, and featured image
+4. Publish your persona
 
 ## Frequently Asked Questions
 
