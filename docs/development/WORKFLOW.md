@@ -7,19 +7,20 @@ This document outlines the development workflow for the CME Cruises plugin.
 ### Local Development Setup
 
 1. **Docker-based WordPress Environment**
-   - Local WordPress container with the plugin directory mounted
-   - Live updates reflected immediately in the development environment
-   - No need to rebuild or reinstall the plugin after each change
+
+    - Local WordPress container with the plugin directory mounted
+    - Live updates reflected immediately in the development environment
+    - No need to rebuild or reinstall the plugin after each change
 
 2. **Required Tools**
-   - Docker & Docker Compose
-   - Git
-   - Composer
-   - Node.js & npm
+    - Docker & Docker Compose
+    - Git
+    - Composer
+    - Node.js & npm
 
 ### Directory Structure
 
-```
+```plaintext
 cme-cruises/
 ├── admin/               # Admin interfaces
 │   ├── css/             # Admin stylesheets

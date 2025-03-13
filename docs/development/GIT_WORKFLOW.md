@@ -64,23 +64,25 @@ git commit -m "feat: description of your changes"
 When the pre-commit hook catches linting errors, follow these steps:
 
 1. **Review the error messages** in the terminal which describe:
-   - The file with the issue
-   - The line number and column
-   - A description of the problem
-   - Often a reference to the specific rule being violated
+
+    - The file with the issue
+    - The line number and column
+    - A description of the problem
+    - Often a reference to the specific rule being violated
 
 2. **Fix the issues manually** by:
-   - Opening the referenced files
-   - Navigating to the specified line numbers
-   - Making the necessary corrections based on the rule description
-   - Following the [Coding Standards](CODING_STANDARDS.md) documentation
+
+    - Opening the referenced files
+    - Navigating to the specified line numbers
+    - Making the necessary corrections based on the rule description
+    - Following the [Coding Standards](CODING_STANDARDS.md) documentation
 
 3. **After fixing the issues**, stage your changes and try committing again:
 
-   ```bash
-   git add <fixed-files>
-   git commit -m "your message"
-   ```
+    ```bash
+    git add <fixed-files>
+    git commit -m "your message"
+    ```
 
 4. **Important:** Never use `--no-verify` to bypass pre-commit hooks unless explicitly instructed by a senior developer or team lead.
 
@@ -106,6 +108,7 @@ gh pr create --base dev --head feature/my-feature-name --title "My Feature Title
 ```
 
 Your PR should include:
+
 - A clear title describing the change
 - A detailed description of what was changed and why
 - Any relevant issue numbers (e.g., "Fixes #123")
@@ -229,12 +232,12 @@ echo "Check deployment status at: ${GITHUB_REPO_URL}/actions"
 2. **Clean Directory**: Always ensure clean working directory before releases
 3. **Tag Uniqueness**: Verify tags don't already exist before creating
 4. **Branch Structure**:
-   - `main`: Production-ready code
-   - `dev`: Primary development branch
-   - `feature/*`: Feature development
-   - `bugfix/*`: Bug fixes
-   - `chore/*`: Maintenance tasks
-   - `docs/*`: Documentation updates
+    - `main`: Production-ready code
+    - `dev`: Primary development branch
+    - `feature/*`: Feature development
+    - `bugfix/*`: Bug fixes
+    - `chore/*`: Maintenance tasks
+    - `docs/*`: Documentation updates
 5. **Pre-Commit Checks**: Linting must pass before committing
 6. **Coding Standards**: All code should follow the project's [Coding Standards](CODING_STANDARDS.md)
 7. **Never Bypass Hooks**: Avoid using `--no-verify` to bypass pre-commit hooks

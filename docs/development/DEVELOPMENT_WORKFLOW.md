@@ -5,19 +5,19 @@ This document outlines the development workflow and practices for the CME Person
 ## Table of Contents
 
 - [Development Workflow for CME Personas](#development-workflow-for-cme-personas)
-	- [Table of Contents](#table-of-contents)
-	- [Code Quality Standards](#code-quality-standards)
-	- [Development Workflow](#development-workflow)
-		- [1. Branching Strategy](#1-branching-strategy)
-		- [2. Development Process](#2-development-process)
-		- [3. Code Linting and Quality](#3-code-linting-and-quality)
-		- [4. Commit Guidelines](#4-commit-guidelines)
-		- [5. Pull Request Process](#5-pull-request-process)
-	- [Linting Tools](#linting-tools)
-		- [Running Linters](#running-linters)
-		- [Fixing Linting Issues](#fixing-linting-issues)
-	- [Pre-commit Hooks](#pre-commit-hooks)
-	- [Common Best Practices](#common-best-practices)
+  - [Table of Contents](#table-of-contents)
+  - [Code Quality Standards](#code-quality-standards)
+  - [Development Workflow](#development-workflow)
+    - [1. Branching Strategy](#1-branching-strategy)
+    - [2. Development Process](#2-development-process)
+    - [3. Code Linting and Quality](#3-code-linting-and-quality)
+    - [4. Commit Guidelines](#4-commit-guidelines)
+    - [5. Pull Request Process](#5-pull-request-process)
+  - [Linting Tools](#linting-tools)
+    - [Running Linters](#running-linters)
+    - [Fixing Linting Issues](#fixing-linting-issues)
+  - [Pre-commit Hooks](#pre-commit-hooks)
+  - [Common Best Practices](#common-best-practices)
 
 ## Code Quality Standards
 
@@ -114,6 +114,7 @@ gh pr create --base dev --head your-branch-name --title "Your PR title" --body "
 ```
 
 Your PR should include:
+
 - A clear title describing the change
 - A detailed description of what was changed and why
 - Any relevant issue numbers (e.g., "Fixes #123")
