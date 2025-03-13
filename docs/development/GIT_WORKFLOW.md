@@ -1,6 +1,6 @@
 # Git Workflow Procedures
 
-This document outlines the standard procedures for working with Git in this project, replacing the various shell scripts and text files previously used.
+This document outlines the standard procedures for working with Git in the CME Personas plugin project.
 
 ## Regular Commit Process
 
@@ -19,17 +19,32 @@ git checkout -b feature/my-feature-name
 
 #### Linting and Auto-Fixes
 
-Before committing, it's recommended to run linting with auto-fixes:
+Before committing, you should run linting with auto-fixes:
 
 ```bash
-# Run all auto-fixes (JS, CSS, and Markdown)
-npm run fix
+# Run all linters
+npm run lint
 
-# Or run individual fixes
-npm run fix:js    # Fix JavaScript files
-npm run fix:css   # Fix CSS files
-npm run fix:md    # Fix Markdown files
+# Or run individual linters
+npm run lint:js    # Check JavaScript files
+npm run lint:css   # Check CSS files
+npm run lint:php   # Check PHP files
+npm run lint:md    # Check Markdown files
 ```
+
+For fixing automatically fixable issues:
+
+```bash
+# Attempt to fix ESLint issues
+npx eslint --fix path/to/file.js
+
+# Attempt to fix Stylelint issues
+npx stylelint --fix path/to/file.css
+
+# Attempt to fix Markdown issues
+npx markdownlint-cli2-fix path/to/file.md
+```
+
 #### Staging and Committing
 
 ```bash
@@ -58,37 +73,16 @@ When the pre-commit hook catches linting errors, follow these steps:
    - Opening the referenced files
    - Navigating to the specified line numbers
    - Making the necessary corrections based on the rule description
-   - Follow the [Coding Standards](CODING_STANDARDS.md) documentation
+   - Following the [Coding Standards](CODING_STANDARDS.md) documentation
 
-3. **Common issues and fixes**:
-   - For Markdown:
-     - Hard tabs (MD010): Replace tabs with spaces
-     - Missing blank lines around lists and code blocks (MD031/MD032)
-     - Missing language specification in code fences (MD040)
-   - For JavaScript/CSS:
-     - Indentation issues: Follow the project's tab/space conventions
-     - Trailing whitespace: Remove extra spaces at line ends
-
-4. **After fixing the issues**, stage your changes and try committing again:
+3. **After fixing the issues**, stage your changes and try committing again:
 
    ```bash
    git add <fixed-files>
    git commit -m "your message"
    ```
 
-5. **Using `--no-verify` as a last resort**:
-   Use the `--no-verify` flag ONLY when:
-   - You're in an emergency deployment situation
-   - Making temporary WIP commits you'll clean up later
-   - Issues are in legacy files that will be fixed in a separate pass
-
-   Example:
-
-   ```bash
-   git commit -m "your message" --no-verify
-   ```
-
-   But be aware this bypasses important quality checks and should be followed up with proper fixes.
+4. **Important:** Never use `--no-verify` to bypass pre-commit hooks unless explicitly instructed by a senior developer or team lead.
 
 Use conventional commit message format:
 
@@ -107,11 +101,15 @@ Use conventional commit message format:
 # Push the branch to remote
 git push -u origin feature/my-feature-name
 
-# Create PR using GitHub CLI (if available)
-gh pr create --base dev --head feature/my-feature-name --title "My Feature Title"
+# Create PR using GitHub CLI
+gh pr create --base dev --head feature/my-feature-name --title "My Feature Title" --body "Description of your changes"
 ```
 
-Alternatively, create the PR through the GitHub web interface.
+Your PR should include:
+- A clear title describing the change
+- A detailed description of what was changed and why
+- Any relevant issue numbers (e.g., "Fixes #123")
+- Screenshots or examples if applicable
 
 ### 4. After PR is Merged
 
@@ -147,11 +145,11 @@ Ensure there are no uncommitted changes before proceeding.
 
 #### For Simple Patch Version Increment
 
-To increment patch version (e.g., 1.2.3 → 1.2.4):
+To increment patch version (e.g., 1.0.0 → 1.0.1):
 
 ```bash
 # Determine current version from plugin file
-CURRENT_VERSION=$(grep -o "Version: *[0-9]\+\.[0-9]\+\.[0-9]\+" "cme-cruises.php" | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+")
+CURRENT_VERSION=$(grep -o "Version: *[0-9]\+\.[0-9]\+\.[0-9]\+" "cme-personas.php" | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+")
 
 # Calculate new version
 IFS='.' read -r -a version_parts <<< "${CURRENT_VERSION}"
@@ -170,7 +168,7 @@ For manual version changes (e.g., for minor or major releases):
 
 ```bash
 # Set version manually (replace with desired version)
-NEW_VERSION="1.3.0"
+NEW_VERSION="1.1.0"
 ```
 
 ### 3. Update Files With New Version
@@ -196,7 +194,7 @@ Then update version numbers in:
 ```bash
 # Commit version changes
 git add -A
-git commit -m "Bump version to ${NEW_VERSION}"
+git commit -m "chore: bump version to ${NEW_VERSION}"
 ```
 
 ### 5. Create Release Tags
@@ -235,5 +233,9 @@ echo "Check deployment status at: ${GITHUB_REPO_URL}/actions"
    - `dev`: Primary development branch
    - `feature/*`: Feature development
    - `bugfix/*`: Bug fixes
-5. **Pre-Commit Checks**: Linting should pass before merging to main branches
+   - `chore/*`: Maintenance tasks
+   - `docs/*`: Documentation updates
+5. **Pre-Commit Checks**: Linting must pass before committing
 6. **Coding Standards**: All code should follow the project's [Coding Standards](CODING_STANDARDS.md)
+7. **Never Bypass Hooks**: Avoid using `--no-verify` to bypass pre-commit hooks
+8. **Make Frequent Commits**: Make small, focused commits rather than large infrequent ones
