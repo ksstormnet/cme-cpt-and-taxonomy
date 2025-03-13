@@ -38,13 +38,22 @@ if ( file_exists( $autoloader_path ) ) {
 	require_once $autoloader_path;
 }
 
-// Include the main integrator class.
+// Define plugin constants for legacy compatibility.
+define( 'CME_PLUGIN_DIR', CME_PERSONAS_PATH );
+define( 'CME_PLUGIN_FILE', CME_PERSONAS_FILE );
+
+// Include the main plugin class and the integrator class.
+require_once CME_PERSONAS_PATH . 'includes/class-plugin.php';
 require_once CME_PERSONAS_PATH . 'includes/class-persona-integrator.php';
 
 /**
  * Initialize the plugin.
  */
 function cme_personas_init() {
+	// Initialize the plugin.
+	$plugin = new \CME_Personas\Plugin();
+	$plugin->run();
+
 	// Initialize the integrator.
 	$integrator = \CME_Personas\Persona_Integrator::get_instance();
 }

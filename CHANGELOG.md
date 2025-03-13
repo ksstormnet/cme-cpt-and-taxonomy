@@ -9,23 +9,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Block editor (Gutenberg) integration with sidebar plugin
-- AJAX handler for persona content preview and checking
-- Enhanced preview dialog with improved styling
-- Personalized content viewer in the block editor
+- Frontend integration for persona content display
+- New shortcodes for conditional content based on personas
+- Persona switcher shortcode for the frontend
+- Comprehensive documentation for frontend integration
+- Block editor integration for persona content preview
 
 ### Changed
 
-- Improved admin UI with better visual feedback
-- Enhanced jQuery dialog integration for previews
-- Updated admin JavaScript to support both classic and block editors
-- Optimized content management workflow
+- Improved code linting across all languages (PHP, JS, CSS, Markdown)
+- Enhanced dashboard UI with better organization
+- Updated React components to follow modern patterns
+- Refined JavaScript with better error handling
 
 ### Fixed
 
-- Styling inconsistencies in the admin interface
-- Preview functionality issues in different contexts
-- Cache invalidation for persona-specific content
+- PHP linting issues in Dashboard and Frontend classes
+- JavaScript errors in block editor integration
+- CSS formatting and consistency issues
+- Markdown linting in documentation files
+- Fixed code that was incorrectly scanning node_modules and vendor directories
 
 ## [1.2.0] - 2025-03-13
 

@@ -40,17 +40,37 @@ class Admin {
 	 * @return void
 	 */
 	public function enqueue_scripts( string $hook ): void {
-		// Placeholder for admin script/style enqueuing.
-		// Add specific admin page conditionals as needed.
+		// Enqueue admin CSS for all admin pages.
+		wp_enqueue_style(
+			'cme-personas-admin',
+			plugin_dir_url( CME_PERSONAS_FILE ) . 'admin/css/personas-admin.css',
+			array(),
+			CME_PERSONAS_VERSION,
+			'all'
+		);
 
-		// Example:.
-		// if ( 'edit.php' === $hook && isset( $_GET['post_type'] ) && 'persona' === $_GET['post_type'] ) {.
-		// wp_enqueue_style(.
-		// 'cme-personas-admin',.
-		// CME_PLUGIN_URL . 'assets/css/admin.css',.
-		// [],.
-		// CME_VERSION.
-		// );.
-		// }.
+		// Enqueue dashboard CSS.
+		wp_enqueue_style(
+			'cme-personas-dashboard',
+			plugin_dir_url( CME_PERSONAS_FILE ) . 'admin/css/personas-dashboard.css',
+			array(),
+			CME_PERSONAS_VERSION,
+			'all'
+		);
+
+		// Enqueue the admin menu fix script.
+		wp_enqueue_script(
+			'cme-personas-admin-menu-fix',
+			plugin_dir_url( CME_PERSONAS_FILE ) . 'admin/js/admin-menu-fix.js',
+			array( 'jquery' ),
+			CME_PERSONAS_VERSION,
+			true
+		);
+
+		// Add dashboard styles for dashboard page.
+		if ( 'toplevel_page_cme-personas-dashboard' === $hook ) {
+			wp_enqueue_style( 'dashboard' );
+			wp_enqueue_script( 'dashboard' );
+		}
 	}
 }

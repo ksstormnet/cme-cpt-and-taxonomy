@@ -3,18 +3,17 @@
  *
  * Adds sidebar panel for persona selection and preview in the block editor.
  *
- * @package    CME_Personas
+ * @package
  * @version    1.2.0
  */
 
-( function() {
+(function () {
 	const { __ } = wp.i18n;
 	const { registerPlugin } = wp.plugins;
 	const { PluginSidebar, PluginSidebarMoreMenuItem } = wp.editPost;
 	const { PanelBody, SelectControl, Button, Notice } = wp.components;
-	const { useSelect, useDispatch } = wp.data;
+	const { useSelect } = wp.data;
 	const { Fragment, useState, useEffect } = wp.element;
-	const { apiFetch } = wp;
 
 	/**
 	 * Persona Selector Component
@@ -32,14 +31,18 @@
 		const { postId, personas } = useSelect((select) => {
 			return {
 				postId: select('core/editor').getCurrentPostId(),
-				personas: cmePersonasAdmin?.personas || { default: __('Default', 'cme-personas') }
+				personas: window.cmePersonasAdmin?.personas || {
+					default: __('Default', 'cme-personas'),
+				},
 			};
 		}, []);
 
 		// Create options for the dropdown
-		const personaOptions = Object.entries(personas).map(([value, label]) => {
-			return { value, label };
-		});
+		const personaOptions = Object.entries(personas).map(
+			([value, label]) => {
+				return { value, label };
+			}
+		);
 
 		/**
 		 * Check if preview is available for the selected persona
@@ -58,28 +61,34 @@
 			data.append('action', 'cme_check_persona_content');
 			data.append('post_id', postId);
 			data.append('persona', selectedPersona);
-			data.append('nonce', cmePersonasAdmin.nonce);
+			data.append('nonce', window.cmePersonasAdmin.nonce);
 
-			fetch(cmePersonasAdmin.ajaxUrl, {
+			fetch(window.cmePersonasAdmin.ajaxUrl, {
 				method: 'POST',
 				body: data,
-				credentials: 'same-origin'
+				credentials: 'same-origin',
 			})
-			.then(response => response.json())
-			.then(response => {
-				if (response.success) {
-					setPreviewAvailable(response.data.hasContent);
-				} else {
-					setPreviewError(response.data.message || __('Error checking preview availability', 'cme-personas'));
+				.then((response) => response.json())
+				.then((response) => {
+					if (response.success) {
+						setPreviewAvailable(response.data.hasContent);
+					} else {
+						setPreviewError(
+							response.data.message ||
+								__(
+									'Error checking preview availability',
+									'cme-personas'
+								)
+						);
+						setPreviewAvailable(false);
+					}
+					setPreviewLoading(false);
+				})
+				.catch(() => {
+					setPreviewError(__('Network error', 'cme-personas'));
 					setPreviewAvailable(false);
-				}
-				setPreviewLoading(false);
-			})
-			.catch(error => {
-				setPreviewError(__('Network error', 'cme-personas'));
-				setPreviewAvailable(false);
-				setPreviewLoading(false);
-			});
+					setPreviewLoading(false);
+				});
 		};
 
 		/**
@@ -92,19 +101,23 @@
 
 			// Open the preview in a new dialog
 			// This uses the existing preview function from the admin.js file
-			if (typeof PersonaAdmin !== 'undefined' && typeof PersonaAdmin.showContentPreview === 'function') {
-				PersonaAdmin.showContentPreview(postId, selectedPersona);
+			if (
+				typeof window.PersonaAdmin !== 'undefined' &&
+				typeof window.PersonaAdmin.showContentPreview === 'function'
+			) {
+				window.PersonaAdmin.showContentPreview(postId, selectedPersona);
 			} else {
 				// Fallback if PersonaAdmin is not available
 				window.open(
-					`${window.location.origin}/wp-admin/admin-ajax.php?action=cme_preview_persona_content&post_id=${postId}&persona=${selectedPersona}&nonce=${cmePersonasAdmin.nonce}`,
+					`${window.location.origin}/wp-admin/admin-ajax.php?action=cme_preview_persona_content&post_id=${postId}&persona=${selectedPersona}&nonce=${window.cmePersonasAdmin.nonce}`,
 					'personaPreview',
 					'width=800,height=600,resizable=yes,scrollbars=yes'
 				);
 			}
 		};
 
-		// Effect to check preview availability when persona changes or on initial load
+		// Define the effect function to check availability when relevant dependencies change
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		useEffect(() => {
 			checkPreviewAvailability();
 		}, [selectedPersona, postId]);
@@ -137,29 +150,33 @@
 							className="preview-button"
 							isBusy={previewLoading}
 						>
-							{previewLoading ? __('Checking...', 'cme-personas') : __('Preview Persona Content', 'cme-personas')}
+							{previewLoading
+								? __('Checking…', 'cme-personas')
+								: __('Preview Persona Content', 'cme-personas')}
 						</Button>
 
-						{!previewAvailable && selectedPersona !== 'default' && !previewLoading && (
-							<p className="no-content-message">
-								{__('No content exists for this persona yet. Add content in the Persona Content meta box below the editor.', 'cme-personas')}
-							</p>
-						)}
+						{!previewAvailable &&
+							selectedPersona !== 'default' &&
+							!previewLoading && (
+								<p className="no-content-message">
+									{__(
+										'No content exists for this persona yet. Add content in the Persona Content meta box below the editor.',
+										'cme-personas'
+									)}
+								</p>
+							)}
 					</div>
 				</PanelBody>
 			</Fragment>
 		);
 	};
 
-	// Register the plugin
 	registerPlugin('cme-personas', {
 		icon: 'admin-users',
 		render: () => {
 			return (
 				<Fragment>
-					<PluginSidebarMoreMenuItem
-						target="cme-personas-sidebar"
-					>
+					<PluginSidebarMoreMenuItem target="cme-personas-sidebar">
 						{__('Persona Content', 'cme-personas')}
 					</PluginSidebarMoreMenuItem>
 					<PluginSidebar
