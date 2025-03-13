@@ -1,12 +1,12 @@
-# Cruise Made Easy - Personas
+# CME Personas Plugin
 
-A WordPress plugin that manages customer personas for personalized content delivery in cruise websites, enabling targeted experiences based on visitor preferences and travel styles.
+A WordPress plugin that adds Customer Persona management functionality to WordPress sites.
 
 ## Description
 
-Cruise Made Easy Personas is at the core of the website's personalized user experience system. It provides functionality for maintaining customer personas/niches that power the content personalization system. The plugin enables different content presentation based on visitor-selected personas, creating a tailored browsing experience for each user.
+The CME Personas plugin adds a custom post type for managing customer personas, with support for gender-specific images. This plugin serves as the foundation for personalized content delivery based on visitor preferences.
 
-### Features
+## Features
 
 - Creates a Customer Persona custom post type
 - Provides a structured way to organize customer information
@@ -15,10 +15,9 @@ Cruise Made Easy Personas is at the core of the website's personalized user expe
 - Cache management system for improved performance
 - Secure handling of user preferences
 
-## Requirements
+## Documentation
 
-- WordPress 6.7.2 or higher
-- PHP 8.3 or higher
+Comprehensive documentation is available in the [docs](./docs) directory:
 
 ## Installation
 
@@ -49,14 +48,7 @@ The plugin provides a standard WordPress post editing experience. You can use cu
 
 ## Development
 
-This plugin follows WordPress coding standards and uses modern PHP 8.3 features.
-
-### Requirements for Development
-
-- PHP 8.3+
-- Composer (for development dependencies)
-
-## Changelog
+This project follows strict coding standards and uses Git hooks to ensure code quality.
 
 ### 1.2.0 (March 13, 2025)
 
@@ -81,4 +73,4 @@ This plugin follows WordPress coding standards and uses modern PHP 8.3 features.
 
 ## License
 
-This plugin is proprietary software owned by Sky+Sea LLC d/b/a KSstorm Media. All rights reserved.
+Proprietary - All rights reserved.
