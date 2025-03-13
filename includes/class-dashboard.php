@@ -86,18 +86,9 @@ class Dashboard {
 			25
 		);
 
-		// Remove default first submenu item that WordPress automatically creates.
-		remove_submenu_page( 'cme-personas-dashboard', 'cme-personas-dashboard' );
-
-		// Add custom submenu pages.
-		add_submenu_page(
-			'cme-personas-dashboard',
-			__( 'Manage Personas', 'cme-personas' ),
-			__( 'Manage Personas', 'cme-personas' ),
-			'manage_options',
-			'edit.php?post_type=persona',
-			null
-		);
+		// We need to add a callback for removing the default submenu items after they're created
+		// WordPress automatically adds the main menu as a submenu item too, which we don't want
+		add_action( 'admin_menu', array( $this, 'adjust_submenus' ), 999 );
 
 		// Future pages can be added here. Additional submenu items could include
 		// settings, help, or analytics pages when implemented in future versions.
@@ -217,6 +208,20 @@ class Dashboard {
 	 */
 	public function render_settings_page() {
 		// Will be implemented in future versions.
+	}
+
+	/**
+	 * Adjust submenu items to remove all automatically created items.
+	 *
+	 * @since    1.3.0
+	 */
+	public function adjust_submenus() {
+		global $submenu;
+
+		// Remove all submenu items under our page.
+		if ( isset( $submenu['cme-personas-dashboard'] ) ) {
+			unset( $submenu['cme-personas-dashboard'] );
+		}
 	}
 }
 // Additional comment.
