@@ -10,7 +10,7 @@ The plugin provides several shortcodes for displaying persona-specific content a
 
 Use the `[persona_content]` shortcode to display content specific to a persona:
 
-```
+```text
 [persona_content persona="business" entity_id="123" field="content"]
   Default content displayed for other personas
 [/persona_content]
@@ -29,7 +29,7 @@ If persona-specific content is available, it will be displayed. Otherwise, the d
 
 Use the `[if_persona]` shortcode to conditionally display content based on the active persona:
 
-```
+```text
 [if_persona is="business"]
   Content only shown for business persona
 [/if_persona]
@@ -54,13 +54,13 @@ You can use either parameter, but not both at the same time.
 
 Use the `[persona_switcher]` shortcode to add a persona switcher to your site:
 
-```
+```text
 [persona_switcher]
 ```
 
 Or with custom options:
 
-```
+```text
 [persona_switcher display="dropdown" button_text="Choose Your Experience" class="my-custom-class"]
 ```
 
@@ -132,24 +132,24 @@ Returns an array of all available personas in the format `[id => name]`.
 ```php
 // In your theme's template file
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<header class="entry-header">
-		<h1 class="entry-title">
-			<?php echo cme_get_persona_content(get_the_ID(), 'post', 'title'); ?>
-		</h1>
-	</header>
+ <header class="entry-header">
+  <h1 class="entry-title">
+   <?php echo cme_get_persona_content(get_the_ID(), 'post', 'title'); ?>
+  </h1>
+ </header>
 
-	<div class="entry-content">
-		<?php echo cme_get_persona_content(get_the_ID(), 'post', 'content'); ?>
-	</div>
+ <div class="entry-content">
+  <?php echo cme_get_persona_content(get_the_ID(), 'post', 'content'); ?>
+ </div>
 </article>
 ```
 
 ### Using Conditional Persona Content in a Template
 
 ```php
-<?php 
+<?php
 // Check if the current persona is 'business'
-if (cme_get_current_persona() === 'business') : 
+if (cme_get_current_persona() === 'business') :
 ?>
   <div class="business-specific-notice">
     Special offer for business travelers!
@@ -166,8 +166,8 @@ To enable dynamic content refreshing without page reload when a persona is switc
 
 ```html
 <div class="cme-persona-dynamic" data-post-id="123" data-field="content">
-  <!-- Content will be dynamically updated when persona changes -->
-  <?php echo cme_get_persona_content(123, 'post', 'content'); ?>
+ <!-- Content will be dynamically updated when persona changes -->
+ <?php echo cme_get_persona_content(123, 'post', 'content'); ?>
 </div>
 ```
 
@@ -178,15 +178,30 @@ The plugin includes CSS classes for styling the persona switcher and persona-spe
 For the persona switcher:
 
 ```css
-.cme-persona-switcher { /* Styles for the switcher container */ }
-.cme-persona-buttons { /* Styles for the buttons container */ }
-.cme-persona-button { /* Styles for individual buttons */ }
-.cme-persona-button.active { /* Styles for the active button */ }
-.cme-persona-select { /* Styles for the dropdown selector */ }
+.cme-persona-switcher {
+ /* Styles for the switcher container */
+}
+.cme-persona-buttons {
+ /* Styles for the buttons container */
+}
+.cme-persona-button {
+ /* Styles for individual buttons */
+}
+.cme-persona-button.active {
+ /* Styles for the active button */
+}
+.cme-persona-select {
+ /* Styles for the dropdown selector */
+}
 ```
 
 For persona-specific content:
 
 ```css
-.cme-personalized-content { /* Styles for persona-specific content */ }
-.cme-personalized-content-tag { /* Styles for the persona tag */ }
+.cme-personalized-content {
+ /* Styles for persona-specific content */
+}
+.cme-personalized-content-tag {
+ /* Styles for the persona tag */
+}
+```
