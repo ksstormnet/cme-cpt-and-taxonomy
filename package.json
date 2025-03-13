@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "A WordPress plugin that adds the Customer Persona custom post type and media library tagging functionality.",
   "scripts": {
-    "prepare": "husky",
+    "prepare": "npx husky",
     "lint:js": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:css": "stylelint '**/*.css'",
     "lint:php": "phpcs",
     "lint:md": "markdownlint-cli2 '**/*.md' --config .markdownlint-cli2.yaml",
     "lint": "npm run lint:js && npm run lint:css && npm run lint:php && npm run lint:md",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "echo \"No tests configured yet\" && exit 0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
