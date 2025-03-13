@@ -82,7 +82,7 @@ class Custom_Post_Types {
 				),
 				'public'            => true,
 				'show_ui'           => true,
-				'show_in_menu'      => true,
+				'show_in_menu'      => false, // Hide from admin menu, we'll add it via Dashboard
 				'show_in_nav_menus' => true,
 				'show_in_rest'      => true,
 				'menu_icon'         => 'dashicons-groups',

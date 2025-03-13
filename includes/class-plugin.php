@@ -36,6 +36,14 @@ class Plugin {
 	private readonly Admin $admin;
 
 	/**
+	 * The dashboard interface instance.
+	 *
+	 * @since    1.3.0
+	 * @var      Dashboard
+	 */
+	private readonly Dashboard $dashboard;
+
+	/**
 	 * The shortcodes manager instance.
 	 *
 	 * @since    1.0.0
@@ -70,6 +78,7 @@ class Plugin {
 	private function load_dependencies(): void {
 		require_once CME_PLUGIN_DIR . 'includes/class-custom-post-types.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-admin.php';
+		require_once CME_PLUGIN_DIR . 'includes/class-dashboard.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-shortcodes.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-settings.php';
 	}
@@ -83,6 +92,7 @@ class Plugin {
 	private function initialize_components(): void {
 		$this->custom_post_types = new Custom_Post_Types();
 		$this->admin             = new Admin();
+		$this->dashboard         = Dashboard::get_instance();
 		$this->shortcodes        = new Shortcodes();
 		$this->settings          = new Settings();
 	}
