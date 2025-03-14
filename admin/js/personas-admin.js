@@ -5,7 +5,7 @@
  * @version 1.2.0
  */
 
-/* global cmePersonasAdmin */
+// This script handles admin interactions for the Personas plugin
 
 (function ($) {
 	'use strict';
