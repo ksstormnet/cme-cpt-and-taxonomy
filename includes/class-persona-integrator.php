@@ -427,7 +427,7 @@ class Persona_Integrator {
 		// Remove the default persona since we don't store content for it.
 		unset( $personas['default'] );
 
-		// Show deprecation notice
+		// Show deprecation notice.
 		echo '<div class="notice notice-warning inline"><p>';
 		echo '<strong>' . esc_html__( 'Deprecated Feature:', 'cme-personas' ) . '</strong> ';
 		echo esc_html__( 'This entity-based content approach is being phased out in favor of the boundary-based [if_persona] shortcode approach. We recommend using shortcodes for new content.', 'cme-personas' );
