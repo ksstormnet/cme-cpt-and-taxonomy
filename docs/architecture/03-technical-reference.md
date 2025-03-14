@@ -1,10 +1,15 @@
-# Technical Implementation Details for Shortcode-Based Persona System
+# Persona System Technical Reference
 
-This document provides developers with specific code patterns, hooks, and examples for implementing and extending the persona shortcode system.
+## Version Information
+
+Current as of v1.5.0
+
+This document provides developers with specific code patterns, hooks, examples, and best practices for implementing and extending the shortcode-based persona system.
 
 ## Table of Contents
 
-- [Technical Implementation Details for Shortcode-Based Persona System](#technical-implementation-details-for-shortcode-based-persona-system)
+- [Persona System Technical Reference](#persona-system-technical-reference)
+  - [Version Information](#version-information)
   - [Table of Contents](#table-of-contents)
   - [System Components](#system-components)
   - [Shortcode Implementation](#shortcode-implementation)
@@ -29,21 +34,22 @@ This document provides developers with specific code patterns, hooks, and exampl
   - [Edge Cases and Error Handling](#edge-cases-and-error-handling)
     - [Invalid Persona Handling](#invalid-persona-handling)
     - [Shortcode Nesting Protection](#shortcode-nesting-protection)
+  - [Related Documentation](#related-documentation)
 
 ## System Components
 
 The persona content system consists of the following core components:
 
-1. **Custom Post Types** - Handles registration of the Persona post type
-2. **Shortcode Processing** - Processes the boundary-based shortcodes
-3. **Persona Detection** - Identifies and tracks the current persona
-4. **Admin Integration** - Tools for previewing and testing content
+1. **Custom Post Types** (`class-custom-post-types.php`) - Handles registration of the Persona post type
+2. **Shortcode Processing** (`class-shortcodes.php`) - Processes the boundary-based shortcodes
+3. **Persona Detection** (`class-persona-manager.php`) - Identifies and tracks the current persona
+4. **Admin Integration** (`class-admin.php`) - Tools for previewing and testing content
 
 ## Shortcode Implementation
 
 ### Core Shortcode: `[if_persona]`
 
-The primary shortcode implementation is found in `includes/class-frontend.php`:
+The primary shortcode implementation is found in `includes/class-shortcodes.php`:
 
 ```php
 /**
@@ -117,7 +123,7 @@ private function process_shortcodes( $content ) {
 
 ### Detection Logic
 
-The system detects the current persona through several methods:
+The system detects the current persona through several methods, with a priority hierarchy:
 
 ```php
 /**
@@ -193,16 +199,28 @@ The following integration points are available:
 
 ```php
 // Get current persona
-function cme_get_current_persona();
+function cme_get_current_persona() {
+    $persona_manager = CME_Persona_Manager::get_instance();
+    return $persona_manager->get_current_persona();
+}
 
 // Set active persona
-function cme_set_persona($persona_id);
+function cme_set_persona($persona_id, $set_cookie = true) {
+    $persona_manager = CME_Persona_Manager::get_instance();
+    return $persona_manager->set_persona($persona_id, $set_cookie);
+}
 
 // Check if a persona is valid
-function cme_is_valid_persona($persona_id);
+function cme_is_valid_persona($persona_id) {
+    $persona_manager = CME_Persona_Manager::get_instance();
+    return $persona_manager->is_valid_persona($persona_id);
+}
 
 // Get all available personas
-function cme_get_all_personas();
+function cme_get_all_personas() {
+    $persona_manager = CME_Persona_Manager::get_instance();
+    return $persona_manager->get_all_personas();
+}
 ```
 
 2. **Hooks**:
@@ -252,6 +270,18 @@ echo do_shortcode('[if_persona not="thrill"]
         <div class="standard-options">
             <!-- Standard content here -->
         </div>
+    </div>
+[/if_persona]');
+```
+
+Multiple personas in one condition:
+
+```php
+// Show content for both luxe and easy-breezy personas
+echo do_shortcode('[if_persona is="luxe,easy-breezy"]
+    <div class="non-thrill-options">
+        <h3>Relaxed Options</h3>
+        <p>Content for both luxury and easy-going travelers...</p>
     </div>
 [/if_persona]');
 ```
@@ -332,7 +362,7 @@ add_action('cme_persona_switched', function($new_persona, $old_persona) {
 
 ### Shortcode Processing Optimization
 
-The shortcode approach is optimized for performance:
+The shortcode approach is optimized for performance by only processing content when necessary:
 
 ```php
 // Check for existence of shortcodes before processing
@@ -461,3 +491,9 @@ private function process_nested_shortcodes($content) {
     return $processed;
 }
 ```
+
+## Related Documentation
+
+- [Architecture Overview](./01-architecture-overview.md) - High-level system architecture
+- [Implementation Approach](./02-implementation-approach.md) - Implementation options and decisions
+- [Performance Optimization](./04-performance-optimization.md) - Redis caching and other optimizations

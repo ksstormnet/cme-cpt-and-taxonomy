@@ -1,5 +1,9 @@
 # Persona Content System Architecture Overview
 
+## Version Information
+
+Current as of v1.5.0
+
 This document provides a comprehensive technical overview of the CME Personas plugin architecture, explaining how the shortcode-based persona system works, its components, and how it can be extended.
 
 ## What is the Persona System?
@@ -16,6 +20,30 @@ The system supports multiple personas, with common examples including:
 4. **Thrill Seeker** - Adventure-oriented visitors interested in activities
 
 ## System Architecture
+
+### Component Diagram
+
+```text
+┌──────────────────────────────────────────────────────────┐
+│                   WordPress Frontend                     │
+└───────────────────────────┬──────────────────────────────┘
+                            │
+             ┌──────────────▼──────────────┐
+             │    Persona Content System    │
+             └──────────────┬──────────────┘
+                            │
+    ┌─────────────┬─────────┴────────┬───────────────┐
+    │             │                  │               │
+┌───▼─────┐  ┌────▼─────┐  ┌─────────▼────┐  ┌───────▼───────┐
+│ Persona │  │ Shortcode│  │  Persona     │  │ Admin         │
+│ Manager │  │ Engine   │  │  Detection   │  │ Integration   │
+└───┬─────┘  └────┬─────┘  └─────────┬────┘  └───────┬───────┘
+    │             │                  │               │
+    │       ┌─────▼─────┐       ┌────▼──────┐  ┌─────▼─────┐
+    └───────► Content   │       │Cookie/URL │  │  Preview  │
+            │ Filtering │       │Management │  │  Tools    │
+            └───────────┘       └───────────┘  └───────────┘
+```
 
 ### Key Components
 
@@ -101,7 +129,7 @@ The shortcode approach is optimized for performance:
 
 1. **On-Demand Processing**: Content is processed at render time without duplicating storage
 2. **Minimal Database Impact**: No additional database operations for content storage
-3. **Caching Compatible**: Works with standard WordPress caching solutions
+3. **Caching Compatible**: Works with standard WordPress caching solutions and Redis
 
 ### Frontend Assets
 
@@ -147,10 +175,10 @@ Planned improvements to the architecture include:
 3. **A/B Testing**: Split testing different persona content variations
 4. **Machine Learning**: Automated persona detection based on user behavior
 
-## Technical Best Practices
+## Related Documentation
 
-1. **Shortcode Organization**: Group related persona content together
-2. **Performance Testing**: Monitor page load times with varying persona content
-3. **Fallback Content**: Always provide meaningful default content
-4. **Documentation**: Document which content sections use persona targeting
-5. **Responsive Testing**: Test all persona variations on mobile devices
+For more detailed information, see:
+
+- [Implementation Approach](./02-implementation-approach.md) - Detailed comparison of implementation approaches
+- [Technical Reference](./03-technical-reference.md) - Developer-focused code examples
+- [Performance Optimization](./04-performance-optimization.md) - Performance strategies including Redis caching

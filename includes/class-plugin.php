@@ -82,7 +82,7 @@ class Plugin {
 		require_once CME_PLUGIN_DIR . 'includes/class-shortcodes.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-settings.php';
 		require_once CME_PLUGIN_DIR . 'includes/class-persona-manager.php';
-		require_once CME_PLUGIN_DIR . 'includes/class-persona-content.php';
+		// require_once CME_PLUGIN_DIR . 'includes/class-persona-content.php'; // File not found - refactored out?
 		require_once CME_PLUGIN_DIR . 'includes/class-personas-api.php';
 
 		// Load frontend class to ensure shortcodes are registered.
