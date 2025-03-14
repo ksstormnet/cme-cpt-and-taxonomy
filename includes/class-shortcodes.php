@@ -11,7 +11,9 @@ namespace CME_Personas;
 /**
  * Shortcodes class.
  *
- * This class handles all shortcode functionality.
+ * This class handles specialized shortcodes separately from the core persona shortcodes.
+ * Core persona shortcodes ([if_persona], [persona_content], [persona_switcher]) are
+ * handled by the Frontend class.
  *
  * @since      1.0.3
  * @package    CME_Personas
@@ -25,6 +27,8 @@ class Shortcodes {
 	 * @return   void
 	 */
 	public function register(): void {
+		// This shortcode is handled here, while the core persona shortcodes
+		// are handled in the Frontend class to prevent duplicate registration.
 		add_shortcode( 'cme-persona-rotator', array( $this, 'persona_rotator_shortcode' ) );
 	}
 
@@ -89,7 +93,7 @@ class Shortcodes {
 
 			$image_url = wp_get_attachment_image_url( $image_id, 'large' );
 			if ( ! $image_url ) {
-				$image_url = plugin_dir_url( CME_PLUGIN_FILE ) . 'assets/images/placeholder.png';
+				$image_url = plugin_dir_url( \CME_PERSONAS_FILE ) . 'assets/images/placeholder.png';
 			}
 
 			// Output persona slide.
@@ -112,7 +116,11 @@ class Shortcodes {
 		(function() {
 			document.addEventListener('DOMContentLoaded', function() {
 				const rotator = document.getElementById('<?php echo esc_js( $rotator_id ); ?>');
+				if (!rotator) return;
+
 				const slides = rotator.querySelectorAll('.cme-persona-slide');
+				if (!slides.length) return;
+
 				let currentSlideIndex = 0;
 
 				// Hide all slides except the first one.
