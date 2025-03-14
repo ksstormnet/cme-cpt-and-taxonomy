@@ -112,44 +112,6 @@ class Personas_Post_Types {
 			'normal',
 			'high'
 		);
-
-		add_meta_box(
-			'persona_attributes',
-			__( 'Key Attributes', 'cme-personas' ),
-			array( $this, 'render_persona_attributes_metabox' ),
-			$this->persona_post_type,
-			'normal',
-			'high'
-		);
-	}
-
-	/**
-	 * Render meta box for persona key attributes.
-	 *
-	 * @since    1.6.0
-	 * @param    \WP_Post $post  The post object.
-	 * @return   void
-	 */
-	public function render_persona_attributes_metabox( \WP_Post $post ): void {
-		wp_nonce_field( 'persona_attributes_nonce', 'persona_attributes_nonce' );
-
-		$attributes = get_post_meta( $post->ID, 'persona_attributes', true );
-
-		?>
-		<p><?php esc_html_e( 'Enter key attributes for this persona. This information will be displayed on the dashboard and can be used for future AI integration.', 'cme-personas' ); ?></p>
-		<p><?php esc_html_e( 'Markdown formatting is supported.', 'cme-personas' ); ?></p>
-
-		<?php
-		wp_editor(
-			$attributes,
-			'persona_attributes',
-			array(
-				'media_buttons' => false,
-				'textarea_rows' => 10,
-				'teeny'         => true,
-				'quicktags'     => array( 'buttons' => 'strong,em,ul,ol,li,link' ),
-			)
-		);
 	}
 
 	/**
@@ -344,14 +306,6 @@ class Personas_Post_Types {
 			$indeterminate_image_id = sanitize_text_field( wp_unslash( $_POST['persona_image_indeterminate'] ) );
 			update_post_meta( $post_id, 'persona_image_indeterminate', $indeterminate_image_id );
 			// Media taxonomy functionality has been removed.
-		}
-
-		// Save persona attributes.
-		if ( isset( $_POST['persona_attributes_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['persona_attributes_nonce'] ) ), 'persona_attributes_nonce' ) ) {
-			if ( isset( $_POST['persona_attributes'] ) ) {
-				$attributes = wp_kses_post( wp_unslash( $_POST['persona_attributes'] ) );
-				update_post_meta( $post_id, 'persona_attributes', $attributes );
-			}
 		}
 	}
 }
