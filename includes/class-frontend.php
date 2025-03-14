@@ -162,9 +162,9 @@ class Frontend {
 				return $content; // Too deep, just return unprocessed.
 			}
 
-			$this->nesting_level++;
+			++$this->nesting_level;
 			$processed = do_shortcode( $content );
-			$this->nesting_level--;
+			--$this->nesting_level;
 
 			return $processed;
 		}
@@ -204,16 +204,16 @@ class Frontend {
 	 * Pre-process persona shortcodes to quickly exclude non-matching content.
 	 *
 	 * @since     1.5.0
-	 * @param     bool|string $return      Short-circuit return value.
-	 * @param     string      $tag         Shortcode name.
-	 * @param     array       $attr        Shortcode attributes.
-	 * @param     array       $m           Regular expression match array.
-	 * @return    bool|string              Short-circuit return value.
+	 * @param     bool|string $return_value Short-circuit return value.
+	 * @param     string      $tag          Shortcode name.
+	 * @param     array       $attr         Shortcode attributes.
+	 * @param     array       $m            Regular expression match array (unused).
+	 * @return    bool|string               Short-circuit return value.
 	 */
-	public function pre_process_persona_shortcode( $return, $tag, $attr, $m ) {
+	public function pre_process_persona_shortcode( $return_value, $tag, $attr, $m ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 		// Only handle our shortcode.
 		if ( 'if_persona' !== $tag ) {
-			return $return;
+			return $return_value;
 		}
 
 		// Current persona.
@@ -236,7 +236,7 @@ class Frontend {
 		}
 
 		// Let normal processing happen.
-		return $return;
+		return $return_value;
 	}
 
 	/**

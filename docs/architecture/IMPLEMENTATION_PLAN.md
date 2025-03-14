@@ -5,20 +5,20 @@ This document outlines the implementation plan for the CME Personas plugin with 
 ## Table of Contents
 
 - [Personas Plugin Implementation Plan](#personas-plugin-implementation-plan)
-	- [Table of Contents](#table-of-contents)
-	- [Overview](#overview)
-	- [Implementation Phases](#implementation-phases)
-		- [Phase 1: Core Infrastructure](#phase-1-core-infrastructure)
-			- [Timeline: 1-2 Weeks](#timeline-1-2-weeks)
-		- [Phase 2: Shortcode System](#phase-2-shortcode-system)
-			- [Timeline: 1-2 Weeks](#timeline-1-2-weeks-1)
-		- [Phase 3: Admin Integration](#phase-3-admin-integration)
-			- [Timeline: 1 Week](#timeline-1-week)
-		- [Phase 4: Performance Optimization](#phase-4-performance-optimization)
-			- [Timeline: 1 Week](#timeline-1-week-1)
-	- [Key Technical Decisions](#key-technical-decisions)
-	- [Testing Strategy](#testing-strategy)
-	- [Deployment Process](#deployment-process)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Implementation Phases](#implementation-phases)
+    - [Phase 1: Core Infrastructure](#phase-1-core-infrastructure)
+      - [Timeline: 1-2 Weeks](#timeline-1-2-weeks)
+    - [Phase 2: Shortcode System](#phase-2-shortcode-system)
+      - [Timeline: 1-2 Weeks](#timeline-1-2-weeks-1)
+    - [Phase 3: Admin Integration](#phase-3-admin-integration)
+      - [Timeline: 1 Week](#timeline-1-week)
+    - [Phase 4: Performance Optimization](#phase-4-performance-optimization)
+      - [Timeline: 1 Week](#timeline-1-week-1)
+  - [Key Technical Decisions](#key-technical-decisions)
+  - [Testing Strategy](#testing-strategy)
+  - [Deployment Process](#deployment-process)
 
 ## Overview
 
@@ -94,9 +94,9 @@ class Persona_Manager {
     if (!$this->is_valid_persona($persona_id)) {
       return false;
     }
-    
+
     $this->current_persona = $persona_id;
-    
+
     if ($set_cookie) {
       setcookie(
         'cme_persona',
@@ -106,7 +106,7 @@ class Persona_Manager {
         COOKIE_DOMAIN
       );
     }
-    
+
     return true;
   }
 
@@ -163,12 +163,12 @@ class Frontend {
     // Register shortcodes
     add_shortcode('if_persona', array($this, 'if_persona_shortcode'));
     add_shortcode('persona_switcher', array($this, 'persona_switcher_shortcode'));
-    
+
     // Add AJAX handler for persona switching
     add_action('wp_ajax_switch_persona', array($this, 'ajax_switch_persona'));
     add_action('wp_ajax_nopriv_switch_persona', array($this, 'ajax_switch_persona'));
   }
-  
+
   /**
    * Shortcode for conditional persona content.
    *
@@ -185,11 +185,11 @@ class Frontend {
       $atts,
       'if_persona'
     );
-    
+
     // Get current persona
     $persona_manager = Persona_Manager::get_instance();
     $current_persona = $persona_manager->get_current_persona();
-    
+
     // If 'is' attribute is set, check if current persona matches
     if (null !== $atts['is']) {
       $allowed_personas = array_map('trim', explode(',', $atts['is']));
@@ -197,7 +197,7 @@ class Frontend {
         return '';
       }
     }
-    
+
     // If 'not' attribute is set, check if current persona does not match
     if (null !== $atts['not']) {
       $excluded_personas = array_map('trim', explode(',', $atts['not']));
@@ -205,11 +205,11 @@ class Frontend {
         return '';
       }
     }
-    
+
     // If we get here, the conditions are met
     return do_shortcode($content);
   }
-  
+
   /**
    * Shortcode for persona switcher.
    *
@@ -226,10 +226,10 @@ class Frontend {
       $atts,
       'persona_switcher'
     );
-    
+
     // Build the switcher HTML
     // ... Implementation details ...
-    
+
     return $output;
   }
 }
@@ -261,21 +261,21 @@ class Admin {
   public function register() {
     // Add sidebar panel for persona preview
     add_action('add_meta_boxes', array($this, 'add_preview_meta_box'));
-    
+
     // Add admin scripts and styles
     add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
-    
+
     // TinyMCE integration
     add_action('admin_init', array($this, 'tinymce_integration'));
-    
+
     // Admin preview notice
     add_action('admin_notices', array($this, 'preview_notice'));
   }
-  
+
   // Add meta box for persona preview
   public function add_preview_meta_box() {
     $post_types = apply_filters('cme_persona_content_post_types', array('post', 'page'));
-    
+
     foreach ($post_types as $post_type) {
       add_meta_box(
         'persona_preview_meta_box',
@@ -287,24 +287,24 @@ class Admin {
       );
     }
   }
-  
+
   // Render the persona preview meta box
   public function render_preview_meta_box($post) {
     // Get all personas
     $persona_manager = Persona_Manager::get_instance();
     $personas = $persona_manager->get_all_personas();
-    
+
     // Get preview URL
     $preview_url = get_preview_post_link($post);
-    
+
     echo '<p>' . esc_html__('Preview this page as:', 'cme-personas') . '</p>';
     echo '<ul class="persona-preview-links">';
-    
+
     foreach ($personas as $id => $name) {
       $url = add_query_arg('persona', $id, $preview_url);
       echo '<li><a href="' . esc_url($url) . '" target="_blank">' . esc_html($name) . '</a></li>';
     }
-    
+
     echo '</ul>';
     echo '<p class="description">' . esc_html__('Links open in a new window with the selected persona active.', 'cme-personas') . '</p>';
   }
@@ -336,30 +336,30 @@ class Performance {
   public function register() {
     // Only process shortcodes when necessary
     add_filter('the_content', array($this, 'maybe_process_shortcodes'), 7);
-    
+
     // Add compatibility filters for popular plugins
     add_action('plugins_loaded', array($this, 'plugin_compatibility'));
   }
-  
+
   // Check if content contains persona shortcodes before processing
   public function maybe_process_shortcodes($content) {
     // Skip processing if no persona shortcodes are found
-    if (strpos($content, '[if_persona') === false && 
+    if (strpos($content, '[if_persona') === false &&
         strpos($content, '[persona_') === false) {
       return $content;
     }
-    
+
     // Process shortcodes
     return do_shortcode($content);
   }
-  
+
   // Add compatibility for popular plugins
   public function plugin_compatibility() {
     // Compatibility with page builders
     if (defined('ELEMENTOR_VERSION')) {
       add_action('elementor/frontend/after_render', array($this, 'elementor_compatibility'));
     }
-    
+
     // Compatibility with caching plugins
     if (defined('WP_CACHE') && WP_CACHE) {
       add_action('wp_footer', array($this, 'cache_compatibility'));

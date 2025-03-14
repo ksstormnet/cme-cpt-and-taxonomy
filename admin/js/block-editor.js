@@ -11,7 +11,7 @@
 	const { __ } = wp.i18n;
 	const { registerPlugin } = wp.plugins;
 	const { PluginSidebar, PluginSidebarMoreMenuItem } = wp.editPost;
-	const { PanelBody, SelectControl, Button, Notice } = wp.components;
+	const { PanelBody, SelectControl, Button } = wp.components;
 	const { useSelect } = wp.data;
 	const { Fragment, useState } = wp.element;
 
