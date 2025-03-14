@@ -40,15 +40,6 @@ class Frontend {
 	private $persona_manager;
 
 	/**
-	 * Instance of the Persona_Content class.
-	 *
-	 * @since    1.3.0
-	 * @access   private
-	 * @var      Persona_Content    $persona_content    Instance of the Persona_Content class.
-	 */
-	private $persona_content;
-
-	/**
 	 * Instance of the Personas_API class.
 	 *
 	 * @since    1.3.0
@@ -78,7 +69,6 @@ class Frontend {
 	private function __construct() {
 		// Initialize instances.
 		$this->persona_manager = Persona_Manager::get_instance();
-		$this->persona_content = Persona_Content::get_instance();
 		$this->personas_api    = Personas_API::get_instance();
 
 		// Setup hooks.
@@ -92,7 +82,6 @@ class Frontend {
 	 */
 	private function setup_hooks() {
 		// Register shortcodes.
-		add_shortcode( 'persona_content', array( $this, 'persona_content_shortcode' ) );
 		add_shortcode( 'persona_switcher', array( $this, 'persona_switcher_shortcode' ) );
 		add_shortcode( 'if_persona', array( $this, 'if_persona_shortcode' ) );
 
@@ -157,57 +146,6 @@ class Frontend {
 			return do_shortcode( $content );
 		}
 		return $content;
-	}
-
-	/**
-	 * Shortcode for persona-specific content.
-	 *
-	 * Usage: [persona_content persona="business" entity_id="123" entity_type="post" field="content"]
-	 *        [persona_content persona="family"]Default content for other personas[/persona_content]
-	 *
-	 * @since     1.3.0
-	 * @param     array  $atts      Shortcode attributes.
-	 * @param     string $content   Default content (optional).
-	 * @return    string            The persona-specific content or default content.
-	 */
-	public function persona_content_shortcode( $atts, $content = null ) {
-		$atts = shortcode_atts(
-			array(
-				'persona'     => null, // When null, the current persona will be used.
-				'entity_id'   => null, // When null, the current post will be used.
-				'entity_type' => 'post',
-				'field'       => 'content',
-			),
-			$atts,
-			'persona_content'
-		);
-
-		// If no entity_id is provided, use current post.
-		if ( null === $atts['entity_id'] ) {
-			global $post;
-			$atts['entity_id'] = $post ? $post->ID : 0;
-		}
-
-		// If entity_id is still null or 0, return the default content.
-		if ( empty( $atts['entity_id'] ) ) {
-			return $this->process_shortcodes( $content );
-		}
-
-		// Get persona-specific content.
-		$persona_content = $this->personas_api->get_content(
-			$atts['entity_id'],
-			$atts['entity_type'],
-			$atts['field'],
-			$atts['persona']
-		);
-
-		// If we have persona-specific content, return it.
-		if ( $persona_content ) {
-			return $persona_content;
-		}
-
-		// Otherwise return the default content.
-		return $this->process_shortcodes( $content );
 	}
 
 	/**
