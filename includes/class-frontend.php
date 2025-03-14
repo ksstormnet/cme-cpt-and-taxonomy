@@ -248,8 +248,8 @@ class Frontend {
 	public function persona_content_shortcode( $atts, $content = null ) {
 		$atts = shortcode_atts(
 			array(
-				'persona'     => null, // If null, will use current persona.
-				'entity_id'   => null, // If null, will use current post.
+				'persona'     => null, // When null, the current persona will be used.
+				'entity_id'   => null, // When null, the current post will be used.
 				'entity_type' => 'post',
 				'field'       => 'content',
 			),
@@ -343,9 +343,9 @@ class Frontend {
 	public function persona_switcher_shortcode( $atts ) {
 		$atts = shortcode_atts(
 			array(
-				'display'     => 'buttons', // 'buttons' or 'dropdown'.
+				'display'     => 'buttons', // Either buttons or dropdown format.
 				'button_text' => __( 'Select Persona', 'cme-personas' ),
-				'class'       => '', // Additional CSS classes.
+				'class'       => '', // For custom styling.
 			),
 			$atts,
 			'persona_switcher'
