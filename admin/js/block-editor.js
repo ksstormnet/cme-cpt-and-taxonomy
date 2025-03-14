@@ -13,7 +13,7 @@
 	const { PluginSidebar, PluginSidebarMoreMenuItem } = wp.editPost;
 	const { PanelBody, SelectControl, Button, Notice } = wp.components;
 	const { useSelect } = wp.data;
-	const { Fragment, useState, useEffect } = wp.element;
+	const { Fragment, useState, useEffect, useCallback } = wp.element;
 
 	/**
 	 * Persona Selector Component
@@ -47,7 +47,7 @@
 		/**
 		 * Check if preview is available for the selected persona
 		 */
-		const checkPreviewAvailability = () => {
+		const checkPreviewAvailability = useCallback(() => {
 			if (selectedPersona === 'default' || !postId) {
 				setPreviewAvailable(false);
 				return;
@@ -89,7 +89,7 @@
 					setPreviewAvailable(false);
 					setPreviewLoading(false);
 				});
-		};
+		}, [selectedPersona, postId]);
 
 		/**
 		 * Handle preview button click
@@ -116,11 +116,10 @@
 			}
 		};
 
-		// Define the effect function to check availability when relevant dependencies change
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		// Use effect to check availability when relevant dependencies change
 		useEffect(() => {
 			checkPreviewAvailability();
-		}, [selectedPersona, postId]);
+		}, [selectedPersona, postId, checkPreviewAvailability]);
 
 		return (
 			<Fragment>
