@@ -5,16 +5,15 @@ This directory contains comprehensive documentation for the persona content syst
 ## Documentation Index
 
 - [Overview](./OVERVIEW.md) - Introduction to the persona content system, its features, and capabilities
-- [Implementation Comparison](./IMPLEMENTATION_COMPARISON.md) - Detailed comparison of different implementation approaches
+- [Implementation](./IMPLEMENTATION.md) - Comprehensive overview of implementation approaches and the chosen WordPress plugin implementation
 - [Technical Implementation](./TECHNICAL_IMPLEMENTATION.md) - Developer-focused implementation details with code examples
-- [Plugin Implementation](./PLUGIN_IMPLEMENTATION.md) - **Current Implementation Plan** - Detailed plan for a standalone WordPress Personas plugin
 - [Redis Implementation Plan](./IMPLEMENTATION_PLAN.md) - Alternative implementation using Redis-based caching (kept for reference)
 
 ## Implementation Decision
 
 **Current Direction**: Based on our latest analysis, we've decided to implement personas as a **standalone WordPress plugin** rather than embedding it within the Cruise Made Easy plugin. This approach offers better separation of concerns, modularity, and reusability.
 
-The implementation details are found in [Plugin Implementation](./PLUGIN_IMPLEMENTATION.md), which supersedes previous implementation plans.
+The implementation details are found in the [Implementation](./IMPLEMENTATION.md) document, which includes a comparison of approaches and the detailed plan for the chosen WordPress plugin architecture.
 
 ## Purpose
 
@@ -43,5 +42,5 @@ The system currently supports the following personas:
 For developers new to the project, we recommend:
 
 1. First reading the [Overview](./OVERVIEW.md) document
-2. Then review the [Plugin Implementation](./PLUGIN_IMPLEMENTATION.md) plan
+2. Then review the [Implementation](./IMPLEMENTATION.md) document
 3. For technical code examples, see [Technical Implementation](./TECHNICAL_IMPLEMENTATION.md)
