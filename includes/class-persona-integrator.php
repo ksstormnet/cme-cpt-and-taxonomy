@@ -189,6 +189,9 @@ class Persona_Integrator {
 			/**
 			 * Get persona-specific content for an entity.
 			 *
+			 * @deprecated 1.6.0 This function uses the entity-based content approach which is being replaced
+			 *                   by the boundary-based shortcode approach. Use [if_persona] shortcodes instead.
+			 *
 			 * @since     1.1.0
 			 * @param     int    $entity_id       The entity ID (e.g., post ID).
 			 * @param     string $entity_type     The entity type (default: 'post').
@@ -386,6 +389,9 @@ class Persona_Integrator {
 	/**
 	 * Register meta boxes.
 	 *
+	 * @deprecated 1.6.0 The entity-based content approach is being phased out in favor of the
+	 *                   boundary-based shortcode approach. Use [if_persona] shortcodes instead.
+	 *
 	 * @since    1.1.0
 	 */
 	public function register_meta_boxes() {
@@ -420,6 +426,12 @@ class Persona_Integrator {
 
 		// Remove the default persona since we don't store content for it.
 		unset( $personas['default'] );
+
+		// Show deprecation notice
+		echo '<div class="notice notice-warning inline"><p>';
+		echo '<strong>' . esc_html__( 'Deprecated Feature:', 'cme-personas' ) . '</strong> ';
+		echo esc_html__( 'This entity-based content approach is being phased out in favor of the boundary-based [if_persona] shortcode approach. We recommend using shortcodes for new content.', 'cme-personas' );
+		echo '</p></div>';
 
 		// Check if we have any personas.
 		if ( empty( $personas ) ) {

@@ -6,40 +6,21 @@ This guide explains how to integrate persona-specific content into your theme an
 
 The plugin provides several shortcodes for displaying persona-specific content and adding persona switchers to your site.
 
-### Persona Content Shortcode
-
-Use the `[persona_content]` shortcode to display content specific to a persona:
-
-```text
-[persona_content persona="business" entity_id="123" field="content"]
-  Default content displayed for other personas
-[/persona_content]
-```
-
-**Parameters:**
-
-- `persona` - (Optional) The persona ID to display content for. If not specified, will use the current active persona.
-- `entity_id` - (Optional) The post/entity ID to get content from. Defaults to the current post.
-- `entity_type` - (Optional) The entity type. Defaults to 'post'.
-- `field` - (Optional) The field to display ('title', 'content', 'excerpt'). Defaults to 'content'.
-
-If persona-specific content is available, it will be displayed. Otherwise, the default content (if provided) will be shown.
-
 ### Conditional Persona Content Shortcode
 
 Use the `[if_persona]` shortcode to conditionally display content based on the active persona:
 
 ```text
-[if_persona is="business"]
-  Content only shown for business persona
+[if_persona is="easy-breezy"]
+  Content only shown for easy-breezy persona
 [/if_persona]
 
-[if_persona is="family,luxury"]
-  Content shown for family or luxury personas
+[if_persona is="luxe,thrill"]
+  Content shown for luxe or thrill personas
 [/if_persona]
 
-[if_persona not="business"]
-  Content shown for all personas except business
+[if_persona not="thrill"]
+  Content shown for all personas except thrill
 [/if_persona]
 ```
 
@@ -85,7 +66,7 @@ Returns the ID of the currently active persona.
 ### Set Persona
 
 ```php
-$success = cme_set_persona('business', true);
+$success = cme_set_persona('easy-breezy', true);
 ```
 
 Sets the active persona.
@@ -93,20 +74,6 @@ Sets the active persona.
 - First parameter: The persona ID to set
 - Second parameter: Whether to set a cookie (defaults to true)
 - Returns: Boolean indicating success
-
-### Get Persona Content
-
-```php
-$content = cme_get_persona_content($post_id, 'post', 'content', $persona_id);
-```
-
-Gets persona-specific content for an entity.
-
-- First parameter: The entity ID (e.g., post ID)
-- Second parameter: The entity type (default: 'post')
-- Third parameter: The content field name (default: 'content')
-- Fourth parameter: The persona ID (null for current)
-- Returns: The persona-specific content, or original content if not found
 
 ### Get All Personas
 
@@ -127,47 +94,34 @@ Returns an array of all available personas in the format `[id => name]`.
 </div>
 ```
 
-### Displaying Persona-Specific Content in a Template
-
-```php
-// In your theme's template file
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
- <header class="entry-header">
-  <h1 class="entry-title">
-   <?php echo cme_get_persona_content(get_the_ID(), 'post', 'title'); ?>
-  </h1>
- </header>
-
- <div class="entry-content">
-  <?php echo cme_get_persona_content(get_the_ID(), 'post', 'content'); ?>
- </div>
-</article>
-```
-
 ### Using Conditional Persona Content in a Template
 
 ```php
 <?php
-// Check if the current persona is 'business'
-if (cme_get_current_persona() === 'business') :
+// Check if the current persona is 'luxe'
+if (cme_get_current_persona() === 'luxe') :
 ?>
-  <div class="business-specific-notice">
-    Special offer for business travelers!
+  <div class="luxe-specific-notice">
+    Special offer for luxury travelers!
   </div>
 <?php endif; ?>
 ```
 
-### Dynamic Content Refresh
+### Using Shortcodes in Templates
 
-To enable dynamic content refreshing without page reload when a persona is switched:
-
-1. Add the `cme-persona-dynamic` class to elements with persona-specific content
-2. Add data attributes for the post ID and field
-
-```html
-<div class="cme-persona-dynamic" data-post-id="123" data-field="content">
- <!-- Content will be dynamically updated when persona changes -->
- <?php echo cme_get_persona_content(123, 'post', 'content'); ?>
+```php
+<div class="trip-highlights">
+  <h2>Highlights of Your Trip</h2>
+  
+  <?php echo do_shortcode('[if_persona is="easy-breezy"]
+    <p>Relaxing beaches and no-hassle excursions await!</p>
+    <img src="/images/easy-cruise.jpg" alt="Relaxing cruise experience">
+  [/if_persona]'); ?>
+  
+  <?php echo do_shortcode('[if_persona is="thrill"]
+    <p>Get ready for adventure with our extreme excursions!</p>
+    <img src="/images/thrill-cruise.jpg" alt="Adventure cruise experience">
+  [/if_persona]'); ?>
 </div>
 ```
 
@@ -195,13 +149,31 @@ For the persona switcher:
 }
 ```
 
-For persona-specific content:
+## Best Practices
 
-```css
-.cme-personalized-content {
- /* Styles for persona-specific content */
-}
-.cme-personalized-content-tag {
- /* Styles for the persona tag */
-}
+1. **Use boundary-based shortcodes**: The `[if_persona]` shortcode is the primary method for persona content customization. It provides clear boundaries around content and maintains compatibility with other WordPress functionality.
+
+2. **Nest shortcodes for complex scenarios**: You can nest `[if_persona]` shortcodes for more complex conditional logic:
+
+```text
+[if_persona not="thrill"]
+  <div class="relaxation-options">
+    <h2>Relaxation Options</h2>
+    
+    [if_persona is="luxe"]
+      <div class="premium-options">
+        <h3>Premium Relaxation</h3>
+        <!-- Premium content here -->
+      </div>
+    [/if_persona]
+    
+    <div class="standard-options">
+      <!-- Standard content here -->
+    </div>
+  </div>
+[/if_persona]
 ```
+
+3. **Default content first**: Always design your pages with default content first, then add persona-specific variations. This ensures a good experience for all users, even those who don't have a persona assigned.
+
+4. **Add persona switchers in accessible locations**: Provide users with easy ways to change their persona in common areas like header, footer, or sidebar.

@@ -4,6 +4,9 @@
  *
  * Handles persona-specific content storage and retrieval.
  *
+ * @deprecated 1.6.0 This class uses the entity-based content approach which is being replaced
+ *                   by the boundary-based shortcode approach. Use [if_persona] shortcodes instead.
+ *
  * @since      1.1.0
  * @package    CME_Personas
  */
@@ -15,6 +18,9 @@ namespace CME_Personas;
  *
  * This class is responsible for storing and retrieving persona-specific content.
  * It provides methods for getting and setting content variations for different personas.
+ *
+ * @deprecated 1.6.0 This class is being phased out in favor of the boundary-based shortcode approach.
+ *                   Code should migrate to using [if_persona] shortcodes for conditional content.
  *
  * @since      1.1.0
  * @package    CME_Personas
