@@ -1,12 +1,15 @@
 # Persona System Implementation Approach
 
-*Current as of v1.5.0*
+## Version Information
+
+Current as of v1.5.0
 
 This document provides a comprehensive overview of the persona system implementation approach, including a comparison of different implementation options and the rationale for choosing the boundary-based shortcode method.
 
 ## Table of Contents
 
 - [Persona System Implementation Approach](#persona-system-implementation-approach)
+	- [Version Information](#version-information)
 	- [Table of Contents](#table-of-contents)
 	- [Implementation Decision Summary](#implementation-decision-summary)
 	- [Implementation Approaches Comparison](#implementation-approaches-comparison)
@@ -58,12 +61,14 @@ We evaluated two primary approaches for implementing the persona content system.
 #### Technical Implementation Details
 
 **WordPress/PHP Backend**:
+
 - Persona detection via cookies, URL parameters, or user meta
 - Content filtering at the server level with WordPress hooks
 - Database queries optimized to fetch only relevant persona content
 - Edge cache integration via custom headers
 
 **Example - Persona Detection**:
+
 ```php
 function cme_detect_persona_from_gtm() {
   // Read from $_COOKIE or GTM dataLayer variables
@@ -79,11 +84,13 @@ function cme_detect_persona_from_gtm() {
 ```
 
 **Content Storage Strategy**:
+
 - Store persona-specific content within shortcode boundaries
 - Process shortcodes server-side to include or exclude content
 - Use WordPress's native shortcode system for compatibility
 
 **Cache Integration**:
+
 - Set persona-specific cache headers
 - Configure edge caching to vary by persona
 
@@ -123,11 +130,13 @@ function cme_detect_persona_from_gtm() {
 #### Technical Implementation Details
 
 **WordPress/PHP Backend**:
+
 - Deliver all persona variations to the edge
 - Use HTML data attributes to mark persona-specific content
 - Process content at the edge level rather than server
 
 **Content Delivery Structure**:
+
 ```php
 function cme_wrap_content_with_persona_markers($content) {
   // Get all persona variations for this content
@@ -150,6 +159,7 @@ function cme_wrap_content_with_persona_markers($content) {
 ```
 
 **Edge Processing**:
+
 - Cloudflare Workers or similar edge computing platform
 - HTML transformation to remove non-matching persona content
 - Caching of transformed content at the edge
@@ -226,7 +236,7 @@ function cme_wrap_content_with_persona_markers($content) {
 
 ## Chosen Implementation: WordPress Plugin with Boundary-Based Shortcodes
 
-Based on the comparison, we've chosen the **Server-Side approach with boundary-based shortcodes** (Option 1). 
+Based on the comparison, we've chosen the **Server-Side approach with boundary-based shortcodes** (Option 1).
 
 ### Overview
 
@@ -266,7 +276,7 @@ wp-content/plugins/personas/
 
 #### Phase 2: Shortcode System
 
-- [ ] Implement Frontend class with shortcode handlers 
+- [ ] Implement Frontend class with shortcode handlers
 - [ ] Create if_persona shortcode for boundary-based content
 - [ ] Add persona_switcher shortcode
 - [ ] Ensure compatibility with third-party shortcodes

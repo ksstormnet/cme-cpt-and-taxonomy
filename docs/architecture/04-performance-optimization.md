@@ -1,12 +1,15 @@
 # Persona System Performance Optimization
 
-*Current as of v1.5.0*
+## Version Information
+
+Current as of v1.5.0
 
 This document outlines performance optimization strategies for the persona content system, with special focus on Redis caching implementation, edge caching, and other performance enhancements.
 
 ## Table of Contents
 
 - [Persona System Performance Optimization](#persona-system-performance-optimization)
+	- [Version Information](#version-information)
 	- [Table of Contents](#table-of-contents)
 	- [Performance Overview](#performance-overview)
 	- [Redis Object Caching](#redis-object-caching)
@@ -121,6 +124,7 @@ To enable Redis with WordPress:
    - Configure connection settings
 
 2. **Adjust wp-config.php**:
+
    ```php
    // Enable object caching
    define('WP_CACHE', true);
@@ -213,6 +217,7 @@ add_action('send_headers', 'cme_set_edge_cache_headers');
 Configure edge caching to use persona-specific cache keys:
 
 **Cloudflare Page Rule Example**:
+
 ```
 URL: *cruisemadeeasy.com/*
 Settings:

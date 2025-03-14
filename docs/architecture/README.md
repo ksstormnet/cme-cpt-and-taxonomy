@@ -80,6 +80,7 @@ The Redis object caching implementation is complementary to the boundary-based s
 - Minimizing database queries for persona detection
 
 This creates a two-level caching strategy:
+
 1. Redis as an object/fragment cache at the WordPress level
 2. Edge caching (Cloudflare) at the network level
 

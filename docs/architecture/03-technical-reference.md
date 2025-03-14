@@ -1,12 +1,15 @@
 # Persona System Technical Reference
 
-*Current as of v1.5.0*
+## Version Information
+
+Current as of v1.5.0
 
 This document provides developers with specific code patterns, hooks, examples, and best practices for implementing and extending the shortcode-based persona system.
 
 ## Table of Contents
 
 - [Persona System Technical Reference](#persona-system-technical-reference)
+	- [Version Information](#version-information)
 	- [Table of Contents](#table-of-contents)
 	- [System Components](#system-components)
 	- [Shortcode Implementation](#shortcode-implementation)

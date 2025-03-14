@@ -1,6 +1,8 @@
 # Persona Content System Architecture Overview
 
-*Current as of v1.5.0*
+## Version Information
+
+Current as of v1.5.0
 
 This document provides a comprehensive technical overview of the CME Personas plugin architecture, explaining how the shortcode-based persona system works, its components, and how it can be extended.
 
@@ -21,7 +23,7 @@ The system supports multiple personas, with common examples including:
 
 ### Component Diagram
 
-```
+```text
 ┌──────────────────────────────────────────────────────────┐
 │                   WordPress Frontend                     │
 └───────────────────────────┬──────────────────────────────┘
