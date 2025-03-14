@@ -181,9 +181,9 @@ public function set_persona( $persona_id, $set_cookie = true ) {
 The persona system uses WordPress post types for persona definition:
 
 1. **Post Type**: 'persona' - Stores basic persona information
-2. **Post Meta**: Stores persona properties including gender-specific images
+2. **Content Management**: Uses standard WordPress content with `[if_persona]` shortcodes embedded
 
-The boundary-based shortcode approach doesn't require specialized content storage - regular WordPress content contains the shortcodes.
+The boundary-based shortcode approach doesn't require specialized content storage - regular WordPress content contains the shortcodes that define which sections are visible to which personas.
 
 ## Integration Points
 
