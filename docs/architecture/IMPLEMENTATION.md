@@ -5,36 +5,36 @@ This document provides a comprehensive overview of the persona system implementa
 ## Table of Contents
 
 - [Persona System Implementation](#persona-system-implementation)
-	- [Table of Contents](#table-of-contents)
-	- [Implementation Approaches Comparison](#implementation-approaches-comparison)
-		- [Introduction](#introduction)
-		- [Option 1: Server-Side Persona Detection with Edge Caching](#option-1-server-side-persona-detection-with-edge-caching)
-			- [Technical Implementation Details](#technical-implementation-details)
-				- [WordPress/PHP Backend](#wordpressphp-backend)
-				- [Cloudflare Configuration](#cloudflare-configuration)
-			- [Performance Characteristics](#performance-characteristics)
-			- [Scalability Factors](#scalability-factors)
-			- [Specific Challenges](#specific-challenges)
-		- [Option 3: Edge-Worker Persona Application](#option-3-edge-worker-persona-application)
-			- [Technical Implementation Details](#technical-implementation-details-1)
-				- [WordPress/PHP Backend](#wordpressphp-backend-1)
-				- [Cloudflare Worker Implementation](#cloudflare-worker-implementation)
-			- [Performance Characteristics](#performance-characteristics-1)
-			- [Scalability Factors](#scalability-factors-1)
-			- [Specific Challenges](#specific-challenges-1)
-		- [Data Flow Comparison with 'easy-breezy' Example](#data-flow-comparison-with-easy-breezy-example)
-			- [Option 1: Server-Side Flow](#option-1-server-side-flow)
-			- [Option 3: Edge-Worker Flow](#option-3-edge-worker-flow)
-		- [Decision Factors Summary](#decision-factors-summary)
-	- [Chosen Implementation: WordPress Plugin](#chosen-implementation-wordpress-plugin)
-		- [Overview](#overview)
-		- [Plugin Architecture](#plugin-architecture)
-		- [Phase 1: Core Infrastructure](#phase-1-core-infrastructure)
-			- [Tasks](#tasks)
-			- [Deliverables](#deliverables)
-			- [Core Classes](#core-classes)
-				- [Persona Manager Class](#persona-manager-class)
-				- [Persona Content Class](#persona-content-class)
+    - [Table of Contents](#table-of-contents)
+    - [Implementation Approaches Comparison](#implementation-approaches-comparison)
+        - [Introduction](#introduction)
+        - [Option 1: Server-Side Persona Detection with Edge Caching](#option-1-server-side-persona-detection-with-edge-caching)
+            - [Technical Implementation Details](#technical-implementation-details)
+                - [WordPress/PHP Backend](#wordpressphp-backend)
+                - [Cloudflare Configuration](#cloudflare-configuration)
+            - [Performance Characteristics](#performance-characteristics)
+            - [Scalability Factors](#scalability-factors)
+            - [Specific Challenges](#specific-challenges)
+        - [Option 3: Edge-Worker Persona Application](#option-3-edge-worker-persona-application)
+            - [Technical Implementation Details](#technical-implementation-details-1)
+                - [WordPress/PHP Backend](#wordpressphp-backend-1)
+                - [Cloudflare Worker Implementation](#cloudflare-worker-implementation)
+            - [Performance Characteristics](#performance-characteristics-1)
+            - [Scalability Factors](#scalability-factors-1)
+            - [Specific Challenges](#specific-challenges-1)
+        - [Data Flow Comparison with 'easy-breezy' Example](#data-flow-comparison-with-easy-breezy-example)
+            - [Option 1: Server-Side Flow](#option-1-server-side-flow)
+            - [Option 3: Edge-Worker Flow](#option-3-edge-worker-flow)
+        - [Decision Factors Summary](#decision-factors-summary)
+    - [Chosen Implementation: WordPress Plugin](#chosen-implementation-wordpress-plugin)
+        - [Overview](#overview)
+        - [Plugin Architecture](#plugin-architecture)
+        - [Phase 1: Core Infrastructure](#phase-1-core-infrastructure)
+            - [Tasks](#tasks)
+            - [Deliverables](#deliverables)
+            - [Core Classes](#core-classes)
+                - [Persona Manager Class](#persona-manager-class)
+                - [Persona Content Class](#persona-content-class)
 
 ## Implementation Approaches Comparison
 
@@ -250,83 +250,83 @@ Both approaches assume that the Personas plugin handles core persona management,
 
     ```javascript
     addEventListener("fetch", (event) => {
-     event.respondWith(handleRequest(event.request));
+    	event.respondWith(handleRequest(event.request));
     });
 
     async function handleRequest(request) {
-     // Extract persona from cookies or other sources
-     const persona = getPersonaFromRequest(request) || "default";
+    	// Extract persona from cookies or other sources
+    	const persona = getPersonaFromRequest(request) || "default";
 
-     // Get the response from origin or cache
-     const response = await fetch(request);
+    	// Get the response from origin or cache
+    	const response = await fetch(request);
 
-     // Check if this page has persona content
-     const hasPersonaContent = response.headers.get("X-Has-Persona-Content");
+    	// Check if this page has persona content
+    	const hasPersonaContent = response.headers.get("X-Has-Persona-Content");
 
-     if (hasPersonaContent !== "true") {
-      // No persona content, return response as is
-      return response;
-     }
+    	if (hasPersonaContent !== "true") {
+    		// No persona content, return response as is
+    		return response;
+    	}
 
-     // Get the HTML text
-     const html = await response.text();
+    	// Get the HTML text
+    	const html = await response.text();
 
-     // Process the HTML for this persona
-     const processedHtml = processHtmlForPersona(html, persona);
+    	// Process the HTML for this persona
+    	const processedHtml = processHtmlForPersona(html, persona);
 
-     // Create a new response
-     const newResponse = new Response(processedHtml, {
-      status: response.status,
-      statusText: response.statusText,
-      headers: response.headers,
-     });
+    	// Create a new response
+    	const newResponse = new Response(processedHtml, {
+    		status: response.status,
+    		statusText: response.statusText,
+    		headers: response.headers,
+    	});
 
-     // Add cache headers for this persona
-     newResponse.headers.set("Cache-Tag", `persona-${persona}`);
+    	// Add cache headers for this persona
+    	newResponse.headers.set("Cache-Tag", `persona-${persona}`);
 
-     return newResponse;
+    	return newResponse;
     }
 
     function processHtmlForPersona(html, persona) {
-     // Simple regex approach (actual implementation would use HTML parser)
-     const regex = new RegExp(
-      `<div data-persona="${persona}">([\\s\\S]*?)<\/div>`,
-      "g",
-     );
-     let processedHtml = html;
+    	// Simple regex approach (actual implementation would use HTML parser)
+    	const regex = new RegExp(
+    		`<div data-persona="${persona}">([\\s\\S]*?)<\/div>`,
+    		"g",
+    	);
+    	let processedHtml = html;
 
-     // Remove all persona containers
-     processedHtml = processedHtml.replace(
-      /<div data-persona="[^"]*">[\s\S]*?<\/div>/g,
-      "",
-     );
+    	// Remove all persona containers
+    	processedHtml = processedHtml.replace(
+    		/<div data-persona="[^"]*">[\s\S]*?<\/div>/g,
+    		"",
+    	);
 
-     // Find all content for this persona
-     const matches = [...html.matchAll(regex)];
+    	// Find all content for this persona
+    	const matches = [...html.matchAll(regex)];
 
-     // Replace back the content for this persona
-     matches.forEach((match) => {
-      // Find position to insert content by looking for markers
-      // This is a simplified approach - real implementation would be more robust
-      processedHtml = processedHtml.replace(
-       "<!-- PERSONA_CONTENT_MARKER -->",
-       match[1],
-      );
-     });
+    	// Replace back the content for this persona
+    	matches.forEach((match) => {
+    		// Find position to insert content by looking for markers
+    		// This is a simplified approach - real implementation would be more robust
+    		processedHtml = processedHtml.replace(
+    			"<!-- PERSONA_CONTENT_MARKER -->",
+    			match[1],
+    		);
+    	});
 
-     return processedHtml;
+    	return processedHtml;
     }
 
     function getPersonaFromRequest(request) {
-     // Get cookies from request
-     const cookieHeader = request.headers.get("Cookie") || "";
-     const cookies = cookieHeader.split(";").reduce((obj, c) => {
-      const [key, value] = c.trim().split("=");
-      obj[key] = value;
-      return obj;
-     }, {});
+    	// Get cookies from request
+    	const cookieHeader = request.headers.get("Cookie") || "";
+    	const cookies = cookieHeader.split(";").reduce((obj, c) => {
+    		const [key, value] = c.trim().split("=");
+    		obj[key] = value;
+    		return obj;
+    	}, {});
 
-     return cookies["_gtm_persona"];
+    	return cookies["_gtm_persona"];
     }
     ```
 
@@ -336,28 +336,28 @@ Both approaches assume that the Personas plugin handles core persona management,
     ```javascript
     // Using HTMLRewriter (Cloudflare's recommended approach)
     async function handleRequest(request) {
-     const persona = getPersonaFromRequest(request) || "default";
-     const response = await fetch(request);
+    	const persona = getPersonaFromRequest(request) || "default";
+    	const response = await fetch(request);
 
-     if (response.headers.get("X-Has-Persona-Content") !== "true") {
-      return response;
-     }
+    	if (response.headers.get("X-Has-Persona-Content") !== "true") {
+    		return response;
+    	}
 
-     return new HTMLRewriter()
-      .on("div[data-persona]", {
-       element(el) {
-        const elPersona = el.getAttribute("data-persona");
+    	return new HTMLRewriter()
+    		.on("div[data-persona]", {
+    			element(el) {
+    				const elPersona = el.getAttribute("data-persona");
 
-        // If this isn't for our persona, remove it
-        if (elPersona !== persona && elPersona !== "default") {
-         el.remove();
-        } else {
-         // Keep the content but remove the data-persona attribute
-         el.removeAttribute("data-persona");
-        }
-       },
-      })
-      .transform(response);
+    				// If this isn't for our persona, remove it
+    				if (elPersona !== persona && elPersona !== "default") {
+    					el.remove();
+    				} else {
+    					// Keep the content but remove the data-persona attribute
+    					el.removeAttribute("data-persona");
+    				}
+    			},
+    		})
+    		.transform(response);
     }
     ```
 
@@ -411,19 +411,19 @@ Both approaches assume that the Personas plugin handles core persona management,
     ```javascript
     // Implement streaming processing for large pages
     async function processLargePage(response, persona) {
-     const { readable, writable } = new TransformStream();
+    	const { readable, writable } = new TransformStream();
 
-     // Create a streaming HTML processor
-     const htmlProcessor = new HTMLProcessor(persona);
+    	// Create a streaming HTML processor
+    	const htmlProcessor = new HTMLProcessor(persona);
 
-     // Process the stream
-     response.body
-      .pipeThrough(new TextDecoderStream())
-      .pipeThrough(htmlProcessor)
-      .pipeThrough(new TextEncoderStream())
-      .pipeTo(writable);
+    	// Process the stream
+    	response.body
+    		.pipeThrough(new TextDecoderStream())
+    		.pipeThrough(htmlProcessor)
+    		.pipeThrough(new TextEncoderStream())
+    		.pipeTo(writable);
 
-     return new Response(readable, response);
+    	return new Response(readable, response);
     }
     ```
 
@@ -456,7 +456,7 @@ Both approaches assume that the Personas plugin handles core persona management,
     <div data-persona="default">Default cruise description...</div>
     <div data-persona="easy-breezy">Relaxed, simple cruise description...</div>
     <div data-persona="luxe">
-     Premium cruise description with luxury details...
+    	Premium cruise description with luxury details...
     </div>
     <!-- more content with persona variations -->
     ```
@@ -920,3 +920,4 @@ class Personas_Content {
                 break;
 
             case '
+```
