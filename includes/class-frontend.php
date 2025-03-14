@@ -210,7 +210,7 @@ class Frontend {
 	 * @param     array       $m            Regular expression match array (unused).
 	 * @return    bool|string               Short-circuit return value.
 	 */
-	public function pre_process_persona_shortcode( $return_value, $tag, $attr, $m ) {
+	public function pre_process_persona_shortcode( $return_value, $tag, $attr, $m ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 		// Only handle our shortcode.
 		if ( 'if_persona' !== $tag ) {
 			return $return_value;

@@ -5,30 +5,30 @@ This document provides developers with specific code patterns, hooks, and exampl
 ## Table of Contents
 
 - [Technical Implementation Details for Shortcode-Based Persona System](#technical-implementation-details-for-shortcode-based-persona-system)
-	- [Table of Contents](#table-of-contents)
-	- [System Components](#system-components)
-	- [Shortcode Implementation](#shortcode-implementation)
-		- [Core Shortcode: `[if_persona]`](#core-shortcode-if_persona)
-		- [Safe Content Processing](#safe-content-processing)
-	- [Persona Detection](#persona-detection)
-		- [Detection Logic](#detection-logic)
-		- [Setting the Persona](#setting-the-persona)
-	- [Storage Method](#storage-method)
-	- [Integration Points](#integration-points)
-	- [Code Examples](#code-examples)
-		- [Shortcode Usage](#shortcode-usage)
-		- [Creating and Managing Personas](#creating-and-managing-personas)
-		- [Retrieving Persona Data](#retrieving-persona-data)
-		- [Extending the System](#extending-the-system)
-	- [Performance Considerations](#performance-considerations)
-		- [Shortcode Processing Optimization](#shortcode-processing-optimization)
-		- [Asset Loading](#asset-loading)
-	- [Admin Integration](#admin-integration)
-		- [Admin Preview](#admin-preview)
-		- [TinyMCE Integration](#tinymce-integration)
-	- [Edge Cases and Error Handling](#edge-cases-and-error-handling)
-		- [Invalid Persona Handling](#invalid-persona-handling)
-		- [Shortcode Nesting Protection](#shortcode-nesting-protection)
+    - [Table of Contents](#table-of-contents)
+    - [System Components](#system-components)
+    - [Shortcode Implementation](#shortcode-implementation)
+        - [Core Shortcode: `[if_persona]`](#core-shortcode-if_persona)
+        - [Safe Content Processing](#safe-content-processing)
+    - [Persona Detection](#persona-detection)
+        - [Detection Logic](#detection-logic)
+        - [Setting the Persona](#setting-the-persona)
+    - [Storage Method](#storage-method)
+    - [Integration Points](#integration-points)
+    - [Code Examples](#code-examples)
+        - [Shortcode Usage](#shortcode-usage)
+        - [Creating and Managing Personas](#creating-and-managing-personas)
+        - [Retrieving Persona Data](#retrieving-persona-data)
+        - [Extending the System](#extending-the-system)
+    - [Performance Considerations](#performance-considerations)
+        - [Shortcode Processing Optimization](#shortcode-processing-optimization)
+        - [Asset Loading](#asset-loading)
+    - [Admin Integration](#admin-integration)
+        - [Admin Preview](#admin-preview)
+        - [TinyMCE Integration](#tinymce-integration)
+    - [Edge Cases and Error Handling](#edge-cases-and-error-handling)
+        - [Invalid Persona Handling](#invalid-persona-handling)
+        - [Shortcode Nesting Protection](#shortcode-nesting-protection)
 
 ## System Components
 
@@ -133,7 +133,7 @@ public function get_current_persona() {
             return $persona;
         }
     }
-    
+
     // Check cookie next
     if ( isset( $_COOKIE['cme_current_persona'] ) ) {
         $persona = sanitize_key( $_COOKIE['cme_current_persona'] );
@@ -141,7 +141,7 @@ public function get_current_persona() {
             return $persona;
         }
     }
-    
+
     // Fall back to default
     return 'default';
 }
@@ -161,7 +161,7 @@ public function set_persona( $persona_id, $set_cookie = true ) {
     if ( ! $this->is_valid_persona( $persona_id ) ) {
         return false;
     }
-    
+
     if ( $set_cookie ) {
         setcookie(
             'cme_current_persona',
@@ -171,7 +171,7 @@ public function set_persona( $persona_id, $set_cookie = true ) {
             COOKIE_DOMAIN
         );
     }
-    
+
     return true;
 }
 ```
@@ -241,14 +241,14 @@ Advanced usage with nested shortcodes:
 echo do_shortcode('[if_persona not="thrill"]
     <div class="relaxation-options">
         <h2>Relaxation Options</h2>
-        
+
         [if_persona is="luxe"]
             <div class="premium-options">
                 <h3>Premium Relaxation</h3>
                 <!-- Premium content here -->
             </div>
         [/if_persona]
-        
+
         <div class="standard-options">
             <!-- Standard content here -->
         </div>
@@ -306,12 +306,12 @@ add_filter('cme_current_persona', function($persona) {
     if (is_user_logged_in()) {
         $user_id = get_current_user_id();
         $user_persona = get_user_meta($user_id, 'preferred_persona', true);
-        
+
         if (!empty($user_persona)) {
             return $user_persona;
         }
     }
-    
+
     return $persona;
 });
 
@@ -338,11 +338,11 @@ The shortcode approach is optimized for performance:
 // Check for existence of shortcodes before processing
 function maybe_process_persona_shortcodes($content) {
     // Only process if shortcodes exist in the content
-    if (strpos($content, '[if_persona') !== false || 
+    if (strpos($content, '[if_persona') !== false ||
         strpos($content, '[persona_') !== false) {
         return do_shortcode($content);
     }
-    
+
     return $content;
 }
 ```
@@ -354,16 +354,16 @@ Conditionally load assets only when needed:
 ```php
 function enqueue_persona_assets() {
     global $post;
-    
+
     // Skip if no post content
     if (!is_singular() || empty($post->post_content)) {
         return;
     }
-    
+
     // Only load assets if shortcodes are present
-    if (strpos($post->post_content, '[if_persona') !== false || 
+    if (strpos($post->post_content, '[if_persona') !== false ||
         strpos($post->post_content, '[persona_') !== false) {
-        
+
         wp_enqueue_style('cme-personas');
         wp_enqueue_script('cme-personas-js');
     }
@@ -383,10 +383,10 @@ function persona_admin_preview_notice() {
     if (!isset($_GET['persona'])) {
         return;
     }
-    
+
     $persona = sanitize_key($_GET['persona']);
     $persona_name = get_persona_name($persona);
-    
+
     echo '<div class="notice notice-info">';
     echo '<p>' . sprintf(__('Previewing content as "%s" persona.', 'cme-personas'), esc_html($persona_name)) . '</p>';
     echo '</div>';
@@ -430,7 +430,7 @@ function is_valid_persona($persona_id) {
     if ('default' === $persona_id) {
         return true;
     }
-    
+
     $persona = get_post($persona_id);
     return ($persona && 'persona' === $persona->post_type && 'publish' === $persona->post_status);
 }
@@ -453,10 +453,11 @@ private function process_nested_shortcodes($content) {
     if ($this->nesting_level > 10) {
         return $content; // Too deep, just return unprocessed
     }
-    
+
     $this->nesting_level++;
     $processed = do_shortcode($content);
     $this->nesting_level--;
-    
+
     return $processed;
 }
+```
