@@ -48,6 +48,7 @@ class Personas_Dashboard {
 	private function __construct() {
 		add_action( 'admin_menu', array( $this, 'register_dashboard_page' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 	}
 
 	/**
@@ -65,6 +66,25 @@ class Personas_Dashboard {
 				array(),
 				CME_PERSONAS_VERSION,
 				'all'
+			);
+		}
+	}
+
+	/**
+	 * Enqueue dashboard specific scripts.
+	 *
+	 * @since    1.5.2
+	 * @param    string $hook    Current admin page.
+	 */
+	public function enqueue_scripts( $hook ) {
+		// Only load on our dashboard page.
+		if ( 'toplevel_page_cme-personas-dashboard' === $hook ) {
+			wp_enqueue_script(
+				'cme-personas-dashboard',
+				CME_PERSONAS_URL . 'admin/js/personas-dashboard.js',
+				array( 'jquery' ),
+				CME_PERSONAS_VERSION,
+				true
 			);
 		}
 	}
@@ -169,46 +189,62 @@ class Personas_Dashboard {
 							$attributes = get_post_meta( $persona->ID, 'persona_attributes', true );
 							?>
 							<div class="cme-persona-card">
-								<div class="cme-persona-card-title"><?php echo esc_html( $persona->post_title ); ?></div>
+								<h2 class="cme-persona-card-title"><?php echo esc_html( $persona->post_title ); ?></h2>
 
-								<div class="cme-persona-images">
-									<div class="cme-persona-image">
+								<div class="cme-persona-image-rotator">
+									<div class="cme-persona-image-container">
 										<?php if ( $male_image_id ) : ?>
-											<?php echo wp_get_attachment_image( $male_image_id, 'thumbnail' ); ?>
-											<div class="cme-persona-image-name"><?php echo esc_html( $male_name ); ?></div>
+											<div class="cme-persona-slide">
+												<?php echo wp_get_attachment_image( $male_image_id, 'medium', false, array( 'class' => 'cme-persona-slide-image' ) ); ?>
+												<div class="cme-persona-slide-caption"><?php echo esc_html( $male_name ); ?></div>
+											</div>
 										<?php else : ?>
-											<div class="cme-persona-image-placeholder dashicons dashicons-businessman"></div>
-											<div class="cme-persona-image-name"><?php esc_html_e( 'Male', 'cme-personas' ); ?></div>
+											<div class="cme-persona-slide">
+												<div class="cme-persona-image-placeholder dashicons dashicons-businessman"></div>
+												<div class="cme-persona-slide-caption"><?php esc_html_e( 'Male', 'cme-personas' ); ?></div>
+											</div>
 										<?php endif; ?>
-									</div>
 
-									<div class="cme-persona-image">
 										<?php if ( $female_image_id ) : ?>
-											<?php echo wp_get_attachment_image( $female_image_id, 'thumbnail' ); ?>
-											<div class="cme-persona-image-name"><?php echo esc_html( $female_name ); ?></div>
+											<div class="cme-persona-slide">
+												<?php echo wp_get_attachment_image( $female_image_id, 'medium', false, array( 'class' => 'cme-persona-slide-image' ) ); ?>
+												<div class="cme-persona-slide-caption"><?php echo esc_html( $female_name ); ?></div>
+											</div>
 										<?php else : ?>
-											<div class="cme-persona-image-placeholder dashicons dashicons-businesswoman"></div>
-											<div class="cme-persona-image-name"><?php esc_html_e( 'Female', 'cme-personas' ); ?></div>
+											<div class="cme-persona-slide">
+												<div class="cme-persona-image-placeholder dashicons dashicons-businesswoman"></div>
+												<div class="cme-persona-slide-caption"><?php esc_html_e( 'Female', 'cme-personas' ); ?></div>
+											</div>
+										<?php endif; ?>
+
+										<?php if ( $indeterminate_image_id ) : ?>
+											<div class="cme-persona-slide">
+												<?php echo wp_get_attachment_image( $indeterminate_image_id, 'medium', false, array( 'class' => 'cme-persona-slide-image' ) ); ?>
+												<div class="cme-persona-slide-caption"><?php echo esc_html( $indeterminate_name ); ?></div>
+											</div>
+										<?php else : ?>
+											<div class="cme-persona-slide">
+												<div class="cme-persona-image-placeholder dashicons dashicons-admin-users"></div>
+												<div class="cme-persona-slide-caption"><?php esc_html_e( 'Person', 'cme-personas' ); ?></div>
+											</div>
 										<?php endif; ?>
 									</div>
 
-									<div class="cme-persona-image">
-										<?php if ( $indeterminate_image_id ) : ?>
-											<?php echo wp_get_attachment_image( $indeterminate_image_id, 'thumbnail' ); ?>
-											<div class="cme-persona-image-name"><?php echo esc_html( $indeterminate_name ); ?></div>
-										<?php else : ?>
-											<div class="cme-persona-image-placeholder dashicons dashicons-admin-users"></div>
-											<div class="cme-persona-image-name"><?php esc_html_e( 'Person', 'cme-personas' ); ?></div>
-										<?php endif; ?>
+									<div class="cme-persona-rotator-nav">
+										<button class="cme-persona-rotator-prev" aria-label="<?php esc_attr_e( 'Previous image', 'cme-personas' ); ?>">&lsaquo;</button>
+										<div class="cme-persona-rotator-dots"></div>
+										<button class="cme-persona-rotator-next" aria-label="<?php esc_attr_e( 'Next image', 'cme-personas' ); ?>">&rsaquo;</button>
 									</div>
 								</div>
 
 								<div class="cme-persona-attributes">
-									<strong><?php esc_html_e( 'Key Attributes:', 'cme-personas' ); ?></strong>
+									<h3 class="cme-persona-attributes-title"><?php esc_html_e( 'Key Attributes:', 'cme-personas' ); ?></h3>
 									<?php if ( ! empty( $attributes ) ) : ?>
-										<?php echo wp_kses_post( wpautop( $attributes ) ); ?>
+										<div class="cme-persona-attributes-content">
+											<?php echo wp_kses_post( wpautop( $attributes ) ); ?>
+										</div>
 									<?php else : ?>
-										<p><?php esc_html_e( 'No attributes defined.', 'cme-personas' ); ?></p>
+										<p class="cme-persona-attributes-content"><?php esc_html_e( 'No attributes defined.', 'cme-personas' ); ?></p>
 									<?php endif; ?>
 								</div>
 
@@ -232,7 +268,7 @@ class Personas_Dashboard {
 			<div class="cme-dashboard-section">
 				<h2><?php esc_html_e( 'Documentation & Management', 'cme-personas' ); ?></h2>
 
-				<div class="cme-card-grid">
+				<div class="cme-personas-dashboard cme-card-grid">
 					<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=persona' ) ); ?>" class="cme-card">
 						<div class="cme-card-icon dashicons dashicons-plus-alt"></div>
 						<div class="cme-card-title"><?php esc_html_e( 'Add New Persona', 'cme-personas' ); ?></div>
