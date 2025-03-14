@@ -78,9 +78,9 @@ class Ajax_Handler {
 		}
 
 		// Get parameters.
-		$post_id  = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
-		$field    = isset( $_POST['field'] ) ? sanitize_key( $_POST['field'] ) : 'content';
-		$persona  = isset( $_POST['persona'] ) ? sanitize_key( $_POST['persona'] ) : '';
+		$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
+		$field   = isset( $_POST['field'] ) ? sanitize_key( $_POST['field'] ) : 'content';
+		$persona = isset( $_POST['persona'] ) ? sanitize_key( $_POST['persona'] ) : '';
 
 		if ( empty( $post_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid post ID.', 'cme-personas' ) ) );
@@ -88,7 +88,7 @@ class Ajax_Handler {
 
 		// Get content manager.
 		$content_manager = Persona_Content::get_instance();
-		$api = Personas_API::get_instance();
+		$api             = Personas_API::get_instance();
 
 		// Get the content.
 		$content = $api->get_content( $post_id, 'post', $field, $persona );
@@ -96,9 +96,9 @@ class Ajax_Handler {
 		// Return result.
 		wp_send_json_success(
 			array(
-				'content'  => $content,
-				'field'    => $field,
-				'persona'  => $persona,
+				'content' => $content,
+				'field'   => $field,
+				'persona' => $persona,
 			)
 		);
 	}
@@ -185,7 +185,7 @@ class Ajax_Handler {
 		$persona_excerpt = $content_manager->get_content( $post_id, 'post', 'excerpt', $persona );
 
 		// Build preview HTML.
-		$preview_html = '<div class="cme-persona-preview">';
+		$preview_html  = '<div class="cme-persona-preview">';
 		$preview_html .= '<h2>' . esc_html( $persona_title ) . '</h2>';
 
 		if ( ! empty( $persona_excerpt ) ) {
