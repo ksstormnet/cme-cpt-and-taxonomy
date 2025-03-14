@@ -9,21 +9,21 @@
 namespace CME_Personas;
 
 /**
- * Dashboard class.
+ * Personas Dashboard class.
  *
  * Provides the main dashboard page for the Personas admin section.
  *
  * @since      1.3.0
  * @package    CME_Personas
  */
-class Dashboard {
+class Personas_Dashboard {
 
 	/**
 	 * Instance of the class.
 	 *
 	 * @since    1.3.0
 	 * @access   private
-	 * @var      Dashboard    $instance    Singleton instance of the class.
+	 * @var      Personas_Dashboard    $instance    Singleton instance of the class.
 	 */
 	private static $instance = null;
 
@@ -31,7 +31,7 @@ class Dashboard {
 	 * Get the singleton instance of the class.
 	 *
 	 * @since     1.3.0
-	 * @return    Dashboard    The singleton instance.
+	 * @return    Personas_Dashboard    The singleton instance.
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -224,4 +224,3 @@ class Dashboard {
 		}
 	}
 }
-// Additional comment.

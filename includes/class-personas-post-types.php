@@ -1,6 +1,6 @@
 <?php
 /**
- * Custom Post Types registration.
+ * Personas Post Types registration.
  *
  * @since      1.1.0
  * @package    CME_Personas
@@ -9,14 +9,14 @@
 namespace CME_Personas;
 
 /**
- * Custom Post Types class.
+ * Personas Post Types class.
  *
- * This class handles registration of custom post types.
+ * This class handles registration of custom post types for personas.
  *
  * @since      1.1.0
  * @package    CME_Personas
  */
-class Custom_Post_Types {
+class Personas_Post_Types {
 	/**
 	 * Post type name for Persona.
 	 *

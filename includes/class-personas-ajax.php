@@ -1,6 +1,6 @@
 <?php
 /**
- * AJAX Handler Class
+ * Personas AJAX Handler Class
  *
  * Handles AJAX requests for Persona functionality.
  *
@@ -11,21 +11,21 @@
 namespace CME_Personas;
 
 /**
- * AJAX Handler Class
+ * Personas AJAX Handler Class
  *
  * This class handles all AJAX requests for the Persona system.
  *
  * @since      1.2.0
  * @package    CME_Personas
  */
-class Ajax_Handler {
+class Personas_Ajax {
 
 	/**
 	 * Instance of the class.
 	 *
 	 * @since    1.2.0
 	 * @access   private
-	 * @var      Ajax_Handler    $instance    Singleton instance of the class.
+	 * @var      Personas_Ajax    $instance    Singleton instance of the class.
 	 */
 	private static $instance = null;
 
@@ -33,7 +33,7 @@ class Ajax_Handler {
 	 * Get the singleton instance of the class.
 	 *
 	 * @since     1.2.0
-	 * @return    Ajax_Handler    The singleton instance.
+	 * @return    Personas_Ajax    The singleton instance.
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
