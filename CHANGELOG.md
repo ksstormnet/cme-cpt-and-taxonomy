@@ -9,7 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Renamed generic `class-plugin.php` to more descriptive `class-personas-bootstrap.php` for better code organization
+- Refactored plugin architecture to follow Single Responsibility Principle:
+  - Split `class-persona-manager.php` into specialized components:
+    - `class-personas-detector.php`: Handles persona detection from various sources
+    - `class-personas-storage.php`: Manages storage of persona preferences
+    - `class-personas-repository.php`: Retrieves persona data from database
+  - Renamed `class-plugin.php` to `class-personas-loader.php` for clarity
+  - Created `class-personas-facade.php` as a simplified API layer
+  - Added `class-personas-assets.php` for script/style management
+  - Added backward compatibility layer to maintain API stability
 
 ## [1.5.1] - 2025-03-14
 
