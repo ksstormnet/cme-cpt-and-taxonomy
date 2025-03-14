@@ -144,6 +144,50 @@ class Frontend {
 	}
 
 	/**
+	 * Process content with shortcodes safely.
+	 *
+	 * This method handles shortcode processing in a way that doesn't interfere
+	 * with third-party shortcodes like Meta Slider.
+	 *
+	 * @since     1.4.2
+	 * @param     string $content   Content to process.
+	 * @return    string            Processed content.
+	 */
+	private function process_shortcodes( $content ) {
+		// First check if content contains a Meta Slider shortcode
+		if ( ! empty( $content ) && strpos( $content, '[metaslider' ) !== false ) {
+			// If there's a Meta Slider shortcode, remove our shortcodes temporarily
+			// so they don't interfere with Meta Slider processing
+			remove_shortcode( 'persona_content' );
+			remove_shortcode( 'persona_switcher' );
+			remove_shortcode( 'if_persona' );
+			remove_shortcode( 'cme-persona-rotator' );
+
+			// Process with Meta Slider shortcodes
+			$content = do_shortcode( $content );
+
+			// Re-add our shortcodes
+			add_shortcode( 'persona_content', array( $this, 'persona_content_shortcode' ) );
+			add_shortcode( 'persona_switcher', array( $this, 'persona_switcher_shortcode' ) );
+			add_shortcode( 'if_persona', array( $this, 'if_persona_shortcode' ) );
+
+			// Also re-add the rotator shortcode if it exists
+			if ( class_exists( '\\CME_Personas\\Shortcodes' ) ) {
+				$shortcodes = new \CME_Personas\Shortcodes();
+				$shortcodes->register();
+			}
+
+			return $content;
+		}
+
+		// Standard processing for content without Meta Slider
+		if ( ! empty( $content ) ) {
+			return do_shortcode( $content );
+		}
+		return $content;
+	}
+
+	/**
 	 * Shortcode for persona-specific content.
 	 *
 	 * Usage: [persona_content persona="business" entity_id="123" entity_type="post" field="content"]
@@ -174,7 +218,7 @@ class Frontend {
 
 		// If entity_id is still null or 0, return the default content.
 		if ( empty( $atts['entity_id'] ) ) {
-			return do_shortcode( $content );
+			return $this->process_shortcodes( $content );
 		}
 
 		// Get persona-specific content.
@@ -191,7 +235,7 @@ class Frontend {
 		}
 
 		// Otherwise return the default content.
-		return do_shortcode( $content );
+		return $this->process_shortcodes( $content );
 	}
 
 	/**
@@ -236,7 +280,7 @@ class Frontend {
 		}
 
 		// If we get here, the conditions are met.
-		return do_shortcode( $content );
+		return $this->process_shortcodes( $content );
 	}
 
 	/**

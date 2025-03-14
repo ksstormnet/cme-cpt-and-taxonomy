@@ -25,7 +25,10 @@ class Shortcodes {
 	 * @return   void
 	 */
 	public function register(): void {
-		add_shortcode( 'cme-persona-rotator', array( $this, 'persona_rotator_shortcode' ) );
+		// Check if the shortcode is already registered (to avoid multiple registrations)
+		if ( ! shortcode_exists( 'cme-persona-rotator' ) ) {
+			add_shortcode( 'cme-persona-rotator', array( $this, 'persona_rotator_shortcode' ) );
+		}
 	}
 
 	/**

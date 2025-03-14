@@ -23,11 +23,13 @@ The pre-push hook runs all linters to ensure the entire codebase meets standards
 If you encounter issues with Husky hooks:
 
 1. Ensure hooks are executable:
+
    ```bash
    chmod +x .husky/pre-commit .husky/pre-push
    ```
 
 2. Verify Husky is properly installed:
+
    ```bash
    npm run prepare
    ```

@@ -15,72 +15,138 @@ The system supports four primary personas:
 3. **Luxe Seafarer** - Luxury-focused travelers seeking premium experiences
 4. **Thrill Seeker** - Adventure-oriented cruisers interested in activities and exploration
 
-## Content Management
+## Using Persona Shortcodes
 
-### Admin Interface
+The persona system uses shortcodes to define boundaries around content that should be displayed conditionally based on the current visitor's persona.
 
-The persona content system provides a tabbed interface in the WordPress admin for managing content variations:
+### Basic Shortcode Usage
 
-*Note: See [Persona Tabs Illustration Description](../assets/persona-tabs-illustration.txt) for a textual description of the interface.*
+The primary shortcode used for persona-specific content is `[if_persona]`:
 
-Each tab contains a full Gutenberg block editor instance allowing for complete flexibility in creating persona-specific content.
+```
+[if_persona is="easy-breezy"]
+This content will only be shown to visitors with the "Easy-Breezy Cruiser" persona.
+[/if_persona]
+```
 
-### Key Features
+### Targeting Multiple Personas
 
-- **Full Block Editor Support**: Create rich, visually distinct content for each persona
-- **Default Fallback**: Default content displays when persona-specific content is not available
-- **Preview Mode**: Preview content as it will appear to different personas
-- **Field-Level Variations**: Customize individual fields or entire content blocks
+You can target multiple personas by separating them with commas:
+
+```
+[if_persona is="easy-breezy,luxe"]
+This content will be shown to both "Easy-Breezy Cruiser" and "Luxe Seafarer" personas.
+[/if_persona]
+```
+
+### Excluding Personas
+
+You can also display content for everyone EXCEPT specific personas:
+
+```
+[if_persona not="thrill"]
+This content will be shown to everyone EXCEPT "Thrill Seeker" personas.
+[/if_persona]
+```
+
+### Complex Content and Third-Party Shortcodes
+
+A major advantage of the boundary-based shortcode approach is that you can include any content within the shortcode boundaries, including:
+
+- Images and media
+- Third-party shortcodes (like Meta Slider)
+- Complex HTML elements
+- Other WordPress blocks and embeds
+
+Example with Meta Slider:
+
+```
+[if_persona is="luxe"]
+<h2>Luxury Accommodations</h2>
+<p>Indulge in our premium suite options...</p>
+[metaslider id="123"]
+[/if_persona]
+```
+
+### Nesting Shortcodes
+
+You can nest persona shortcodes for more complex conditional logic:
+
+```
+[if_persona not="thrill"]
+  <p>Relaxation is our priority...</p>
+  
+  [if_persona is="luxe"]
+    <p>Enjoy our premium spa treatments...</p>
+  [/if_persona]
+[/if_persona]
+```
+
+## Previewing Persona Content
+
+### Using Query Parameters
+
+You can preview how content will appear to different personas by adding a `persona` query parameter to any URL:
+
+```
+https://your-site.com/page/?persona=easy-breezy
+```
+
+This is useful for testing and verifying that persona-specific content displays correctly.
+
+### Admin Preview
+
+When editing content in the WordPress admin, you can use the persona selector in the sidebar to preview how your content will appear to different personas before publishing.
+
+## Persona Switcher
+
+You can add a persona switcher to your site that allows visitors to manually select their persona:
+
+```
+[persona_switcher]
+```
+
+This will display a set of buttons, one for each persona. Visitors can click to change their persona, and the page will refresh to show the appropriate content.
+
+### Customizing the Switcher
+
+You can customize the appearance of the switcher:
+
+```
+[persona_switcher display="dropdown" button_text="Choose Your Cruise Style"]
+```
+
+Options:
+- `display`: "buttons" (default) or "dropdown"
+- `button_text`: The label for the dropdown select
+- `class`: Additional CSS classes for styling
 
 ## Technical Implementation
 
-### Content Storage
+### Content Storage and Detection
 
-Persona content is stored in a dedicated table structure:
+Behind the scenes, the persona system:
 
-```sql
-CREATE TABLE cme_persona_content (
-  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  entity_id bigint(20) unsigned NOT NULL,
-  entity_type varchar(20) NOT NULL,
-  persona_id varchar(50) NOT NULL,
-  content_field varchar(50) NOT NULL,
-  content_data longtext NOT NULL,
-  date_modified datetime NOT NULL,
-  PRIMARY KEY (id),
-  KEY entity_persona (entity_id, entity_type, persona_id)
-);
-```
+1. Stores the visitor's selected persona in a cookie
+2. Checks for the persona query parameter
+3. Processes shortcodes based on the active persona
+4. Shows or hides content accordingly
 
-This design allows for efficient retrieval of specific content variations while maintaining flexibility across different entity types.
+### Performance Considerations
 
-### Persona Detection
+The shortcode-based approach is lightweight and efficient:
+- No duplicate content storage
+- Minimal database queries
+- Compatible with caching plugins
 
-The system detects visitor personas through several methods:
+## Best Practices
 
-1. **Cookie-Based**: Stores visitor's selected persona in a cookie
-2. **URL Parameter**: Allows specifying persona via `?persona=xyz` parameter
-3. **Session-Based**: Maintains persona selection across page views
-4. **Default Fallback**: Uses configured default persona when none is detected
+1. **Default First**: Always consider the default experience first, then add persona-specific variations
+2. **Clear Boundaries**: Keep shortcode blocks focused and well-organized
+3. **Test All Personas**: Always preview your content as each persona to ensure proper display
+4. **Documentation**: Document which sections of your site use persona-specific content
 
-## Using the Persona System
-
-### Creating Persona Content
-
-1. Edit a cruise, ship, or destination
-2. Navigate to the persona content section
-3. Select the appropriate persona tab
-4. Create custom content specific to that persona
-5. Save the entity
-
-### Previewing Persona Content
-
-1. While editing content, use the "Preview as Persona" dropdown
-2. Select the desired persona to preview
-3. View the full rendered page as that persona would see it
-4. Switch between personas to compare experiences
-
-### Content Strategies
+## Content Strategies
 
 For effective persona-based content:
 
@@ -89,97 +155,13 @@ For effective persona-based content:
 3. **Vary Length and Detail**: Adjust detail level based on persona preferences
 4. **Use Appropriate Imagery**: Select images that resonate with each persona
 
-## Frontend Integration
-
-### Displaying Persona Content
-
-The system automatically handles content switching on the frontend:
-
-```php
-// Example of displaying persona-aware content
-$content = cme_get_persona_content($post_id, 'post', 'post_content');
-echo apply_filters('the_content', $content);
-```
-
-### Custom Template Integration
-
-For custom templates, use the dedicated functions:
-
-```php
-// Get persona-specific content for an entity
-function cme_get_persona_content($entity_id, $entity_type, $content_field, $persona = null);
-
-// Check current user's persona
-function cme_get_current_persona();
-
-// Switch content display to a specific persona
-function cme_switch_persona($persona);
-```
-
-## Extending the Persona System
-
-### Adding New Personas
-
-To add new personas:
-
-1. Use the Personas settings page in the admin
-2. Add the new persona key and name
-3. Update database
-4. Update frontend detection logic
-
-### Custom Field Integration
-
-To add persona support to custom fields:
-
-```php
-// Register a custom field for persona content
-function register_persona_custom_field($field_key, $entity_type) {
-    add_action('cme_persona_editor_fields', function($entity_id, $persona) use ($field_key, $entity_type) {
-        $content = cme_get_persona_content($entity_id, $entity_type, $field_key, $persona);
-        // Render editor field
-    }, 10, 2);
-}
-```
-
-### Hooks and Filters
-
-The persona system provides several hooks for extension:
-
-```php
-// Modify detected persona
-add_filter('cme_current_persona', function($persona) {
-    // Custom logic
-    return $persona;
-});
-
-// Add custom persona editor tabs
-add_action('cme_persona_editor_tabs', function($entity_id, $entity_type) {
-    // Custom tab rendering
-});
-
-// Process persona content before display
-add_filter('cme_persona_content', function($content, $entity_id, $entity_type, $field, $persona) {
-    // Modify content
-    return $content;
-}, 10, 5);
-```
-
-## Best Practices
-
-1. **Content First**: Create default content before persona variations
-2. **Be Purposeful**: Only create variations when meaningful differences exist
-3. **Test Thoroughly**: View content with each persona to ensure proper display
-4. **Performance Awareness**: Use caching when implementing custom extensions
-5. **Documentation**: Document custom persona implementations for team reference
-
 ## Troubleshooting
 
 ### Common Issues
 
 1. **Content Not Switching**: Check persona detection and cookie settings
-2. **Editor Not Loading**: Verify JavaScript console for errors
-3. **Missing Variations**: Ensure content is saved for the specific persona
-4. **Database Errors**: Check table structure and permissions
+2. **Shortcode Not Working**: Verify that shortcode syntax is correct
+3. **Third-Party Compatibility**: If a third-party shortcode doesn't work inside persona shortcodes, try placing it outside and using multiple persona shortcodes around its parts
 
 ### Support
 
