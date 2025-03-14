@@ -49,6 +49,15 @@ class Frontend {
 	private $personas_api;
 
 	/**
+	 * Shortcode nesting level tracking.
+	 *
+	 * @since    1.5.0
+	 * @access   private
+	 * @var      int    $nesting_level    Current nesting level of shortcodes.
+	 */
+	private $nesting_level = 0;
+
+	/**
 	 * Get the singleton instance of the class.
 	 *
 	 * @since     1.3.0
@@ -91,6 +100,9 @@ class Frontend {
 
 		// Add frontend assets.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_assets' ) );
+
+		// Filter main content to optimize shortcode processing.
+		add_filter( 'the_content', array( $this, 'maybe_process_persona_shortcodes' ), 11 );
 	}
 
 	/**
@@ -127,6 +139,7 @@ class Frontend {
 					'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
 					'nonce'          => wp_create_nonce( 'cme_personas_nonce' ),
 					'currentPersona' => $this->personas_api->get_current_persona(),
+					'reloadOnSwitch' => apply_filters( 'cme_personas_reload_on_switch', false ),
 				)
 			);
 		}
@@ -135,7 +148,8 @@ class Frontend {
 	/**
 	 * Process content with shortcodes safely.
 	 *
-	 * This method handles general shortcode processing in content.
+	 * This method handles general shortcode processing in content
+	 * with protection against excessive nesting.
 	 *
 	 * @since     1.4.2
 	 * @param     string $content   Content to process.
@@ -143,9 +157,86 @@ class Frontend {
 	 */
 	private function process_shortcodes( $content ) {
 		if ( ! empty( $content ) ) {
-			return do_shortcode( $content );
+			// Prevent excessive nesting.
+			if ( $this->nesting_level > 10 ) {
+				return $content; // Too deep, just return unprocessed.
+			}
+
+			$this->nesting_level++;
+			$processed = do_shortcode( $content );
+			$this->nesting_level--;
+
+			return $processed;
 		}
 		return $content;
+	}
+
+	/**
+	 * Conditionally process shortcodes in content for performance optimization.
+	 *
+	 * @since     1.5.0
+	 * @param     string $content   The content to process.
+	 * @return    string            The processed content.
+	 */
+	public function maybe_process_persona_shortcodes( $content ) {
+		// Only process if shortcodes exist in the content.
+		if ( false !== strpos( $content, '[if_persona' ) ) {
+			// Reset nesting level counter.
+			$this->nesting_level = 0;
+
+			// Add special handling to optimize any persona shortcodes that won't apply.
+			$current_persona = $this->personas_api->get_current_persona();
+
+			// Add filter to quickly handle persona shortcodes.
+			add_filter( 'pre_do_shortcode_tag', array( $this, 'pre_process_persona_shortcode' ), 10, 4 );
+
+			// Process the shortcodes.
+			$content = do_shortcode( $content );
+
+			// Remove the filter.
+			remove_filter( 'pre_do_shortcode_tag', array( $this, 'pre_process_persona_shortcode' ), 10 );
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Pre-process persona shortcodes to quickly exclude non-matching content.
+	 *
+	 * @since     1.5.0
+	 * @param     bool|string $return      Short-circuit return value.
+	 * @param     string      $tag         Shortcode name.
+	 * @param     array       $attr        Shortcode attributes.
+	 * @param     array       $m           Regular expression match array.
+	 * @return    bool|string              Short-circuit return value.
+	 */
+	public function pre_process_persona_shortcode( $return, $tag, $attr, $m ) {
+		// Only handle our shortcode.
+		if ( 'if_persona' !== $tag ) {
+			return $return;
+		}
+
+		// Current persona.
+		$current_persona = $this->personas_api->get_current_persona();
+
+		// Check for 'is' condition.
+		if ( isset( $attr['is'] ) ) {
+			$allowed_personas = array_map( 'trim', explode( ',', $attr['is'] ) );
+			if ( ! in_array( $current_persona, $allowed_personas, true ) ) {
+				return ''; // Short-circuit - this content won't be displayed.
+			}
+		}
+
+		// Check for 'not' condition.
+		if ( isset( $attr['not'] ) ) {
+			$excluded_personas = array_map( 'trim', explode( ',', $attr['not'] ) );
+			if ( in_array( $current_persona, $excluded_personas, true ) ) {
+				return ''; // Short-circuit - this content won't be displayed.
+			}
+		}
+
+		// Let normal processing happen.
+		return $return;
 	}
 
 	/**
