@@ -5,6 +5,12 @@ All notable changes to the CME Personas plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Renamed generic `class-plugin.php` to more descriptive `class-personas-bootstrap.php` for better code organization
+
 ## [1.5.1] - 2025-03-14
 
 ### Fixed
