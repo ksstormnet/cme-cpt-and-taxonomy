@@ -2,7 +2,7 @@
 
 ## Version Information
 
-Current as of v1.5.0
+Current as of v1.5.1
 
 This document outlines performance optimization strategies for the persona content system, with special focus on Redis caching implementation, edge caching, and other performance enhancements.
 
@@ -67,7 +67,7 @@ Redis object caching works as a complementary technology to the boundary-based s
 
 The implementation uses WordPress's Object Cache API with Redis as the backend:
 
-```php
+````php
 /**
  * Cache processed shortcode content.
  *
@@ -127,11 +127,11 @@ To enable Redis with WordPress:
    ```php
    // Enable object caching
    define('WP_CACHE', true);
-   
+
    // Optional: Redis-specific settings
    define('WP_REDIS_HOST', '127.0.0.1');
    define('WP_REDIS_PORT', 6379);
-   ```
+````
 
 3. **Optimize Redis Configuration**:
    - Adjust Redis memory allocation based on site needs
@@ -154,12 +154,12 @@ private function should_cache_content($content) {
     if (strlen($content) < 1000 && strpos($content, '[if_persona') === false) {
         return false;
     }
-    
+
     // Don't cache certain dynamic content
     if (strpos($content, '[some_dynamic_shortcode') !== false) {
         return false;
     }
-    
+
     return true;
 }
 ```
@@ -177,11 +177,11 @@ The persona system integrates with Cloudflare or similar edge caching solutions:
 public function set_persona_cache_headers() {
     // Get current persona
     $persona = $this->get_current_persona();
-    
+
     // Set cache headers
     header('Cache-Control: public, max-age=3600');
     header('Vary: Cookie');
-    
+
     // Set Cloudflare-specific cache headers
     header('Cache-Tag: persona-' . $persona);
 }
@@ -198,13 +198,13 @@ Setting proper cache headers allows edge caching to work correctly with personas
 function cme_set_edge_cache_headers() {
     $persona_manager = CME_Persona_Manager::get_instance();
     $current_persona = $persona_manager->get_current_persona();
-    
+
     // Set Edge Cache TTL appropriate for content update frequency
     header('Cache-Control: public, max-age=3600, s-maxage=3600');
-    
+
     // Vary by persona cookie
     header('Vary: Cookie');
-    
+
     // Set Cloudflare-specific headers
     header('Cache-Tag: persona-' . esc_attr($current_persona));
 }
@@ -243,7 +243,7 @@ function cme_maybe_process_shortcodes($content) {
     if (strpos($content, '[if_persona') === false) {
         return $content;
     }
-    
+
     // Process persona shortcodes
     return do_shortcode($content);
 }
@@ -266,14 +266,14 @@ function cme_optimize_shortcode_parsing($content) {
         // Break content into chunks for better memory usage
         $chunks = str_split($content, 10000);
         $processed = '';
-        
+
         foreach ($chunks as $chunk) {
             $processed .= $this->process_persona_shortcodes($chunk);
         }
-        
+
         return $processed;
     }
-    
+
     // Process normally for smaller content
     return $this->process_persona_shortcodes($content);
 }
@@ -293,25 +293,25 @@ Optimize persona detection queries:
  */
 public function get_optimized_persona() {
     static $cached_persona = null;
-    
+
     // Return cached result if available
     if ($cached_persona !== null) {
         return $cached_persona;
     }
-    
+
     // Check for cached persona in object cache
     $cached_persona = wp_cache_get('current_persona_' . $this->get_user_identifier(), 'personas');
     if (false !== $cached_persona) {
         return $cached_persona;
     }
-    
+
     // Perform normal detection
     $persona = $this->detect_persona();
-    
+
     // Cache for this request and in object cache
     $cached_persona = $persona;
     wp_cache_set('current_persona_' . $this->get_user_identifier(), $persona, 'personas', HOUR_IN_SECONDS);
-    
+
     return $persona;
 }
 ```
@@ -331,22 +331,22 @@ Optimize content retrieval for persona-specific content:
 public function get_optimized_persona_content($post_id, $persona) {
     // Generate cache key
     $cache_key = 'persona_variations_' . $post_id . '_' . $persona;
-    
+
     // Try to get from cache
     $variations = wp_cache_get($cache_key, 'persona-content');
     if (false !== $variations) {
         return $variations;
     }
-    
+
     // Get from database
     $variations = get_post_meta($post_id, '_persona_variations_' . $persona, true);
     if (!is_array($variations)) {
         $variations = array();
     }
-    
+
     // Cache for future requests
     wp_cache_set($cache_key, $variations, 'persona-content', HOUR_IN_SECONDS);
-    
+
     return $variations;
 }
 ```
@@ -363,23 +363,23 @@ Only load assets when needed:
  */
 function cme_enqueue_persona_assets() {
     global $post;
-    
+
     // Skip if not a singular post or no content
     if (!is_singular() || empty($post->post_content)) {
         return;
     }
-    
+
     // Only load assets if shortcodes are present
     if (strpos($post->post_content, '[if_persona') !== false ||
         strpos($post->post_content, '[persona_') !== false) {
-        
+
         wp_enqueue_style(
             'cme-personas',
             plugin_dir_url(CME_PERSONAS_PLUGIN_FILE) . 'public/css/personas.min.css',
             array(),
             CME_PERSONAS_VERSION
         );
-        
+
         wp_enqueue_script(
             'cme-personas-js',
             plugin_dir_url(CME_PERSONAS_PLUGIN_FILE) . 'public/js/personas.min.js',
@@ -405,7 +405,7 @@ function cme_add_persona_critical_css() {
     if (!$this->is_persona_active()) {
         return;
     }
-    
+
     // Critical CSS
     echo '<style>
     .persona-content { display: none; }
@@ -461,14 +461,14 @@ function cme_log_persona_performance() {
     if (mt_rand(1, 100) > 5) {
         return;
     }
-    
+
     global $wpdb;
-    
+
     // Get metrics
     $load_time = timer_stop(0, 3);
     $query_count = $wpdb->num_queries;
     $current_persona = cme_get_current_persona();
-    
+
     // Log to custom table
     $wpdb->insert(
         $wpdb->prefix . 'persona_performance',
@@ -500,13 +500,13 @@ function cme_persona_debug_log($message, $data = null) {
     if (!defined('WP_DEBUG') || !WP_DEBUG) {
         return;
     }
-    
+
     $log_entry = '[' . date('Y-m-d H:i:s') . '] ' . $message;
-    
+
     if ($data !== null) {
         $log_entry .= ': ' . print_r($data, true);
     }
-    
+
     error_log($log_entry);
 }
 ```

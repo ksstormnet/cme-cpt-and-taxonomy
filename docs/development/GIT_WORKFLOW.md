@@ -1,6 +1,69 @@
 # Git Workflow Procedures
 
-This document outlines the standard procedures for working with Git in the CME Personas plugin project.
+This document outlines the standard procedures for working with Git in the CME Personas plugin project. For general development practices, refer to [DEVELOPMENT_WORKFLOW.md](./DEVELOPMENT_WORKFLOW.md).
+
+## CRITICAL PRACTICES - READ FIRST
+
+1. **NEVER modify ANY repository content without creating a branch first**
+
+   - This includes code, documentation, configuration files, assets, etc.
+   - No exceptions for "small" or "quick" changes
+   - Always follow the branching strategy below for all changes
+
+2. **ALWAYS branch from `dev`, not from `main`**
+
+   - All development work starts from the `dev` branch
+   - Only release processes should interact directly with `main`
+
+3. **CONTINUOUSLY update documentation as you work**
+
+   - Update documentation alongside code changes, not at the end
+   - Keep checklists current as tasks are completed
+   - Don't defer documentation updates until version increments
+
+4. **USE appropriate semantic versioning**
+   - MAJOR version (x.0.0): Breaking changes that are not backward compatible
+   - MINOR version (0.x.0): New features added in a backward compatible manner
+   - PATCH version (0.0.x): Backward compatible bug fixes and non-functional changes
+
+## Table of Contents
+
+- [Git Workflow Procedures](#git-workflow-procedures)
+  - [CRITICAL PRACTICES - READ FIRST](#critical-practices---read-first)
+  - [Table of Contents](#table-of-contents)
+  - [Branch Structure](#branch-structure)
+  - [Regular Commit Process](#regular-commit-process)
+    - [1. Development on Feature Branches](#1-development-on-feature-branches)
+    - [2. Commit Guidelines](#2-commit-guidelines)
+    - [3. Create Pull Request](#3-create-pull-request)
+    - [4. After PR is Merged](#4-after-pr-is-merged)
+  - [Version Increment Process](#version-increment-process)
+    - [1. Ensure Clean Working Directory](#1-ensure-clean-working-directory)
+    - [2. Update Version Numbers](#2-update-version-numbers)
+      - [For Simple Patch Version Increment](#for-simple-patch-version-increment)
+      - [For Custom Version Set](#for-custom-version-set)
+    - [3. Update Files With New Version](#3-update-files-with-new-version)
+    - [4. Commit Version Changes](#4-commit-version-changes)
+    - [5. Create Release Tags](#5-create-release-tags)
+    - [6. Push Changes to Remote](#6-push-changes-to-remote)
+    - [7. Check Deployment Status](#7-check-deployment-status)
+  - [Essential Git Practices](#essential-git-practices)
+  - [Version Increment Guidelines](#version-increment-guidelines)
+    - [When to Use MAJOR Version (x.0.0)](#when-to-use-major-version-x00)
+    - [When to Use MINOR Version (0.x.0)](#when-to-use-minor-version-0x0)
+    - [When to Use PATCH Version (0.0.x)](#when-to-use-patch-version-00x)
+
+## Branch Structure
+
+The project uses the following branch structure:
+
+- `main` - Production-ready code
+- `dev` - Primary development branch
+- Feature branches:
+  - `feature/*` - Feature development (e.g., `feature/add-persona-detection`)
+  - `bugfix/*` - Bug fixes (e.g., `bugfix/fix-image-display`)
+  - `chore/*` - Maintenance tasks (e.g., `chore/update-dependencies`)
+  - `docs/*` - Documentation updates (e.g., `docs/update-readme`)
 
 ## Regular Commit Process
 
@@ -15,78 +78,21 @@ git pull origin dev
 git checkout -b feature/my-feature-name
 ```
 
-### 2. Make and Commit Changes
+### 2. Commit Guidelines
 
-#### Linting and Auto-Fixes
-
-Before committing, you should run linting with auto-fixes:
+Format commit messages using conventional commit style:
 
 ```bash
-# Run all linters
-npm run lint
+# Format
+git commit -m "<type>: <description>"
 
-# Or run individual linters
-npm run lint:js    # Check JavaScript files
-npm run lint:css   # Check CSS files
-npm run lint:php   # Check PHP files
-npm run lint:md    # Check Markdown files
+# Examples
+git commit -m "feat: add persona detection system"
+git commit -m "fix: resolve issue with gender-specific images"
+git commit -m "docs: update technical implementation documentation"
 ```
 
-For fixing automatically fixable issues:
-
-```bash
-# Attempt to fix ESLint issues
-npx eslint --fix path/to/file.js
-
-# Attempt to fix Stylelint issues
-npx stylelint --fix path/to/file.css
-
-# Attempt to fix Markdown issues
-npx markdownlint-cli2-fix path/to/file.md
-```
-
-#### Staging and Committing
-
-```bash
-# Stage files (either all or selectively)
-git add .                  # All files
-# OR
-git add path/to/files      # Selective files
-
-# Commit changes with descriptive message
-git commit -m "feat: description of your changes"
-```
-
-> **Note:** The pre-commit hook will automatically run linting on staged files and attempt to fix issues when possible. If issues can't be fixed automatically, the commit will be aborted with error messages indicating what needs to be fixed manually.
-
-#### Handling Linting Errors
-
-When the pre-commit hook catches linting errors, follow these steps:
-
-1. **Review the error messages** in the terminal which describe:
-
-    - The file with the issue
-    - The line number and column
-    - A description of the problem
-    - Often a reference to the specific rule being violated
-
-2. **Fix the issues manually** by:
-
-    - Opening the referenced files
-    - Navigating to the specified line numbers
-    - Making the necessary corrections based on the rule description
-    - Following the [Coding Standards](CODING_STANDARDS.md) documentation
-
-3. **After fixing the issues**, stage your changes and try committing again:
-
-    ```bash
-    git add <fixed-files>
-    git commit -m "your message"
-    ```
-
-4. **Important:** Never use `--no-verify` to bypass pre-commit hooks unless explicitly instructed by a senior developer or team lead.
-
-Use conventional commit message format:
+Commit types:
 
 - `feat:` - New feature
 - `fix:` - Bug fix
@@ -107,7 +113,7 @@ git push -u origin feature/my-feature-name
 gh pr create --base dev --head feature/my-feature-name --title "My Feature Title" --body "Description of your changes"
 ```
 
-Your PR should include:
+PR content requirements:
 
 - A clear title describing the change
 - A detailed description of what was changed and why
@@ -128,8 +134,6 @@ git branch -d feature/my-feature-name
 ```
 
 ## Version Increment Process
-
-Follow these steps to update version numbers and create a release:
 
 ### 1. Ensure Clean Working Directory
 
@@ -226,19 +230,44 @@ GITHUB_REPO_URL=$(git config --get remote.origin.url | sed 's/git@github.com:/ht
 echo "Check deployment status at: ${GITHUB_REPO_URL}/actions"
 ```
 
-## Important Rules
+## Essential Git Practices
 
-1. **Version Format**: Always use semantic versioning (x.y.z)
-2. **Clean Directory**: Always ensure clean working directory before releases
-3. **Tag Uniqueness**: Verify tags don't already exist before creating
-4. **Branch Structure**:
-    - `main`: Production-ready code
-    - `dev`: Primary development branch
-    - `feature/*`: Feature development
-    - `bugfix/*`: Bug fixes
-    - `chore/*`: Maintenance tasks
-    - `docs/*`: Documentation updates
-5. **Pre-Commit Checks**: Linting must pass before committing
-6. **Coding Standards**: All code should follow the project's [Coding Standards](CODING_STANDARDS.md)
-7. **Never Bypass Hooks**: Avoid using `--no-verify` to bypass pre-commit hooks
-8. **Make Frequent Commits**: Make small, focused commits rather than large infrequent ones
+1. **Use semantic versioning (x.y.z)** for all version numbers
+2. **Ensure clean working directory** before releases
+3. **Verify tags don't already exist** before creating new ones
+4. **Make small, focused commits** rather than large infrequent ones
+5. **Keep feature branches short-lived** - merge or delete them promptly
+6. **Rebase feature branches** on dev before creating PRs when there are conflicts
+7. **Use meaningful commit messages** that clearly describe the changes
+8. **Never push directly to main or dev** branches - always use PRs
+9. **Never rewrite history** of shared branches (main/dev)
+10. **Follow the process** - don't take shortcuts in the git workflow
+11. **Suggest version increments** when appropriate for your changes
+12. **Update documentation continuously** as you implement changes
+
+## Version Increment Guidelines
+
+When determining or suggesting version increments, follow these guidelines:
+
+### When to Use MAJOR Version (x.0.0)
+
+- Breaking API changes
+- Incompatible changes to database schemas
+- Removing deprecated functionality
+- Changes requiring users to modify their implementation
+
+### When to Use MINOR Version (0.x.0)
+
+- Adding new features while maintaining backward compatibility
+- Marking functionality as deprecated (but still available)
+- Substantial internal refactoring that doesn't break compatibility
+- Adding new files or modules with new functionality
+
+### When to Use PATCH Version (0.0.x)
+
+- Bug fixes without API changes
+- Performance improvements without API changes
+- Non-functional changes like formatting, style, and documentation
+- Changes to error messages or logs
+
+If in doubt about which version increment to use, err on the side of a higher increment level to avoid underestimating the impact of changes.

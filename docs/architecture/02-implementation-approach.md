@@ -2,7 +2,7 @@
 
 ## Version Information
 
-Current as of v1.5.0
+Current as of v1.5.1
 
 This document provides a comprehensive overview of the persona system implementation approach, including a comparison of different implementation options and the rationale for choosing the boundary-based shortcode method.
 
