@@ -102,9 +102,6 @@ class Frontend {
 
 		// Add frontend assets.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_assets' ) );
-
-		// Add filter for content to handle metaslider compatibility.
-		add_filter( 'the_content', array( $this, 'filter_content_for_metaslider' ), 999 );
 	}
 
 	/**
@@ -144,78 +141,6 @@ class Frontend {
 				)
 			);
 		}
-	}
-
-	/**
-	 * Filter content to handle Meta Slider compatibility.
-	 *
-	 * This function detects if the content contains Meta Slider shortcodes
-	 * and processes them properly to avoid conflicts.
-	 *
-	 * @since     1.4.2
-	 * @param     string $content   The content to filter.
-	 * @return    string            The filtered content.
-	 */
-	public function filter_content_for_metaslider( $content ) {
-		// Check if content contains a Meta Slider shortcode.
-		if ( ! empty( $content ) && strpos( $content, '[metaslider' ) !== false ) {
-			// Process meta slider shortcodes separately to avoid interference.
-			$content = $this->process_metaslider_shortcodes( $content );
-		}
-
-		return $content;
-	}
-
-	/**
-	 * Process content with Meta Slider shortcodes safely.
-	 *
-	 * This method handles shortcode processing in a way that doesn't interfere
-	 * with Meta Slider shortcodes by temporarily removing our shortcodes.
-	 *
-	 * @since     1.4.2
-	 * @param     string $content   Content to process.
-	 * @return    string            Processed content.
-	 */
-	private function process_metaslider_shortcodes( $content ) {
-		// Remember our shortcode handlers.
-		$persona_content_handler  = $this->get_shortcode_handler( 'persona_content' );
-		$persona_switcher_handler = $this->get_shortcode_handler( 'persona_switcher' );
-		$if_persona_handler       = $this->get_shortcode_handler( 'if_persona' );
-
-		// Temporarily remove our shortcodes.
-		remove_shortcode( 'persona_content' );
-		remove_shortcode( 'persona_switcher' );
-		remove_shortcode( 'if_persona' );
-
-		// Process Meta Slider shortcodes.
-		$content = do_shortcode( $content );
-
-		// Re-add our shortcodes.
-		if ( $persona_content_handler ) {
-			add_shortcode( 'persona_content', $persona_content_handler );
-		}
-
-		if ( $persona_switcher_handler ) {
-			add_shortcode( 'persona_switcher', $persona_switcher_handler );
-		}
-
-		if ( $if_persona_handler ) {
-			add_shortcode( 'if_persona', $if_persona_handler );
-		}
-
-		return $content;
-	}
-
-	/**
-	 * Get the current handler for a shortcode.
-	 *
-	 * @since     1.4.2
-	 * @param     string $tag   The shortcode tag.
-	 * @return    callable|false The shortcode handler or false if not found.
-	 */
-	private function get_shortcode_handler( $tag ) {
-		global $shortcode_tags;
-		return isset( $shortcode_tags[ $tag ] ) ? $shortcode_tags[ $tag ] : false;
 	}
 
 	/**

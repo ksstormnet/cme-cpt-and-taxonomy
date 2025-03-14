@@ -71,8 +71,8 @@ class Personas_API {
 		$this->persona_manager = Persona_Manager::get_instance();
 		$this->persona_content = Persona_Content::get_instance();
 
-		// Shortcodes are now handled by Frontend class to avoid duplication
-		// Removed: add_action( 'init', array( $this, 'register_shortcodes' ) );
+		// Shortcodes are now handled by Frontend class to avoid duplication.
+		// Removed: add_action( 'init', array( $this, 'register_shortcodes' ) ).
 	}
 
 	/**
@@ -83,8 +83,8 @@ class Personas_API {
 	 * @deprecated 1.4.2 Shortcodes are now handled by Frontend class
 	 */
 	public function register_shortcodes() {
-		// This method is kept for backward compatibility but does nothing
-		// Removed: add_shortcode calls
+		// This method is kept for backward compatibility but does nothing.
+		// Removed: add_shortcode calls.
 	}
 
 	/**
@@ -99,7 +99,7 @@ class Personas_API {
 	 * @deprecated 1.4.2 Use the Frontend class implementation instead
 	 */
 	public function persona_content_shortcode( $atts, $content = null ) {
-		// Forward to the Frontend class implementation
+		// Forward to the Frontend class implementation.
 		$frontend = Frontend::get_instance();
 		return $frontend->persona_content_shortcode( $atts, $content );
 	}
@@ -115,7 +115,7 @@ class Personas_API {
 	 * @deprecated 1.4.2 Use the Frontend class implementation instead
 	 */
 	public function persona_switcher_shortcode( $atts ) {
-		// Forward to the Frontend class implementation
+		// Forward to the Frontend class implementation.
 		$frontend = Frontend::get_instance();
 		return $frontend->persona_switcher_shortcode( $atts );
 	}
@@ -177,6 +177,9 @@ class Personas_API {
 	/**
 	 * Get persona-specific content for an entity.
 	 *
+	 * @deprecated 1.6.0 This method uses the entity-based content approach which is being replaced
+	 *                   by the boundary-based shortcode approach. Use [if_persona] shortcodes instead.
+	 *
 	 * @since     1.1.0
 	 * @param     int    $entity_id       The entity ID (e.g., post ID).
 	 * @param     string $entity_type     The entity type (default: 'post').
@@ -190,6 +193,9 @@ class Personas_API {
 
 	/**
 	 * Set persona-specific content for an entity.
+	 *
+	 * @deprecated 1.6.0 This method uses the entity-based content approach which is being replaced
+	 *                   by the boundary-based shortcode approach. Use [if_persona] shortcodes instead.
 	 *
 	 * @since     1.1.0
 	 * @param     int    $entity_id       The entity ID (e.g., post ID).
@@ -206,6 +212,9 @@ class Personas_API {
 	/**
 	 * Process block content for persona-specific variations.
 	 *
+	 * @deprecated 1.6.0 This method uses the entity-based content approach which is being replaced
+	 *                   by the boundary-based shortcode approach. Use [if_persona] shortcodes instead.
+	 *
 	 * @since     1.1.0
 	 * @param     string $content         The content with blocks.
 	 * @param     string $persona_id      The persona ID.
@@ -217,6 +226,9 @@ class Personas_API {
 
 	/**
 	 * Get all personas that have content for a specific entity.
+	 *
+	 * @deprecated 1.6.0 This method uses the entity-based content approach which is being replaced
+	 *                   by the boundary-based shortcode approach. Use [if_persona] shortcodes instead.
 	 *
 	 * @since     1.1.0
 	 * @param     int    $entity_id       The entity ID.

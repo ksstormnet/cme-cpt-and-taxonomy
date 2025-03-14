@@ -51,56 +51,6 @@
 	border-color: #006ba1;
 }
 
-/* Meta Slider Compatibility Styles */
-.metaslider {
-	/* Ensure Meta Slider has proper z-index to avoid persona element issues */
-	position: relative;
-	z-index: 1;
-}
-
-.metaslider .slides img {
-	/* Ensure images maintain their aspect ratio */
-	height: auto !important;
-}
-
-/* Fix for Meta Slider captions in persona content */
-.metaslider .caption-wrap {
-	position: absolute !important;
-	bottom: 0 !important;
-	left: 0 !important;
-	background: rgb(0 0 0 / 70%) !important;
-	color: white !important;
-	margin: 0 !important;
-	display: block !important;
-	width: 100% !important;
-	line-height: 1.4em !important;
-}
-
-/* Fix for navigation controls in persona content */
-.metaslider .flex-control-nav {
-	bottom: 10px !important;
-	z-index: 10 !important;
-}
-
-.metaslider .flex-direction-nav a {
-	z-index: 10 !important;
-}
-
-/* Ensure proper display within persona shortcodes */
-[if_persona] .metaslider,
-[persona_content] .metaslider {
-	overflow: visible !important;
-}
-
-/* Override any potential conflicts with flex-based sliders */
-.metaslider .flexslider {
-	margin-bottom: 0 !important;
-}
-
-.metaslider .flexslider .slides > li {
-	position: relative !important;
-}
-
 /* Ensure proper rendering in responsive contexts */
 @media (width <= 768px) {
 	.cme-persona-buttons {
@@ -111,54 +61,4 @@
 		width: 100%;
 		margin-bottom: 0.5em;
 	}
-
-	/* Meta Slider responsive fixes */
-	.metaslider .caption-wrap {
-		position: relative !important;
-		background: #000 !important;
-		padding: 10px !important;
-	}
-}
-
-/* Meta Slider compatibility fix */
-
-/* Base Meta Slider styles - less specific selectors first */
-.metaslider {
-  text-align: center;
-  margin: 0 auto !important;
-  width: auto !important;
-  max-width: 100% !important;
-  display: block !important;
-}
-
-/* More specific selectors for contextual styling */
-.entry-content .metaslider,
-.post-content .metaslider,
-.page-content .metaslider,
-.widget .metaslider {
-  margin: 0 auto 1.5em !important;
-  display: block !important;
-}
-
-/* FlexSlider specific styles */
-.metaslider .flexslider {
-  margin: 0 auto !important;
-  text-align: center !important;
-}
-
-/* Ensure images display properly */
-.metaslider img {
-  height: auto;
-  max-width: 100%;
-}
-
-/* Preserve MetaSlider's box model */
-.metaslider * {
-  box-sizing: content-box;
-}
-
-/* Navigation alignment */
-.metaslider .flex-control-nav {
-  width: 100% !important;
-  text-align: center !important;
 }
