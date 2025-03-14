@@ -23,7 +23,7 @@ The persona system uses shortcodes to define boundaries around content that shou
 
 The primary shortcode used for persona-specific content is `[if_persona]`:
 
-```
+```php
 [if_persona is="easy-breezy"]
 This content will only be shown to visitors with the "Easy-Breezy Cruiser" persona.
 [/if_persona]
@@ -33,7 +33,7 @@ This content will only be shown to visitors with the "Easy-Breezy Cruiser" perso
 
 You can target multiple personas by separating them with commas:
 
-```
+```php
 [if_persona is="easy-breezy,luxe"]
 This content will be shown to both "Easy-Breezy Cruiser" and "Luxe Seafarer" personas.
 [/if_persona]
@@ -43,7 +43,7 @@ This content will be shown to both "Easy-Breezy Cruiser" and "Luxe Seafarer" per
 
 You can also display content for everyone EXCEPT specific personas:
 
-```
+```php
 [if_persona not="thrill"]
 This content will be shown to everyone EXCEPT "Thrill Seeker" personas.
 [/if_persona]
@@ -74,7 +74,7 @@ Example with custom HTML:
 
 You can nest persona shortcodes for more complex conditional logic:
 
-```
+```html
 [if_persona not="thrill"]
   <p>Relaxation is our priority...</p>
   
@@ -90,7 +90,7 @@ You can nest persona shortcodes for more complex conditional logic:
 
 You can preview how content will appear to different personas by adding a `persona` query parameter to any URL:
 
-```
+```php
 https://your-site.com/page/?persona=easy-breezy
 ```
 
@@ -104,7 +104,7 @@ When editing content in the WordPress admin, you can use the persona selector in
 
 You can add a persona switcher to your site that allows visitors to manually select their persona:
 
-```
+```php
 [persona_switcher]
 ```
 
@@ -114,11 +114,12 @@ This will display a set of buttons, one for each persona. Visitors can click to 
 
 You can customize the appearance of the switcher:
 
-```
+```php
 [persona_switcher display="dropdown" button_text="Choose Your Cruise Style"]
 ```
 
 Options:
+
 - `display`: "buttons" (default) or "dropdown"
 - `button_text`: The label for the dropdown select
 - `class`: Additional CSS classes for styling
@@ -137,6 +138,7 @@ Behind the scenes, the persona system:
 ### Performance Considerations
 
 The shortcode-based approach is lightweight and efficient:
+
 - No duplicate content storage
 - Minimal database queries
 - Compatible with caching plugins

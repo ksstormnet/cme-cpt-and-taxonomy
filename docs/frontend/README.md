@@ -10,7 +10,7 @@ The plugin provides several shortcodes for displaying persona-specific content a
 
 Use the `[if_persona]` shortcode to conditionally display content based on the active persona:
 
-```text
+```php
 [if_persona is="easy-breezy"]
   Content only shown for easy-breezy persona
 [/if_persona]
@@ -35,13 +35,13 @@ You can use either parameter, but not both at the same time.
 
 Use the `[persona_switcher]` shortcode to add a persona switcher to your site:
 
-```text
+```php
 [persona_switcher]
 ```
 
 Or with custom options:
 
-```text
+```php
 [persona_switcher display="dropdown" button_text="Choose Your Experience" class="my-custom-class"]
 ```
 
@@ -155,7 +155,7 @@ For the persona switcher:
 
 2. **Nest shortcodes for complex scenarios**: You can nest `[if_persona]` shortcodes for more complex conditional logic:
 
-```text
+```html
 [if_persona not="thrill"]
   <div class="relaxation-options">
     <h2>Relaxation Options</h2>
