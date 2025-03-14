@@ -17,7 +17,12 @@ This document outlines the development workflow and practices for the CME Person
     - [Running Linters](#running-linters)
     - [Fixing Linting Issues](#fixing-linting-issues)
   - [Pre-commit Hooks](#pre-commit-hooks)
+  - [Common Pitfalls to Avoid](#common-pitfalls-to-avoid)
+    - [Bypassing Linting](#bypassing-linting)
+    - [Migration Restrictions](#migration-restrictions)
+    - [Code Removal Best Practices](#code-removal-best-practices)
   - [Common Best Practices](#common-best-practices)
+  - [Working with AI Assistants](#working-with-ai-assistants)
 
 ## Code Quality Standards
 
@@ -169,6 +174,66 @@ The project uses Husky to run pre-commit hooks that enforce coding standards:
 
 **Remember: Never use `--no-verify` to bypass these hooks** unless explicitly instructed to do so.
 
+## Common Pitfalls to Avoid
+
+### Bypassing Linting
+
+❌ **NEVER DO THIS:**
+
+```bash
+git commit --no-verify -m "message"
+```
+
+This bypasses our quality control and introduces technical debt. Instead:
+
+✅ **DO THIS:**
+
+1. Run `npm run lint` before committing
+2. Fix issues identified by linters
+3. Commit clean code that passes all checks
+
+### Migration Restrictions
+
+❌ **NEVER DO THIS:**
+
+- Creating migration files without schema changes
+- Adding placeholder migrations "for future use"
+- Mentioning or suggesting migrations without being asked
+- Including comments about "potential migrations needed"
+- Speculating about database changes that might be required
+
+✅ **DO THIS:**
+
+- Only discuss migrations when explicitly asked
+- Only create migrations for actual database changes when requested
+- Focus on solving problems without assuming database interaction needs
+- Request clarification if unsure about database interaction needs
+
+### Code Removal Best Practices
+
+❌ **NEVER DO THIS:**
+
+```php
+// Commented out but left in the codebase
+// function oldFunction() {
+//    // Implementation
+// }
+
+/**
+ * @deprecated since version 1.2.0, use newFunction() instead.
+ */
+function oldFunction() {
+    // Still in the codebase
+}
+```
+
+✅ **DO THIS:**
+
+```php
+// Clean removal - not present in the code at all
+// Document removal in commit message and/or changelog
+```
+
 ## Common Best Practices
 
 1. **Write code that meets standards from the start**: Understand the linting rules and write code that adheres to them initially, rather than fixing issues later.
@@ -186,3 +251,14 @@ The project uses Husky to run pre-commit hooks that enforce coding standards:
 7. **Keep dependencies updated**: Regularly check for outdated dependencies and update them.
 
 By following these practices, we maintain a high-quality codebase and efficient development process.
+
+## Working with AI Assistants
+
+When using AI assistants (like Claude) for development tasks, refer to the [AI Assistants Guidelines](./AI_ASSISTANTS.md) for specific requirements and best practices.
+
+Key points:
+
+- Ensure AI-generated code adheres to our standards
+- Never use `--no-verify` with AI-assisted commits
+- Follow strict guidelines for code removal and migrations
+- Provide proper context when working with AI tools
