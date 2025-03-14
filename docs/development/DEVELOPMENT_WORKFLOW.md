@@ -1,18 +1,14 @@
 # Development Workflow for CME Personas
 
-This document outlines the development workflow and practices for the CME Personas plugin.
+This document outlines the development process and coding practices for the CME Personas plugin.
 
 ## Table of Contents
 
 - [Development Workflow for CME Personas](#development-workflow-for-cme-personas)
   - [Table of Contents](#table-of-contents)
   - [Code Quality Standards](#code-quality-standards)
-  - [Development Workflow](#development-workflow)
-    - [1. Branching Strategy](#1-branching-strategy)
-    - [2. Development Process](#2-development-process)
-    - [3. Code Linting and Quality](#3-code-linting-and-quality)
-    - [4. Commit Guidelines](#4-commit-guidelines)
-    - [5. Pull Request Process](#5-pull-request-process)
+  - [Development Process Overview](#development-process-overview)
+  - [Code Linting and Quality](#code-linting-and-quality)
   - [Linting Tools](#linting-tools)
     - [Running Linters](#running-linters)
     - [Fixing Linting Issues](#fixing-linting-issues)
@@ -28,39 +24,21 @@ This document outlines the development workflow and practices for the CME Person
 
 The CME Personas plugin follows strict code quality standards. All code must adhere to these standards to ensure consistency, maintainability, and robustness. For specific coding standards, refer to the [CODING_STANDARDS.md](./CODING_STANDARDS.md) document.
 
-## Development Workflow
+## Development Process Overview
 
-### 1. Branching Strategy
+1. **Plan and understand requirements** before starting development
+2. **Create a feature branch** following the naming conventions in [GIT_WORKFLOW.md](./GIT_WORKFLOW.md)
+3. **Implement your changes** following coding standards
+4. **Write and run tests** to ensure functionality
+5. **Run linters** and fix any issues
+6. **Commit your changes** with descriptive messages (see [GIT_WORKFLOW.md](./GIT_WORKFLOW.md) for commit guidelines)
+7. **Create a pull request** for code review (see [GIT_WORKFLOW.md](./GIT_WORKFLOW.md) for PR process)
+8. **Address feedback** from code reviews
+9. **Merge** once approved
 
-- `main` - Production-ready code
-- `dev` - Development branch that contains the latest approved features
-- Feature branches - Used for individual feature development
+For detailed git procedures, branch naming conventions, and PR creation process, refer to [GIT_WORKFLOW.md](./GIT_WORKFLOW.md).
 
-Always create a new branch for each feature, bug fix, or task. Branch names should follow this convention:
-
-- `feature/` - For new features (e.g., `feature/add-content-personalization`)
-- `bugfix/` - For bug fixes (e.g., `bugfix/fix-image-display`)
-- `chore/` - For maintenance tasks (e.g., `chore/update-dependencies`)
-- `docs/` - For documentation updates (e.g., `docs/update-readme`)
-
-```bash
-# Example: Creating a new feature branch from dev
-git checkout dev
-git pull origin dev
-git checkout -b feature/new-feature-name
-```
-
-### 2. Development Process
-
-1. Ensure your local `dev` branch is up to date
-2. Create a new branch for your task
-3. Implement your changes
-4. Test your changes thoroughly
-5. Run linters and fix any issues
-6. Commit your changes with descriptive messages
-7. Push your branch and create a PR
-
-### 3. Code Linting and Quality
+## Code Linting and Quality
 
 **All code must be linted before committing**. The project uses multiple linters to ensure code quality:
 
@@ -84,46 +62,7 @@ npm run lint:md
 
 **✅ When linters identify issues that cannot be auto-fixed, you must manually fix them before committing.**
 
-**❌ Never use `--no-verify` to bypass pre-commit hooks unless explicitly instructed** by a senior developer or team lead.
-
-### 4. Commit Guidelines
-
-- Make frequent, small commits rather than large, infrequent ones
-- Write clear, descriptive commit messages
-- Follow the conventional commit format:
-  - `feat:` - A new feature
-  - `fix:` - A bug fix
-  - `docs:` - Documentation changes
-  - `style:` - Code style changes (formatting, etc.)
-  - `refactor:` - Code changes that neither fix bugs nor add features
-  - `test:` - Adding or updating tests
-  - `chore:` - Changes to the build process, tooling, etc.
-
-```bash
-# Examples
-git commit -m "feat: add persona detection system"
-git commit -m "fix: resolve issue with gender-specific images"
-git commit -m "docs: update technical implementation documentation"
-```
-
-### 5. Pull Request Process
-
-When your feature is complete, create a pull request using GitHub CLI:
-
-```bash
-# Push your branch to the remote repository
-git push -u origin your-branch-name
-
-# Create a pull request using the GitHub CLI
-gh pr create --base dev --head your-branch-name --title "Your PR title" --body "Description of your changes"
-```
-
-Your PR should include:
-
-- A clear title describing the change
-- A detailed description of what was changed and why
-- Any relevant issue numbers (e.g., "Fixes #123")
-- Screenshots or examples if applicable
+**❌ Never use `--no-verify` to bypass pre-commit hooks** unless explicitly instructed by a senior developer or team lead.
 
 ## Linting Tools
 
@@ -238,15 +177,15 @@ function oldFunction() {
 
 1. **Write code that meets standards from the start**: Understand the linting rules and write code that adheres to them initially, rather than fixing issues later.
 
-2. **Keep branches small and focused**: Each branch should address a single feature, bug fix, or task.
+2. **Keep features small and focused**: Each feature should address a specific requirement or task.
 
 3. **Update documentation as you go**: When you change functionality, update the relevant documentation in the same PR.
 
-4. **Test thoroughly**: Ensure your changes work correctly before creating a PR.
+4. **Test thoroughly**: Ensure your changes work correctly before requesting review.
 
 5. **Review your own code first**: Before requesting a review, look through your changes for obvious issues.
 
-6. **Respond to PR feedback promptly**: Address reviewer comments in a timely manner.
+6. **Respond to review feedback promptly**: Address reviewer comments in a timely manner.
 
 7. **Keep dependencies updated**: Regularly check for outdated dependencies and update them.
 
