@@ -336,9 +336,9 @@ class Persona_Integrator {
 				'nonce'    => wp_create_nonce( 'cme_personas_admin_nonce' ),
 				'personas' => $this->persona_manager->get_all_personas(),
 				'i18n'     => array(
-					'closeButton'   => __( 'Close', 'cme-personas' ),
+					'closeButton'  => __( 'Close', 'cme-personas' ),
 					/* translators: %s: Persona name */
-					'previewBadge'  => __( '%s Persona View', 'cme-personas' ),
+					'previewBadge' => __( '%s Persona View', 'cme-personas' ),
 				),
 			)
 		);

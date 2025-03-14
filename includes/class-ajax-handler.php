@@ -57,6 +57,6 @@ class Ajax_Handler {
 	 * @since    1.2.0
 	 */
 	private function setup_hooks() {
-		// No AJAX handlers needed after removing entity-based content
+		// No AJAX handlers needed after removing entity-based content.
 	}
 }
