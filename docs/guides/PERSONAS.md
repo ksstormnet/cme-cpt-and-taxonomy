@@ -54,17 +54,19 @@ This content will be shown to everyone EXCEPT "Thrill Seeker" personas.
 A major advantage of the boundary-based shortcode approach is that you can include any content within the shortcode boundaries, including:
 
 - Images and media
-- Third-party shortcodes (like Meta Slider)
+- Third-party shortcodes
 - Complex HTML elements
 - Other WordPress blocks and embeds
 
-Example with Meta Slider:
+Example with custom HTML:
 
-```
+```html
 [if_persona is="luxe"]
 <h2>Luxury Accommodations</h2>
 <p>Indulge in our premium suite options...</p>
-[metaslider id="123"]
+<div class="featured-image">
+  <img src="/images/luxury-suite.jpg" alt="Luxury Suite">
+</div>
 [/if_persona]
 ```
 
