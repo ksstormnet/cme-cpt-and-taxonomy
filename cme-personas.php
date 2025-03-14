@@ -8,7 +8,7 @@
  * @license           GPL-2.0-or-later
  *
  * @wordpress-plugin
- * Plugin Name:       CME Personas
+ * Plugin Name:       Cruise Made Easy - Personas
  * Plugin URI:        https://cruisemadeeasy.com/plugins/cme-personas
  * Description:       Customer persona management system with content personalization.
  * Version:           1.4.1
