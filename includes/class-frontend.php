@@ -14,7 +14,7 @@ namespace CME_Personas;
  * Frontend Integration Class
  *
  * This class provides shortcodes, template functions, and frontend persona
- * switching functionality for the Personas plugin.
+ * switching functionality for the Personas plugin using a boundary-based approach.
  *
  * @since      1.3.0
  * @package    CME_Personas
@@ -102,6 +102,9 @@ class Frontend {
 
 		// Add frontend assets.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_assets' ) );
+
+		// Add filter for content to handle metaslider compatibility.
+		add_filter( 'the_content', array( $this, 'filter_content_for_metaslider' ), 999 );
 	}
 
 	/**
@@ -111,7 +114,7 @@ class Frontend {
 	 */
 	public function enqueue_frontend_assets() {
 		// Only load assets if they haven't been loaded yet.
-		if ( ! wp_script_is( 'cme-personas', 'enqueued' ) ) {
+		if ( ! wp_script_is( 'cme-personas-frontend', 'enqueued' ) ) {
 			// Frontend CSS.
 			wp_enqueue_style(
 				'cme-personas-frontend',
@@ -144,6 +147,94 @@ class Frontend {
 	}
 
 	/**
+	 * Filter content to handle Meta Slider compatibility.
+	 *
+	 * This function detects if the content contains Meta Slider shortcodes
+	 * and processes them properly to avoid conflicts.
+	 *
+	 * @since     1.4.2
+	 * @param     string $content   The content to filter.
+	 * @return    string            The filtered content.
+	 */
+	public function filter_content_for_metaslider( $content ) {
+		// Check if content contains a Meta Slider shortcode.
+		if ( ! empty( $content ) && strpos( $content, '[metaslider' ) !== false ) {
+			// Process meta slider shortcodes separately to avoid interference.
+			$content = $this->process_metaslider_shortcodes( $content );
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Process content with Meta Slider shortcodes safely.
+	 *
+	 * This method handles shortcode processing in a way that doesn't interfere
+	 * with Meta Slider shortcodes by temporarily removing our shortcodes.
+	 *
+	 * @since     1.4.2
+	 * @param     string $content   Content to process.
+	 * @return    string            Processed content.
+	 */
+	private function process_metaslider_shortcodes( $content ) {
+		// Remember our shortcode handlers.
+		$persona_content_handler  = $this->get_shortcode_handler( 'persona_content' );
+		$persona_switcher_handler = $this->get_shortcode_handler( 'persona_switcher' );
+		$if_persona_handler       = $this->get_shortcode_handler( 'if_persona' );
+
+		// Temporarily remove our shortcodes.
+		remove_shortcode( 'persona_content' );
+		remove_shortcode( 'persona_switcher' );
+		remove_shortcode( 'if_persona' );
+
+		// Process Meta Slider shortcodes.
+		$content = do_shortcode( $content );
+
+		// Re-add our shortcodes.
+		if ( $persona_content_handler ) {
+			add_shortcode( 'persona_content', $persona_content_handler );
+		}
+
+		if ( $persona_switcher_handler ) {
+			add_shortcode( 'persona_switcher', $persona_switcher_handler );
+		}
+
+		if ( $if_persona_handler ) {
+			add_shortcode( 'if_persona', $if_persona_handler );
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Get the current handler for a shortcode.
+	 *
+	 * @since     1.4.2
+	 * @param     string $tag   The shortcode tag.
+	 * @return    callable|false The shortcode handler or false if not found.
+	 */
+	private function get_shortcode_handler( $tag ) {
+		global $shortcode_tags;
+		return isset( $shortcode_tags[ $tag ] ) ? $shortcode_tags[ $tag ] : false;
+	}
+
+	/**
+	 * Process content with shortcodes safely.
+	 *
+	 * This method handles general shortcode processing in content.
+	 *
+	 * @since     1.4.2
+	 * @param     string $content   Content to process.
+	 * @return    string            Processed content.
+	 */
+	private function process_shortcodes( $content ) {
+		if ( ! empty( $content ) ) {
+			return do_shortcode( $content );
+		}
+		return $content;
+	}
+
+	/**
 	 * Shortcode for persona-specific content.
 	 *
 	 * Usage: [persona_content persona="business" entity_id="123" entity_type="post" field="content"]
@@ -157,8 +248,8 @@ class Frontend {
 	public function persona_content_shortcode( $atts, $content = null ) {
 		$atts = shortcode_atts(
 			array(
-				'persona'     => null, // If null, will use current persona.
-				'entity_id'   => null, // If null, will use current post.
+				'persona'     => null, // When null, the current persona will be used.
+				'entity_id'   => null, // When null, the current post will be used.
 				'entity_type' => 'post',
 				'field'       => 'content',
 			),
@@ -174,7 +265,7 @@ class Frontend {
 
 		// If entity_id is still null or 0, return the default content.
 		if ( empty( $atts['entity_id'] ) ) {
-			return do_shortcode( $content );
+			return $this->process_shortcodes( $content );
 		}
 
 		// Get persona-specific content.
@@ -191,7 +282,7 @@ class Frontend {
 		}
 
 		// Otherwise return the default content.
-		return do_shortcode( $content );
+		return $this->process_shortcodes( $content );
 	}
 
 	/**
@@ -236,7 +327,7 @@ class Frontend {
 		}
 
 		// If we get here, the conditions are met.
-		return do_shortcode( $content );
+		return $this->process_shortcodes( $content );
 	}
 
 	/**
@@ -252,9 +343,9 @@ class Frontend {
 	public function persona_switcher_shortcode( $atts ) {
 		$atts = shortcode_atts(
 			array(
-				'display'     => 'buttons', // 'buttons' or 'dropdown'.
+				'display'     => 'buttons', // Either buttons or dropdown format.
 				'button_text' => __( 'Select Persona', 'cme-personas' ),
-				'class'       => '', // Additional CSS classes.
+				'class'       => '', // For custom styling.
 			),
 			$atts,
 			'persona_switcher'

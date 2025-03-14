@@ -1,6 +1,6 @@
 # Security Best Practices
 
-This document outlines security best practices for the CME Cruises plugin development.
+This document outlines security best practices for the CME Personas plugin development.
 
 ## Directory Protection
 
@@ -15,8 +15,8 @@ All directories should contain an `index.php` file to prevent directory listings
  *
  * This file exists to prevent directory listings.
  *
- * @package    CME_Cruises
- * @subpackage CME_Cruises/{directory_path}
+ * @package    CME_Personas
+ * @subpackage CME_Personas/{directory_path}
  */
 
 // Silence is golden.
@@ -24,7 +24,7 @@ All directories should contain an `index.php` file to prevent directory listings
 
 ### Creating Index Files
 
-To add missing index.php files across the plugin, use the following bash script from the plugin's root directory:
+To add missing index.php files across the plugin use the following bash script from the plugin's root directory:
 
 ```bash
 #!/bin/bash
@@ -41,8 +41,8 @@ update_index_file() {
  *
  * This file exists to prevent directory listings.
  *
- * @package    CME_Cruises
- * @subpackage CME_Cruises/$subpackage
+ * @package    CME_Personas
+ * @subpackage CME_Personas/$subpackage
  */
 
 // Silence is golden.
@@ -94,14 +94,14 @@ done
 ### Input Validation
 
 - Always validate user input against expected types and values
-- Use WordPress functions like `sanitize_text_field()`, `absint()`, and `wp_kses_post()`
+- Use WordPress functions like `sanitize_text_field()` `absint()` and `wp_kses_post()`
 - Verify nonces with `wp_verify_nonce()` for all form submissions
 
 ### SQL Queries
 
 - Use `$wpdb->prepare()` for all dynamic SQL queries
 - Never directly interpolate variables into SQL strings
-- Use placeholders (`%s`, `%d`, etc.) for all variables in queries
+- Use placeholders (`%s` `%d` etc.) for all variables in queries
 
 Example:
 
@@ -110,7 +110,7 @@ Example:
 $results = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_type = '" . $post_type . "'");
 
 // CORRECT:
-$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE post_type = %s", $post_type));
+$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE post_type = %s" $post_type));
 ```
 
 ### XSS Prevention
@@ -125,7 +125,7 @@ $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE p
 
 ### File Operations
 
-- Validate file types, sizes, and content before processing
+- Validate file types sizes and content before processing
 - Use WordPress file handling functions when possible
 - Never trust user-submitted filenames
 - Avoid direct file system operations when WordPress alternatives exist
@@ -136,10 +136,10 @@ $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE p
 
   ```php
   if (!current_user_can('manage_options')) {
-      wp_die(__('You do not have sufficient permissions to access this page.', 'cme-cruises'));
+      wp_die(__('You do not have sufficient permissions to access this page.' 'cme-personas'));
   }
   ```
 
 - Use proper capability checks rather than role checks
 - Implement the principle of least privilege - only request capabilities you need
-- For REST API endpoints, use `permission_callback` to verify access
+- For REST API endpoints use `permission_callback` to verify access
