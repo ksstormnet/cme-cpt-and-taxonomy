@@ -119,3 +119,46 @@
 		padding: 10px !important;
 	}
 }
+
+/* Meta Slider compatibility fix */
+
+/* Base Meta Slider styles - less specific selectors first */
+.metaslider {
+  text-align: center;
+  margin: 0 auto !important;
+  width: auto !important;
+  max-width: 100% !important;
+  display: block !important;
+}
+
+/* More specific selectors for contextual styling */
+.entry-content .metaslider,
+.post-content .metaslider,
+.page-content .metaslider,
+.widget .metaslider {
+  margin: 0 auto 1.5em !important;
+  display: block !important;
+}
+
+/* FlexSlider specific styles */
+.metaslider .flexslider {
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+/* Ensure images display properly */
+.metaslider img {
+  height: auto;
+  max-width: 100%;
+}
+
+/* Preserve MetaSlider's box model */
+.metaslider * {
+  box-sizing: content-box;
+}
+
+/* Navigation alignment */
+.metaslider .flex-control-nav {
+  width: 100% !important;
+  text-align: center !important;
+}

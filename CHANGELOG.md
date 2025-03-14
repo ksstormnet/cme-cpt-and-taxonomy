@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.5.0] - 2025-03-13
 
+## [1.4.2] - 2025-03-13
+
+### Fixed
+
+- Fixed compatibility issue with Meta Slider shortcodes
+- Resolved duplicate shortcode registration between Frontend and API classes
+- Improved shortcode processing to avoid conflicts with third-party plugins
+
+## [1.4.1] - 2025-03-13
+
+### Fixed
+
+- Fixed "Class 'CME_Personas\Persona_Manager' not found" error by adding proper class dependencies
+- Fixed PHP 8 compatibility issues with parameter order in set_content methods
+- Fixed "headers already sent" warnings caused by deprecation notices
+
+## [1.4.0] - 2025-03-13
+
 ### Added
 
 - Specialized Meta Slider compatibility handling
