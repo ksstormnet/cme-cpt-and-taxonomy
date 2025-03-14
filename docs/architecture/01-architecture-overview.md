@@ -2,7 +2,7 @@
 
 ## Version Information
 
-Current as of v1.5.0
+Current as of v1.5.1
 
 This document provides a comprehensive technical overview of the CME Personas plugin architecture, explaining how the shortcode-based persona system works, its components, and how it can be extended.
 
@@ -70,9 +70,7 @@ The shortcode-based architecture was chosen for several benefits:
 The primary component of the system is the `[if_persona]` shortcode, which creates boundaries around content that should be conditionally displayed based on the active persona:
 
 ```html
-[if_persona is="persona-id"]
-Content for this persona
-[/if_persona]
+[if_persona is="persona-id"] Content for this persona [/if_persona]
 ```
 
 The shortcode processor evaluates the current visitor's persona against the shortcode parameters and either displays or hides the enclosed content.
@@ -87,11 +85,8 @@ The shortcode processor evaluates the current visitor's persona against the shor
 The shortcode system supports nesting for complex conditional logic:
 
 ```html
-[if_persona not="thrill"]
-  [if_persona is="luxe"]
-    Luxury-specific content
-  [/if_persona]
-[/if_persona]
+[if_persona not="thrill"] [if_persona is="luxe"] Luxury-specific content
+[/if_persona] [/if_persona]
 ```
 
 ## Persona Detection

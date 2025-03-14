@@ -2,7 +2,7 @@
 
 ## Version Information
 
-Current as of v1.5.0
+Current as of v1.5.1
 
 This document provides developers with specific code patterns, hooks, examples, and best practices for implementing and extending the shortcode-based persona system.
 
