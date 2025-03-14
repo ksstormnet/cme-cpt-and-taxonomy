@@ -20,9 +20,9 @@
 /* Persona Cards Grid */
 .cme-persona-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-bottom: 40px;
 }
 
 .cme-persona-card {
@@ -30,75 +30,176 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
-    padding: 20px;
+    padding: 25px;
     transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .cme-persona-card:hover {
     border-color: #2271b1;
     box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
 }
 
 .cme-persona-card-title {
     border-bottom: 1px solid #eee;
     color: #1d2327;
-    font-size: 1.2em;
+    font-size: 1.4em;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     padding-bottom: 10px;
-}
-
-/* Persona Images Section */
-.cme-persona-images {
-    display: flex;
-    gap: 10px;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.cme-persona-image {
-    flex: 1;
     text-align: center;
+    width: 100%;
 }
 
-.cme-persona-image img {
-    border-radius: 50%;
-    height: 80px;
+/* Image Rotator */
+.cme-persona-image-rotator {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto 25px;
+    overflow: hidden;
+}
+
+.cme-persona-image-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+.cme-persona-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.cme-persona-slide.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.cme-persona-slide-image {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    width: 80px;
 }
 
-.cme-persona-image-name {
-    color: #50575e;
-    font-size: 0.9em;
-    margin-top: 5px;
+.cme-persona-slide-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgb(0 0 0 / 60%);
+    color: #fff;
+    padding: 8px 10px;
+    font-size: 1.1em;
+    text-align: center;
+    z-index: 2;
 }
 
 .cme-persona-image-placeholder {
-    align-items: center;
-    background-color: #f0f0f1;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
+    background-color: #f0f0f1;
     color: #2271b1;
     display: flex;
-    font-size: 40px;
-    height: 80px;
+    align-items: center;
     justify-content: center;
-    margin: 0 auto;
-    width: 80px;
+    font-size: 60px;
+}
+
+.cme-persona-rotator-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.cme-persona-rotator-prev,
+.cme-persona-rotator-next {
+    background: #2271b1;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background 0.2s ease;
+}
+
+.cme-persona-rotator-prev:hover,
+.cme-persona-rotator-next:hover {
+    background: #135e96;
+}
+
+.cme-persona-rotator-dots {
+    display: flex;
+    gap: 5px;
+    margin: 0 10px;
+}
+
+.cme-persona-rotator-dot {
+    width: 10px;
+    height: 10px;
+    background: #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.cme-persona-rotator-dot.active {
+    background: #2271b1;
 }
 
 /* Persona Attributes Section */
 .cme-persona-attributes {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.cme-persona-attributes-title {
+    font-size: 1.2em;
+    font-weight: bold;
     margin-bottom: 15px;
+    color: #1d2327;
+    text-align: center;
 }
 
-.cme-persona-attributes ul {
-    margin: 0;
-    padding-left: 20px;
+.cme-persona-attributes-content {
+    padding: 0 15px;
+    text-align: left;
+    line-height: 1.6;
 }
 
-.cme-persona-attributes li {
+.cme-persona-attributes-content p {
+    margin-bottom: 10px;
+}
+
+.cme-persona-attributes-content ul {
+    margin: 0 0 10px 20px;
+    padding-left: 0;
+}
+
+.cme-persona-attributes-content li {
     margin-bottom: 5px;
 }
 
@@ -107,6 +208,7 @@
     display: flex;
     gap: 10px;
     margin-top: 15px;
+    justify-content: center;
 }
 
 .cme-persona-actions a {
@@ -116,7 +218,7 @@
     color: #50575e;
     display: inline-block;
     font-size: 0.9em;
-    padding: 5px 10px;
+    padding: 8px 15px;
     text-decoration: none;
     transition: all 0.2s ease;
 }
@@ -176,6 +278,12 @@
 }
 
 /* Responsive Design */
+@media screen and (width <= 1200px) {
+    .cme-persona-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media screen and (width <= 782px) {
     .cme-persona-grid {
         grid-template-columns: 1fr;
@@ -185,12 +293,7 @@
         grid-template-columns: 1fr;
     }
 
-    .cme-persona-images {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .cme-persona-image {
-        margin-bottom: 15px;
+    .cme-persona-image-container {
+        height: 250px;
     }
 }
