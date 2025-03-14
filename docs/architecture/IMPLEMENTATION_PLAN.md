@@ -1,35 +1,35 @@
 # Personas Plugin Implementation Plan
 
-This document outlines the implementation plan for expanding the CME Personas plugin with enhanced content personalization capabilities.
+This document outlines the implementation plan for the CME Personas plugin with boundary-based shortcode content personalization capabilities.
 
 ## Table of Contents
 
 - [Personas Plugin Implementation Plan](#personas-plugin-implementation-plan)
-    - [Table of Contents](#table-of-contents)
-    - [Overview](#overview)
-    - [Implementation Phases](#implementation-phases)
-        - [Phase 1: Core Infrastructure](#phase-1-core-infrastructure)
-            - [Timeline: 1-2 Weeks](#timeline-1-2-weeks)
-        - [Phase 2: Admin UI](#phase-2-admin-ui)
-            - [Timeline: 1-2 Weeks](#timeline-1-2-weeks-1)
-        - [Phase 3: Frontend Integration](#phase-3-frontend-integration)
-            - [Timeline: 1-2 Weeks](#timeline-1-2-weeks-2)
-        - [Phase 4: Performance Optimization](#phase-4-performance-optimization)
-            - [Timeline: 1-2 Weeks](#timeline-1-2-weeks-3)
-    - [Key Technical Decisions](#key-technical-decisions)
-    - [Testing Strategy](#testing-strategy)
-    - [Deployment Process](#deployment-process)
+	- [Table of Contents](#table-of-contents)
+	- [Overview](#overview)
+	- [Implementation Phases](#implementation-phases)
+		- [Phase 1: Core Infrastructure](#phase-1-core-infrastructure)
+			- [Timeline: 1-2 Weeks](#timeline-1-2-weeks)
+		- [Phase 2: Shortcode System](#phase-2-shortcode-system)
+			- [Timeline: 1-2 Weeks](#timeline-1-2-weeks-1)
+		- [Phase 3: Admin Integration](#phase-3-admin-integration)
+			- [Timeline: 1 Week](#timeline-1-week)
+		- [Phase 4: Performance Optimization](#phase-4-performance-optimization)
+			- [Timeline: 1 Week](#timeline-1-week-1)
+	- [Key Technical Decisions](#key-technical-decisions)
+	- [Testing Strategy](#testing-strategy)
+	- [Deployment Process](#deployment-process)
 
 ## Overview
 
-The goal is to enhance the existing CME Personas plugin with content personalization features while maintaining the current functionality. The expansion centers on:
+The goal is to implement the CME Personas plugin using a boundary-based shortcode approach. This architecture focuses on:
 
-1. Adding personalized content management to the existing persona post type
-2. Implementing persona detection systems for visitors
-3. Creating a frontend API for template integration
-4. Adding optional Redis-based caching for performance
+1. Using shortcodes to define conditional content boundaries
+2. Supporting third-party plugin compatibility
+3. Implementing persona detection systems for visitors
+4. Creating admin tools for previewing content per persona
 
-The expanded plugin will maintain backward compatibility while providing more sophisticated content personalization capabilities.
+The shortcode-based approach provides superior compatibility with existing WordPress plugins and content structures, including complex elements like Meta Slider.
 
 ## Implementation Phases
 
@@ -39,17 +39,17 @@ The expanded plugin will maintain backward compatibility while providing more so
 
 **Deliverables:**
 
+- Persona management system (Custom Post Type)
 - Persona detection system (cookie, URL parameter, session-based)
-- Core API for content storage and retrieval
-- Persona switching functionality
-- Backend data structures for content variations
+- Core API for persona identification and switching
+- Database schema for persona storage
 
 **Tasks:**
 
 1. Create the `Persona_Manager` class for persona detection
-2. Implement `Persona_Content` class for storage and retrieval
-3. Add helper functions for template integration
-4. Create database schema for content variations
+2. Implement `Custom_Post_Types` class for persona registration
+3. Add helper functions for persona identification
+4. Create schema for persona object storage
 
 **Example Implementation:**
 
@@ -69,12 +69,11 @@ class Persona_Manager {
   // Initialize and detect current persona
   public function initialize() {
     add_action('wp', array($this, 'detect_persona'));
-    add_filter('template_include', array($this, 'maybe_switch_persona'));
   }
 
   // Detect current persona from various sources
   public function detect_persona() {
-    // Check for URL parameter
+    // Check for URL parameter (highest priority)
     if (isset($_GET['persona']) && $this->is_valid_persona($_GET['persona'])) {
       $this->set_persona(sanitize_text_field($_GET['persona']));
       return;
@@ -88,6 +87,27 @@ class Persona_Manager {
 
     // Default to 'default' persona
     $this->current_persona = 'default';
+  }
+
+  // Set the active persona
+  public function set_persona($persona_id, $set_cookie = true) {
+    if (!$this->is_valid_persona($persona_id)) {
+      return false;
+    }
+    
+    $this->current_persona = $persona_id;
+    
+    if ($set_cookie) {
+      setcookie(
+        'cme_persona',
+        $persona_id,
+        time() + WEEK_IN_SECONDS,
+        COOKIEPATH,
+        COOKIE_DOMAIN
+      );
+    }
+    
+    return true;
   }
 
   // Check if a persona identifier is valid
@@ -116,356 +136,300 @@ class Persona_Manager {
 }
 ```
 
-### Phase 2: Admin UI
+### Phase 2: Shortcode System
 
 #### Timeline: 1-2 Weeks
 
 **Deliverables:**
 
-- Tabbed interface for persona content editing
-- Block editor integration for content variations
-- Preview functionality for persona content
-- Settings page enhancements
+- `[if_persona]` shortcode for conditional content
+- Shortcode processor that preserves third-party compatibility
+- Additional utility shortcodes for persona interaction
+- Documentation for shortcode usage
 
 **Tasks:**
 
-1. Create tabbed UI for content editing
-2. Implement meta boxes for persona-specific fields
-3. Add preview functionality
-4. Enhance settings page with persona options
+1. Implement `Frontend` class with shortcode handlers
+2. Create `if_persona` shortcode for boundary-based content
+3. Add `persona_switcher` shortcode for user persona selection
+4. Ensure compatibility with third-party shortcodes
+5. Add comprehensive shortcode documentation
+
+**Example Implementation:**
+
+```php
+class Frontend {
+  public function register() {
+    // Register shortcodes
+    add_shortcode('if_persona', array($this, 'if_persona_shortcode'));
+    add_shortcode('persona_switcher', array($this, 'persona_switcher_shortcode'));
+    
+    // Add AJAX handler for persona switching
+    add_action('wp_ajax_switch_persona', array($this, 'ajax_switch_persona'));
+    add_action('wp_ajax_nopriv_switch_persona', array($this, 'ajax_switch_persona'));
+  }
+  
+  /**
+   * Shortcode for conditional persona content.
+   *
+   * Usage: [if_persona is="business"]Business-specific content[/if_persona]
+   *        [if_persona is="family,luxury"]Content for family and luxury personas[/if_persona]
+   *        [if_persona not="business"]Content for non-business personas[/if_persona]
+   */
+  public function if_persona_shortcode($atts, $content = null) {
+    $atts = shortcode_atts(
+      array(
+        'is'  => null,
+        'not' => null,
+      ),
+      $atts,
+      'if_persona'
+    );
+    
+    // Get current persona
+    $persona_manager = Persona_Manager::get_instance();
+    $current_persona = $persona_manager->get_current_persona();
+    
+    // If 'is' attribute is set, check if current persona matches
+    if (null !== $atts['is']) {
+      $allowed_personas = array_map('trim', explode(',', $atts['is']));
+      if (!in_array($current_persona, $allowed_personas, true)) {
+        return '';
+      }
+    }
+    
+    // If 'not' attribute is set, check if current persona does not match
+    if (null !== $atts['not']) {
+      $excluded_personas = array_map('trim', explode(',', $atts['not']));
+      if (in_array($current_persona, $excluded_personas, true)) {
+        return '';
+      }
+    }
+    
+    // If we get here, the conditions are met
+    return do_shortcode($content);
+  }
+  
+  /**
+   * Shortcode for persona switcher.
+   *
+   * Usage: [persona_switcher]
+   *        [persona_switcher display="dropdown" button_text="Switch Persona"]
+   */
+  public function persona_switcher_shortcode($atts) {
+    $atts = shortcode_atts(
+      array(
+        'display' => 'buttons',
+        'button_text' => __('Select Persona', 'cme-personas'),
+        'class' => '',
+      ),
+      $atts,
+      'persona_switcher'
+    );
+    
+    // Build the switcher HTML
+    // ... Implementation details ...
+    
+    return $output;
+  }
+}
+```
+
+### Phase 3: Admin Integration
+
+#### Timeline: 1 Week
+
+**Deliverables:**
+
+- Admin sidebar persona selector for previewing content
+- Preview URL generation for testing persona content
+- TinyMCE integration for easier shortcode insertion
+- Admin notices for active persona preview
+
+**Tasks:**
+
+1. Create admin sidebar component for persona selection
+2. Implement admin preview URL generation
+3. Add TinyMCE shortcode buttons
+4. Create admin notification system
 5. Add inline documentation and help text
 
 **Example Implementation:**
 
 ```php
-class Persona_Admin {
+class Admin {
   public function register() {
-    add_action('add_meta_boxes', array($this, 'add_persona_content_meta_box'));
-    add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
-    add_action('save_post', array($this, 'save_persona_content'));
+    // Add sidebar panel for persona preview
+    add_action('add_meta_boxes', array($this, 'add_preview_meta_box'));
+    
+    // Add admin scripts and styles
+    add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
+    
+    // TinyMCE integration
+    add_action('admin_init', array($this, 'tinymce_integration'));
+    
+    // Admin preview notice
+    add_action('admin_notices', array($this, 'preview_notice'));
   }
-
-  // Add meta box for persona-specific content
-  public function add_persona_content_meta_box() {
+  
+  // Add meta box for persona preview
+  public function add_preview_meta_box() {
     $post_types = apply_filters('cme_persona_content_post_types', array('post', 'page'));
-
+    
     foreach ($post_types as $post_type) {
       add_meta_box(
-        'persona_content_meta_box',
-        __('Persona-Specific Content', 'cme-personas'),
-        array($this, 'render_persona_content_meta_box'),
+        'persona_preview_meta_box',
+        __('Persona Preview', 'cme-personas'),
+        array($this, 'render_preview_meta_box'),
         $post_type,
-        'normal',
+        'side',
         'high'
       );
     }
   }
-
-  // Render the persona content editing interface
-  public function render_persona_content_meta_box($post) {
-    // Create nonce for verification
-    wp_nonce_field('persona_content_nonce', 'persona_content_nonce');
-
-    // Get all available personas
+  
+  // Render the persona preview meta box
+  public function render_preview_meta_box($post) {
+    // Get all personas
     $persona_manager = Persona_Manager::get_instance();
     $personas = $persona_manager->get_all_personas();
-
-    // Get existing values
-    $persona_content = get_post_meta($post->ID, '_persona_content', true);
-    if (!is_array($persona_content)) {
-      $persona_content = array();
+    
+    // Get preview URL
+    $preview_url = get_preview_post_link($post);
+    
+    echo '<p>' . esc_html__('Preview this page as:', 'cme-personas') . '</p>';
+    echo '<ul class="persona-preview-links">';
+    
+    foreach ($personas as $id => $name) {
+      $url = add_query_arg('persona', $id, $preview_url);
+      echo '<li><a href="' . esc_url($url) . '" target="_blank">' . esc_html($name) . '</a></li>';
     }
-
-    // Output tabs and content areas
-    echo '<div class="persona-content-tabs">';
-    echo '<ul class="persona-tabs-nav">';
-
-    foreach ($personas as $key => $label) {
-      $active = ($key === 'default') ? 'active' : '';
-      echo '<li><a href="#persona-tab-' . esc_attr($key) . '" class="' . esc_attr($active) . '">' . esc_html($label) . '</a></li>';
-    }
-
+    
     echo '</ul>';
-    echo '<div class="persona-tabs-content">';
-
-    foreach ($personas as $key => $label) {
-      $content = isset($persona_content[$key]) ? $persona_content[$key] : '';
-      $display = ($key === 'default') ? 'block' : 'none';
-
-      echo '<div id="persona-tab-' . esc_attr($key) . '" class="persona-tab-panel" style="display: ' . esc_attr($display) . ';">';
-      echo '<h3>' . esc_html(sprintf(__('Content for %s Persona', 'cme-personas'), $label)) . '</h3>';
-
-      wp_editor(
-        $content,
-        'persona_content_' . sanitize_key($key),
-        array(
-          'textarea_name' => 'persona_content[' . esc_attr($key) . ']',
-          'media_buttons' => true,
-          'textarea_rows' => 10,
-        )
-      );
-
-      echo '</div>';
-    }
-
-    echo '</div>'; // .persona-tabs-content
-    echo '</div>'; // .persona-content-tabs
+    echo '<p class="description">' . esc_html__('Links open in a new window with the selected persona active.', 'cme-personas') . '</p>';
   }
-}
-```
-
-### Phase 3: Frontend Integration
-
-#### Timeline: 1-2 Weeks
-
-**Deliverables:**
-
-- Public API for template developers
-- Shortcodes for persona-specific content
-- Helper functions for theme integration
-- Frontend persona switching capability
-
-**Tasks:**
-
-1. Create template functions for retrieving content
-2. Implement shortcodes for personalized content
-3. Add frontend persona switcher
-4. Create documentation and examples
-
-**Example Implementation:**
-
-```php
-// Public API for themes and plugins
-function cme_get_persona_content($post_id, $field = 'content', $persona = null) {
-  // Get persona manager
-  $persona_manager = Persona_Manager::get_instance();
-
-  // Use current persona if none specified
-  if (null === $persona) {
-    $persona = $persona_manager->get_current_persona();
-  }
-
-  // Get content manager
-  $content_manager = Persona_Content::get_instance();
-
-  // Get persona-specific content
-  return $content_manager->get_content($post_id, $field, $persona);
-}
-
-// Register shortcodes
-function cme_register_persona_shortcodes() {
-  add_shortcode('persona_content', 'cme_persona_content_shortcode');
-  add_shortcode('persona_switcher', 'cme_persona_switcher_shortcode');
-}
-add_action('init', 'cme_register_persona_shortcodes');
-
-// Shortcode for persona-specific content
-function cme_persona_content_shortcode($atts, $content = null) {
-  $atts = shortcode_atts(
-    array(
-      'persona' => '',
-      'default' => '',
-    ),
-    $atts,
-    'persona_content'
-  );
-
-  // Get current persona
-  $persona_manager = Persona_Manager::get_instance();
-  $current_persona = $persona_manager->get_current_persona();
-
-  // If this content is for the current persona or all personas, show it
-  if (empty($atts['persona']) || $atts['persona'] === $current_persona) {
-    return do_shortcode($content);
-  }
-
-  // If default content provided, return that
-  if (!empty($atts['default'])) {
-    return $atts['default'];
-  }
-
-  return '';
 }
 ```
 
 ### Phase 4: Performance Optimization
 
-#### Timeline: 1-2 Weeks
+#### Timeline: 1 Week
 
 **Deliverables:**
 
-- Optional Redis-based caching for persona content
+- Optimized shortcode processing
+- Persona content caching
 - Performance monitoring tools
-- Preloading capability for high-traffic sites
-- Cache invalidation system
+- Compatibility layer for popular plugins
 
 **Tasks:**
 
-1. Create Redis connection manager (optional dependency)
-2. Implement caching layer for persona content
-3. Add cache invalidation on content updates
-4. Create admin tools for cache management
-5. Performance testing and optimization
+1. Add shortcode detection optimization
+2. Implement content caching for personalized content
+3. Add compatibility fixes for common third-party plugins
+4. Create admin tools for performance monitoring
 
 **Example Implementation:**
 
 ```php
-class Persona_Cache {
-  private static $instance = null;
-  private $redis = null;
-  private $enabled = false;
-
-  // Singleton implementation
-  public static function get_instance() {
-    if (null === self::$instance) {
-      self::$instance = new self();
-    }
-    return self::$instance;
+class Performance {
+  public function register() {
+    // Only process shortcodes when necessary
+    add_filter('the_content', array($this, 'maybe_process_shortcodes'), 7);
+    
+    // Add compatibility filters for popular plugins
+    add_action('plugins_loaded', array($this, 'plugin_compatibility'));
   }
-
-  // Initialize caching
-  public function initialize() {
-    // Check if Redis caching is enabled
-    $this->enabled = get_option('cme_personas_enable_redis', false);
-
-    if ($this->enabled) {
-      $this->connect_to_redis();
+  
+  // Check if content contains persona shortcodes before processing
+  public function maybe_process_shortcodes($content) {
+    // Skip processing if no persona shortcodes are found
+    if (strpos($content, '[if_persona') === false && 
+        strpos($content, '[persona_') === false) {
+      return $content;
     }
-
-    // Register cache invalidation hooks
-    add_action('save_post', array($this, 'invalidate_content_cache'));
-    add_action('deleted_post', array($this, 'invalidate_content_cache'));
+    
+    // Process shortcodes
+    return do_shortcode($content);
   }
-
-  // Try to connect to Redis
-  private function connect_to_redis() {
-    if (!class_exists('Redis')) {
-      $this->enabled = false;
-      return false;
+  
+  // Add compatibility for popular plugins
+  public function plugin_compatibility() {
+    // Compatibility with page builders
+    if (defined('ELEMENTOR_VERSION')) {
+      add_action('elementor/frontend/after_render', array($this, 'elementor_compatibility'));
     }
-
-    try {
-      $this->redis = new Redis();
-      $host = defined('WP_REDIS_HOST') ? WP_REDIS_HOST : '127.0.0.1';
-      $port = defined('WP_REDIS_PORT') ? WP_REDIS_PORT : 6379;
-
-      if ($this->redis->connect($host, $port)) {
-        if (defined('WP_REDIS_PASSWORD') && WP_REDIS_PASSWORD) {
-          $this->redis->auth(WP_REDIS_PASSWORD);
-        }
-        return true;
-      }
-    } catch (Exception $e) {
-      $this->enabled = false;
-      error_log('Redis connection error: ' . $e->getMessage());
+    
+    // Compatibility with caching plugins
+    if (defined('WP_CACHE') && WP_CACHE) {
+      add_action('wp_footer', array($this, 'cache_compatibility'));
     }
-
-    return false;
-  }
-
-  // Get cached content
-  public function get($key) {
-    if (!$this->enabled || !$this->redis) {
-      return false;
-    }
-
-    $prefixed_key = 'cme_persona:' . $key;
-    return $this->redis->get($prefixed_key);
-  }
-
-  // Set cached content
-  public function set($key, $value, $expiry = 86400) {
-    if (!$this->enabled || !$this->redis) {
-      return false;
-    }
-
-    $prefixed_key = 'cme_persona:' . $key;
-    return $this->redis->setEx($prefixed_key, $expiry, $value);
-  }
-
-  // Invalidate content cache
-  public function invalidate_content_cache($post_id) {
-    if (!$this->enabled || !$this->redis) {
-      return false;
-    }
-
-    // Get all personas
-    $persona_manager = Persona_Manager::get_instance();
-    $personas = $persona_manager->get_all_personas();
-
-    // Delete cache for each persona
-    foreach (array_keys($personas) as $persona) {
-      $key = 'cme_persona:post:' . $post_id . ':' . $persona;
-      $this->redis->del($key);
-    }
-
-    return true;
   }
 }
 ```
 
 ## Key Technical Decisions
 
-1. **Content Storage Method:**
+1. **Boundary-Based Shortcode Approach:**
 
-    - Store persona content as post meta for compatibility with existing systems
-    - Use structured meta format for different content fields
-    - Include block identifier support for partial content replacement
+    - Use shortcodes to define conditional content boundaries
+    - Preserve content structure and formatting within boundaries
+    - Maintain compatibility with third-party shortcodes
 
 2. **Persona Detection:**
 
     - Use cookies as primary method (with appropriate consent)
     - Support URL parameters for testing and deep linking
-    - Include JavaScript API for dynamic switching
+    - Prioritize URL parameters over cookies for previewing
 
-3. **Redis Integration:**
+3. **Content Processing:**
 
-    - Make Redis optional with graceful fallback
-    - Use WordPress caching API when available
-    - Implement tiered cache approach (object cache → Redis → database)
+    - Process shortcodes only when present in content
+    - Properly handle nested shortcodes with recursion limits
+    - Preserve third-party shortcode execution order
 
-4. **Admin UI:**
-    - Use tabs for persona content editing
-    - Support standard WordPress block editor
-    - Provide inline documentation and contextual help
+4. **Admin Integration:**
+    - Sidebar tools rather than post editing interface
+    - Query parameter based preview system
+    - Simple URL generation for content testing
 
 ## Testing Strategy
 
 1. **Unit Tests:**
 
     - Persona detection logic
-    - Content storage and retrieval
-    - Shortcode processing
-    - Redis connection and fallback
+    - Shortcode parsing and processing
+    - Parameter handling
+    - Nesting support
 
 2. **Integration Tests:**
 
+    - Third-party shortcode compatibility (Meta Slider, etc.)
     - WordPress hooks and filters
-    - Admin UI functionality
+    - Admin preview functionality
     - Frontend content display
-    - Performance under load
 
 3. **User Acceptance Testing:**
-    - Content editor workflow
+    - Content author workflow
     - Preview functionality
     - Persona switching
-    - Cache management
+    - Cross-browser compatibility
 
 ## Deployment Process
 
 1. **Pre-Deployment:**
 
     - Version compatibility check
-    - Database schema update preparation
-    - Documentation update
+    - Update shortcode documentation
+    - Prepare admin guidelines
 
 2. **Deployment:**
 
-    - Database schema updates
-    - New functionality rollout
-    - Settings migration
+    - Core plugin update
+    - Verify third-party compatibility
+    - Update settings if needed
 
 3. **Post-Deployment:**
-    - Cache warming
+    - Author training on shortcode usage
+    - Content verification for existing sites
     - Performance monitoring
-    - User training
