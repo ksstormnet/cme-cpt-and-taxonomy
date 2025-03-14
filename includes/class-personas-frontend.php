@@ -1,6 +1,6 @@
 <?php
 /**
- * Frontend Integration Class
+ * Personas Frontend Integration Class
  *
  * Handles frontend functionality for Persona content.
  *
@@ -11,7 +11,7 @@
 namespace CME_Personas;
 
 /**
- * Frontend Integration Class
+ * Personas Frontend Integration Class
  *
  * This class provides shortcodes, template functions, and frontend persona
  * switching functionality for the Personas plugin using a boundary-based approach.
@@ -19,34 +19,43 @@ namespace CME_Personas;
  * @since      1.3.0
  * @package    CME_Personas
  */
-class Frontend {
+class Personas_Frontend {
 
 	/**
 	 * Instance of the class.
 	 *
 	 * @since    1.3.0
 	 * @access   private
-	 * @var      Frontend    $instance    Singleton instance of the class.
+	 * @var      Personas_Frontend    $instance    Singleton instance of the class.
 	 */
 	private static $instance = null;
 
 	/**
-	 * Instance of the Persona_Manager class.
+	 * Instance of the Personas_Detector class.
 	 *
-	 * @since    1.3.0
+	 * @since    1.6.0
 	 * @access   private
-	 * @var      Persona_Manager    $persona_manager    Instance of the Persona_Manager class.
+	 * @var      Personas_Detector    $detector    Instance of the Personas_Detector class.
 	 */
-	private $persona_manager;
+	private $detector;
 
 	/**
-	 * Instance of the Personas_API class.
+	 * Instance of the Personas_Facade class.
 	 *
-	 * @since    1.3.0
+	 * @since    1.6.0
 	 * @access   private
-	 * @var      Personas_API    $personas_api    Instance of the Personas_API class.
+	 * @var      Personas_Facade    $facade    Instance of the Personas_Facade class.
 	 */
-	private $personas_api;
+	private $facade;
+
+	/**
+	 * Instance of the Personas_Repository class.
+	 *
+	 * @since    1.6.0
+	 * @access   private
+	 * @var      Personas_Repository    $repository    Instance of the Personas_Repository class.
+	 */
+	private $repository;
 
 	/**
 	 * Shortcode nesting level tracking.
@@ -61,7 +70,7 @@ class Frontend {
 	 * Get the singleton instance of the class.
 	 *
 	 * @since     1.3.0
-	 * @return    Frontend    The singleton instance.
+	 * @return    Personas_Frontend    The singleton instance.
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -77,8 +86,9 @@ class Frontend {
 	 */
 	private function __construct() {
 		// Initialize instances.
-		$this->persona_manager = Persona_Manager::get_instance();
-		$this->personas_api    = Personas_API::get_instance();
+		$this->detector   = Personas_Detector::get_instance();
+		$this->facade     = Personas_Facade::get_instance();
+		$this->repository = Personas_Repository::get_instance();
 
 		// Setup hooks.
 		$this->setup_hooks();
@@ -138,7 +148,7 @@ class Frontend {
 				array(
 					'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
 					'nonce'          => wp_create_nonce( 'cme_personas_nonce' ),
-					'currentPersona' => $this->personas_api->get_current_persona(),
+					'currentPersona' => $this->facade->get_current_persona(),
 					'reloadOnSwitch' => apply_filters( 'cme_personas_reload_on_switch', false ),
 				)
 			);
@@ -185,7 +195,7 @@ class Frontend {
 			$this->nesting_level = 0;
 
 			// Add special handling to optimize any persona shortcodes that won't apply.
-			$current_persona = $this->personas_api->get_current_persona();
+			$current_persona = $this->facade->get_current_persona();
 
 			// Add filter to quickly handle persona shortcodes.
 			add_filter( 'pre_do_shortcode_tag', array( $this, 'pre_process_persona_shortcode' ), 10, 4 );
@@ -217,7 +227,7 @@ class Frontend {
 		}
 
 		// Current persona.
-		$current_persona = $this->personas_api->get_current_persona();
+		$current_persona = $this->facade->get_current_persona();
 
 		// Check for 'is' condition.
 		if ( isset( $attr['is'] ) ) {
@@ -262,7 +272,7 @@ class Frontend {
 		);
 
 		// Get current persona.
-		$current_persona = $this->personas_api->get_current_persona();
+		$current_persona = $this->facade->get_current_persona();
 
 		// If 'is' attribute is set, check if current persona matches.
 		if ( null !== $atts['is'] ) {
@@ -306,10 +316,10 @@ class Frontend {
 		);
 
 		// Get all personas.
-		$personas = $this->persona_manager->get_all_personas();
+		$personas = $this->repository->get_all_personas();
 
 		// Get current persona.
-		$current_persona = $this->personas_api->get_current_persona();
+		$current_persona = $this->facade->get_current_persona();
 
 		// Start building output.
 		$output = '<div class="cme-persona-switcher ' . esc_attr( $atts['class'] ) . '" data-display="' . esc_attr( $atts['display'] ) . '">';
@@ -366,16 +376,20 @@ class Frontend {
 		}
 
 		// Set persona.
-		$success = $this->personas_api->set_persona( $persona_id );
+		$success = $this->facade->set_persona( $persona_id );
 
 		if ( $success ) {
+			// Get persona details for the name.
+			$persona_details = $this->repository->get_persona_details( $persona_id );
+			$persona_name    = $persona_details ? $persona_details['title'] : $persona_id;
+
 			wp_send_json_success(
 				array(
 					'persona' => $persona_id,
 					'message' => sprintf(
 						/* translators: %s: persona name */
 						__( 'Successfully switched to %s persona.', 'cme-personas' ),
-						$this->persona_manager->get_persona_name( $persona_id )
+						$persona_name
 					),
 				)
 			);

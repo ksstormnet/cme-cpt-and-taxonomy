@@ -5,6 +5,29 @@ All notable changes to the CME Personas plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Refactored plugin architecture to follow Single Responsibility Principle:
+  - Split `class-persona-manager.php` into specialized components:
+    - `class-personas-detector.php`: Handles persona detection from various sources
+    - `class-personas-storage.php`: Manages storage of persona preferences
+    - `class-personas-repository.php`: Retrieves persona data from database
+  - Renamed all classes to follow consistent naming convention:
+    - `class-plugin.php` → `class-personas-loader.php`
+    - `class-admin.php` → `class-personas-admin.php`
+    - `class-ajax-handler.php` → `class-personas-ajax.php`
+    - `class-custom-post-types.php` → `class-personas-post-types.php`
+    - `class-dashboard.php` → `class-personas-dashboard.php`
+    - `class-frontend.php` → `class-personas-frontend.php`
+    - `class-settings.php` → `class-personas-settings.php`
+    - `class-shortcodes.php` → `class-personas-shortcodes.php`
+  - Created `class-personas-facade.php` as a simplified API layer
+  - Added `class-personas-assets.php` for script/style management
+  - Removed legacy files and eliminated backward compatibility for cleaner architecture
+  - Applied consistent class naming throughout the codebase
+
 ## [1.5.1] - 2025-03-14
 
 ### Fixed

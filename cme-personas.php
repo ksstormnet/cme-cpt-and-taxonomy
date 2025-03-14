@@ -42,20 +42,16 @@ if ( file_exists( $autoloader_path ) ) {
 define( 'CME_PLUGIN_DIR', CME_PERSONAS_PATH );
 define( 'CME_PLUGIN_FILE', CME_PERSONAS_FILE );
 
-// Include the main plugin class and the integrator class.
-require_once CME_PERSONAS_PATH . 'includes/class-plugin.php';
-require_once CME_PERSONAS_PATH . 'includes/class-persona-integrator.php';
+// Include the main loader class for plugin initialization.
+require_once CME_PERSONAS_PATH . 'includes/class-personas-loader.php';
 
 /**
  * Initialize the plugin.
  */
 function cme_personas_init() {
-	// Initialize the plugin.
-	$plugin = new \CME_Personas\Plugin();
-	$plugin->run();
-
-	// Initialize the integrator.
-	$integrator = \CME_Personas\Persona_Integrator::get_instance();
+	// Initialize the plugin through the loader.
+	$loader = new \CME_Personas\Personas_Loader();
+	$loader->run();
 }
 
 // Start the plugin when WordPress is ready.

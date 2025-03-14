@@ -9,15 +9,14 @@
 namespace CME_Personas;
 
 /**
- * Admin class.
+ * Personas Admin class.
  *
  * Provides admin interface functionality for the plugin.
  *
  * @since      1.1.0
  * @package    CME_Personas
- * @author     Your Name
  */
-class Admin {
+class Personas_Admin {
 
 	/**
 	 * Initialize the class.

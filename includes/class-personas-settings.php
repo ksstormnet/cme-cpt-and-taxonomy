@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin settings page.
+ * Personas settings page.
  *
  * @since      1.1.0
  * @package    CME_Personas
@@ -9,14 +9,14 @@
 namespace CME_Personas;
 
 /**
- * Settings class.
+ * Personas Settings class.
  *
  * This class handles the plugin settings page.
  *
  * @since      1.1.0
  * @package    CME_Personas
  */
-class Settings {
+class Personas_Settings {
 
 	/**
 	 * Option name for settings.
