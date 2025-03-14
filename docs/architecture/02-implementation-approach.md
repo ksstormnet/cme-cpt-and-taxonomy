@@ -9,35 +9,35 @@ This document provides a comprehensive overview of the persona system implementa
 ## Table of Contents
 
 - [Persona System Implementation Approach](#persona-system-implementation-approach)
-	- [Version Information](#version-information)
-	- [Table of Contents](#table-of-contents)
-	- [Implementation Decision Summary](#implementation-decision-summary)
-	- [Implementation Approaches Comparison](#implementation-approaches-comparison)
-		- [Introduction](#introduction)
-		- [Option 1: Server-Side Persona Detection with Edge Caching](#option-1-server-side-persona-detection-with-edge-caching)
-			- [Technical Implementation Details](#technical-implementation-details)
-			- [Performance Characteristics](#performance-characteristics)
-			- [Scalability Factors](#scalability-factors)
-			- [Specific Challenges](#specific-challenges)
-		- [Option 2: Edge-Worker Persona Application](#option-2-edge-worker-persona-application)
-			- [Technical Implementation Details](#technical-implementation-details-1)
-			- [Performance Characteristics](#performance-characteristics-1)
-			- [Scalability Factors](#scalability-factors-1)
-			- [Specific Challenges](#specific-challenges-1)
-		- [Data Flow Comparison with 'easy-breezy' Example](#data-flow-comparison-with-easy-breezy-example)
-			- [Option 1: Server-Side Flow](#option-1-server-side-flow)
-			- [Option 2: Edge-Worker Flow](#option-2-edge-worker-flow)
-		- [Decision Factors Summary](#decision-factors-summary)
-	- [Chosen Implementation: WordPress Plugin with Boundary-Based Shortcodes](#chosen-implementation-wordpress-plugin-with-boundary-based-shortcodes)
-		- [Overview](#overview)
-		- [Plugin Architecture](#plugin-architecture)
-		- [Implementation Phases](#implementation-phases)
-			- [Phase 1: Core Infrastructure](#phase-1-core-infrastructure)
-			- [Phase 2: Shortcode System](#phase-2-shortcode-system)
-			- [Phase 3: Admin Integration](#phase-3-admin-integration)
-			- [Phase 4: Performance Optimization](#phase-4-performance-optimization)
-		- [Key Technical Decisions](#key-technical-decisions)
-	- [Related Documentation](#related-documentation)
+  - [Version Information](#version-information)
+  - [Table of Contents](#table-of-contents)
+  - [Implementation Decision Summary](#implementation-decision-summary)
+  - [Implementation Approaches Comparison](#implementation-approaches-comparison)
+    - [Introduction](#introduction)
+    - [Option 1: Server-Side Persona Detection with Edge Caching](#option-1-server-side-persona-detection-with-edge-caching)
+      - [Technical Implementation Details](#technical-implementation-details)
+      - [Performance Characteristics](#performance-characteristics)
+      - [Scalability Factors](#scalability-factors)
+      - [Specific Challenges](#specific-challenges)
+    - [Option 2: Edge-Worker Persona Application](#option-2-edge-worker-persona-application)
+      - [Technical Implementation Details](#technical-implementation-details-1)
+      - [Performance Characteristics](#performance-characteristics-1)
+      - [Scalability Factors](#scalability-factors-1)
+      - [Specific Challenges](#specific-challenges-1)
+    - [Data Flow Comparison with 'easy-breezy' Example](#data-flow-comparison-with-easy-breezy-example)
+      - [Option 1: Server-Side Flow](#option-1-server-side-flow)
+      - [Option 2: Edge-Worker Flow](#option-2-edge-worker-flow)
+    - [Decision Factors Summary](#decision-factors-summary)
+  - [Chosen Implementation: WordPress Plugin with Boundary-Based Shortcodes](#chosen-implementation-wordpress-plugin-with-boundary-based-shortcodes)
+    - [Overview](#overview)
+    - [Plugin Architecture](#plugin-architecture)
+    - [Implementation Phases](#implementation-phases)
+      - [Phase 1: Core Infrastructure](#phase-1-core-infrastructure)
+      - [Phase 2: Shortcode System](#phase-2-shortcode-system)
+      - [Phase 3: Admin Integration](#phase-3-admin-integration)
+      - [Phase 4: Performance Optimization](#phase-4-performance-optimization)
+    - [Key Technical Decisions](#key-technical-decisions)
+  - [Related Documentation](#related-documentation)
 
 ## Implementation Decision Summary
 
@@ -97,10 +97,12 @@ function cme_detect_persona_from_gtm() {
 #### Performance Characteristics
 
 1. **Server Load**:
+
    - Higher than client-side approach but optimized through strategic shortcode processing
    - Lower than non-cached approaches through edge caching
 
 2. **TTFB (Time To First Byte)**:
+
    - 20-40ms for cached edge responses
    - 200-800ms for cache misses requiring origin fetch
 
@@ -118,6 +120,7 @@ function cme_detect_persona_from_gtm() {
 #### Specific Challenges
 
 1. **Cache Management**:
+
    - Requires careful cache invalidation when persona content changes
    - Need to set proper cache headers for edge caching
 
@@ -167,10 +170,12 @@ function cme_wrap_content_with_persona_markers($content) {
 #### Performance Characteristics
 
 1. **Server Load**:
+
    - Lower than Option 1 because the same content is served for all requests
    - Higher bandwidth between origin and edge
 
 2. **TTFB (Time To First Byte)**:
+
    - 50-70ms for edge-processed cached responses
    - 250-850ms for cache misses requiring origin fetch
 
@@ -188,6 +193,7 @@ function cme_wrap_content_with_persona_markers($content) {
 #### Specific Challenges
 
 1. **HTML Transformation Complexity**:
+
    - Requires careful handling of nested structures
    - Edge computing platforms have resource limits
 
@@ -223,16 +229,16 @@ function cme_wrap_content_with_persona_markers($content) {
 
 ### Decision Factors Summary
 
-| Factor                  | Option 1: Server-Side                               | Option 2: Edge-Worker                               |
-| ----------------------- | --------------------------------------------------- | --------------------------------------------------- |
-| **Development Effort**  | Moderate PHP/WordPress development                  | PHP development + Edge computing expertise           |
-| **Content Management**  | Intuitive shortcode-based editing                   | More complex markup with data attributes            |
-| **Origin Bandwidth**    | Lower (only requested persona sent)                 | Higher (all personas sent to edge)                  |
-| **Origin Server Load**  | Moderate (shortcode processing)                     | Lower (simpler queries, more content)               |
-| **Page Size to Client** | Optimal - only contains requested persona           | Optimal - transformed at edge                       |
-| **Cache Efficiency**    | Very good - separate cache entries per persona      | Very good - separate transformed cache entries      |
-| **Time to Market**      | Faster - uses WordPress-native techniques           | Longer - requires edge worker development           |
-| **Maintenance**         | Concentrated in WordPress                           | Split between WordPress and edge platform           |
+| Factor                  | Option 1: Server-Side                          | Option 2: Edge-Worker                          |
+| ----------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| **Development Effort**  | Moderate PHP/WordPress development             | PHP development + Edge computing expertise     |
+| **Content Management**  | Intuitive shortcode-based editing              | More complex markup with data attributes       |
+| **Origin Bandwidth**    | Lower (only requested persona sent)            | Higher (all personas sent to edge)             |
+| **Origin Server Load**  | Moderate (shortcode processing)                | Lower (simpler queries, more content)          |
+| **Page Size to Client** | Optimal - only contains requested persona      | Optimal - transformed at edge                  |
+| **Cache Efficiency**    | Very good - separate cache entries per persona | Very good - separate transformed cache entries |
+| **Time to Market**      | Faster - uses WordPress-native techniques      | Longer - requires edge worker development      |
+| **Maintenance**         | Concentrated in WordPress                      | Split between WordPress and edge platform      |
 
 ## Chosen Implementation: WordPress Plugin with Boundary-Based Shortcodes
 
@@ -251,7 +257,7 @@ The Personas plugin provides a comprehensive system for creating and managing pe
 
 The plugin follows WordPress best practices with a modular architecture:
 
-```
+```text
 wp-content/plugins/personas/
 ├── personas.php                    # Main plugin file
 ├── includes/                       # Core functionality
@@ -300,11 +306,13 @@ wp-content/plugins/personas/
 ### Key Technical Decisions
 
 1. **Boundary-Based Shortcode Approach**:
+
    - Clear demarcation of conditional content
    - Compatible with third-party plugins
    - Intuitive for content authors
 
 2. **Persona Detection Strategy**:
+
    - Multiple detection methods (cookie, URL, user meta)
    - Hierarchical fallback system
    - WordPress filter for custom detection methods
