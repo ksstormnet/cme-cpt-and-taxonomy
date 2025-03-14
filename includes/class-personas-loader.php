@@ -53,28 +53,24 @@ class Personas_Loader {
 
 		// Load component files.
 		$files = array(
-			'class-custom-post-types.php',
-			'class-admin.php',
-			'class-dashboard.php',
+			'class-personas-post-types.php',
+			'class-personas-admin.php',
+			'class-personas-dashboard.php',
 			'class-personas-repository.php',
 			'class-personas-storage.php',
 			'class-personas-detector.php',
 			'class-personas-facade.php',
 			'class-personas-assets.php',
-			'class-shortcodes.php',
-			'class-settings.php',
-			'class-ajax-handler.php',
+			'class-personas-shortcodes.php',
+			'class-personas-settings.php',
+			'class-personas-ajax.php',
+			'class-personas-frontend.php',
 		);
 
 		foreach ( $files as $file ) {
 			if ( file_exists( $base_path . $file ) ) {
 				require_once $base_path . $file;
 			}
-		}
-
-		// Load frontend class to ensure shortcodes are registered.
-		if ( file_exists( $base_path . 'class-frontend.php' ) ) {
-			require_once $base_path . 'class-frontend.php';
 		}
 	}
 
@@ -86,34 +82,30 @@ class Personas_Loader {
 	 */
 	private function initialize_components() {
 		// Initialize Custom Post Types.
-		$custom_post_types = new Custom_Post_Types();
-		$custom_post_types->register();
+		$post_types = new Personas_Post_Types();
+		$post_types->register();
 
 		// Initialize admin components.
-		$admin = new Admin();
+		$admin = new Personas_Admin();
 		$admin->register();
 
 		// Initialize shortcodes.
-		$shortcodes = new Shortcodes();
+		$shortcodes = new Personas_Shortcodes();
 		$shortcodes->register();
 
 		// Initialize settings.
-		$settings = new Settings();
+		$settings = new Personas_Settings();
 		$settings->register();
 
 		// Initialize components that use get_instance().
-		Dashboard::get_instance();
+		Personas_Dashboard::get_instance();
 		Personas_Repository::get_instance();
 		Personas_Storage::get_instance();
 		Personas_Detector::get_instance();
 		Personas_Facade::get_instance();
 		Personas_Assets::get_instance();
-		Ajax_Handler::get_instance();
-
-		// Initialize frontend if it exists.
-		if ( class_exists( '\\CME_Personas\\Frontend' ) ) {
-			Frontend::get_instance();
-		}
+		Personas_Ajax::get_instance();
+		Personas_Frontend::get_instance();
 	}
 
 	/**

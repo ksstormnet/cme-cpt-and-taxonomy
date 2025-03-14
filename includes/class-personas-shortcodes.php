@@ -1,6 +1,6 @@
 <?php
 /**
- * Shortcodes functionality.
+ * Personas Shortcodes functionality.
  *
  * @since      1.1.0
  * @package    CME_Personas
@@ -9,16 +9,16 @@
 namespace CME_Personas;
 
 /**
- * Shortcodes class.
+ * Personas Shortcodes class.
  *
  * This class handles specialized shortcodes separately from the core persona shortcodes.
  * Core persona shortcodes ([if_persona], [persona_content], [persona_switcher]) are
- * handled by the Frontend class.
+ * handled by the Personas_Frontend class.
  *
  * @since      1.0.3
  * @package    CME_Personas
  */
-class Shortcodes {
+class Personas_Shortcodes {
 
 	/**
 	 * Register shortcodes.
