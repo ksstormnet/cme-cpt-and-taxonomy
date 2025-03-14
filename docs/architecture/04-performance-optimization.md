@@ -9,36 +9,35 @@ This document outlines performance optimization strategies for the persona conte
 ## Table of Contents
 
 - [Persona System Performance Optimization](#persona-system-performance-optimization)
-	- [Version Information](#version-information)
-	- [Table of Contents](#table-of-contents)
-	- [Performance Overview](#performance-overview)
-	- [Redis Object Caching](#redis-object-caching)
-		- [Caching with Shortcodes](#caching-with-shortcodes)
-		- [Cache Implementation](#cache-implementation)
-		- [Redis Configuration](#redis-configuration)
-		- [Conditional Caching](#conditional-caching)
-	- [Edge Caching Integration](#edge-caching-integration)
-		- [Cloudflare Integration](#cloudflare-integration)
-		- [Cache Headers](#cache-headers)
-		- [Persona-Specific Cache Keys](#persona-specific-cache-keys)
-	- [Shortcode Processing Optimization](#shortcode-processing-optimization)
-		- [Selective Processing](#selective-processing)
-		- [Parse Optimization](#parse-optimization)
-	- [Query Optimization](#query-optimization)
-		- [Persona Lookups](#persona-lookups)
-		- [Content Retrieval](#content-retrieval)
-	- [Asset Loading](#asset-loading)
-		- [Conditional Enqueuing](#conditional-enqueuing)
-		- [Critical CSS](#critical-css)
-	- [Implementation Phases](#implementation-phases)
-		- [Phase 1: Core Optimization](#phase-1-core-optimization)
-		- [Phase 2: Redis Integration](#phase-2-redis-integration)
-		- [Phase 3: Edge Caching](#phase-3-edge-caching)
-		- [Phase 4: Advanced Optimizations](#phase-4-advanced-optimizations)
-	- [Monitoring and Profiling](#monitoring-and-profiling)
-		- [Performance Metrics](#performance-metrics)
-		- [Debug Logging](#debug-logging)
-	- [Related Documentation](#related-documentation)
+  - [Version Information](#version-information)
+  - [Table of Contents](#table-of-contents)
+  - [Performance Overview](#performance-overview)
+  - [Redis Object Caching](#redis-object-caching)
+    - [Caching with Shortcodes](#caching-with-shortcodes)
+    - [Cache Implementation](#cache-implementation)
+    - [Conditional Caching](#conditional-caching)
+  - [Edge Caching Integration](#edge-caching-integration)
+    - [Cloudflare Integration](#cloudflare-integration)
+    - [Cache Headers](#cache-headers)
+    - [Persona-Specific Cache Keys](#persona-specific-cache-keys)
+  - [Shortcode Processing Optimization](#shortcode-processing-optimization)
+    - [Selective Processing](#selective-processing)
+    - [Parse Optimization](#parse-optimization)
+  - [Query Optimization](#query-optimization)
+    - [Persona Lookups](#persona-lookups)
+    - [Content Retrieval](#content-retrieval)
+  - [Asset Loading](#asset-loading)
+    - [Conditional Enqueuing](#conditional-enqueuing)
+    - [Critical CSS](#critical-css)
+  - [Implementation Phases](#implementation-phases)
+    - [Phase 1: Core Optimization](#phase-1-core-optimization)
+    - [Phase 2: Redis Integration](#phase-2-redis-integration)
+    - [Phase 3: Edge Caching](#phase-3-edge-caching)
+    - [Phase 4: Advanced Optimizations](#phase-4-advanced-optimizations)
+  - [Monitoring and Profiling](#monitoring-and-profiling)
+    - [Performance Metrics](#performance-metrics)
+    - [Debug Logging](#debug-logging)
+  - [Related Documentation](#related-documentation)
 
 ## Performance Overview
 
@@ -113,7 +112,7 @@ public function maybe_cache_shortcode_output($content, $persona, $post_id) {
 
     return $processed_content;
 }
-```
+```text
 
 ### Redis Configuration
 
@@ -218,7 +217,7 @@ Configure edge caching to use persona-specific cache keys:
 
 **Cloudflare Page Rule Example**:
 
-```
+```text
 URL: *cruisemadeeasy.com/*
 Settings:
   - Cache Level: Everything
