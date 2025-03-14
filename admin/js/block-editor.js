@@ -1,7 +1,7 @@
 /**
  * Personas Block Editor Integration
  *
- * Adds sidebar panel for persona selection and preview in the block editor.
+ * Adds sidebar panel for persona selection and guidance in the block editor.
  *
  * @package
  * @version    1.2.0
@@ -13,24 +13,20 @@
 	const { PluginSidebar, PluginSidebarMoreMenuItem } = wp.editPost;
 	const { PanelBody, SelectControl, Button, Notice } = wp.components;
 	const { useSelect } = wp.data;
-	const { Fragment, useState, useEffect, useCallback } = wp.element;
+	const { Fragment, useState } = wp.element;
 
 	/**
 	 * Persona Selector Component
 	 *
-	 * Allows selecting and previewing content for different personas.
+	 * Shows help for working with persona shortcodes.
 	 */
 	const PersonaSelector = () => {
-		// State for the selected persona
+		// State for the selected persona (for showing shortcode examples)
 		const [selectedPersona, setSelectedPersona] = useState('default');
-		const [previewLoading, setPreviewLoading] = useState(false);
-		const [previewError, setPreviewError] = useState(null);
-		const [previewAvailable, setPreviewAvailable] = useState(false);
 
 		// Get the current post ID and editor state
-		const { postId, personas } = useSelect((select) => {
+		const { personas } = useSelect(() => {
 			return {
-				postId: select('core/editor').getCurrentPostId(),
 				personas: window.cmePersonasAdmin?.personas || {
 					default: __('Default', 'cme-personas'),
 				},
@@ -45,81 +41,34 @@
 		);
 
 		/**
-		 * Check if preview is available for the selected persona
+		 * Handle inserting shortcode
 		 */
-		const checkPreviewAvailability = useCallback(() => {
-			if (selectedPersona === 'default' || !postId) {
-				setPreviewAvailable(false);
+		const handleInsertShortcode = () => {
+			if (selectedPersona === 'default') {
 				return;
 			}
 
-			setPreviewLoading(true);
-			setPreviewError(null);
+			const shortcode = `[if_persona is="${selectedPersona}"]
+Your ${personas[selectedPersona]} persona content goes here.
+[/if_persona]`;
 
-			// Make AJAX request to check if content exists for this persona
-			const data = new FormData();
-			data.append('action', 'cme_check_persona_content');
-			data.append('post_id', postId);
-			data.append('persona', selectedPersona);
-			data.append('nonce', window.cmePersonasAdmin.nonce);
-
-			fetch(window.cmePersonasAdmin.ajaxUrl, {
-				method: 'POST',
-				body: data,
-				credentials: 'same-origin',
-			})
-				.then((response) => response.json())
-				.then((response) => {
-					if (response.success) {
-						setPreviewAvailable(response.data.hasContent);
-					} else {
-						setPreviewError(
-							response.data.message ||
-								__(
-									'Error checking preview availability',
-									'cme-personas'
-								)
-						);
-						setPreviewAvailable(false);
-					}
-					setPreviewLoading(false);
-				})
-				.catch(() => {
-					setPreviewError(__('Network error', 'cme-personas'));
-					setPreviewAvailable(false);
-					setPreviewLoading(false);
-				});
-		}, [selectedPersona, postId]);
-
-		/**
-		 * Handle preview button click
-		 */
-		const handlePreviewClick = () => {
-			if (!previewAvailable || selectedPersona === 'default') {
-				return;
-			}
-
-			// Open the preview in a new dialog
-			// This uses the existing preview function from the admin.js file
+			// Insert into editor at current selection
 			if (
-				typeof window.PersonaAdmin !== 'undefined' &&
-				typeof window.PersonaAdmin.showContentPreview === 'function'
+				typeof wp !== 'undefined' &&
+				wp.data &&
+				wp.data.dispatch('core/block-editor')
 			) {
-				window.PersonaAdmin.showContentPreview(postId, selectedPersona);
-			} else {
-				// Fallback if PersonaAdmin is not available
-				window.open(
-					`${window.location.origin}/wp-admin/admin-ajax.php?action=cme_preview_persona_content&post_id=${postId}&persona=${selectedPersona}&nonce=${window.cmePersonasAdmin.nonce}`,
-					'personaPreview',
-					'width=800,height=600,resizable=yes,scrollbars=yes'
-				);
+				const { insertBlocks } = wp.data.dispatch('core/block-editor');
+				const { createBlock } = wp.blocks;
+
+				// Create a new custom HTML block with our shortcode
+				const newBlock = createBlock('core/html', {
+					content: shortcode,
+				});
+
+				insertBlocks(newBlock);
 			}
 		};
-
-		// Use effect to check availability when relevant dependencies change
-		useEffect(() => {
-			checkPreviewAvailability();
-		}, [selectedPersona, postId, checkPreviewAvailability]);
 
 		return (
 			<Fragment>
@@ -128,42 +77,46 @@
 					initialOpen={true}
 				>
 					<div className="persona-selector">
+						<p>
+							{__(
+								'Use the [if_persona] shortcode to create persona-specific content.',
+								'cme-personas'
+							)}
+						</p>
+
 						<SelectControl
-							label={__('Preview as Persona', 'cme-personas')}
+							label={__('Select Persona', 'cme-personas')}
 							value={selectedPersona}
 							options={personaOptions}
 							onChange={setSelectedPersona}
 							className="personas-list"
 						/>
 
-						{previewError && (
-							<Notice status="error" isDismissible={false}>
-								{previewError}
-							</Notice>
-						)}
-
 						<Button
 							isPrimary
-							disabled={!previewAvailable || previewLoading}
-							onClick={handlePreviewClick}
-							className="preview-button"
-							isBusy={previewLoading}
+							disabled={selectedPersona === 'default'}
+							onClick={handleInsertShortcode}
+							className="insert-shortcode-button"
 						>
-							{previewLoading
-								? __('Checking…', 'cme-personas')
-								: __('Preview Persona Content', 'cme-personas')}
+							{__('Insert Shortcode', 'cme-personas')}
 						</Button>
 
-						{!previewAvailable &&
-							selectedPersona !== 'default' &&
-							!previewLoading && (
-								<p className="no-content-message">
-									{__(
-										'No content exists for this persona yet. Add content in the Persona Content meta box below the editor.',
-										'cme-personas'
-									)}
-								</p>
-							)}
+						<div className="shortcode-examples">
+							<h3>{__('Shortcode Examples:', 'cme-personas')}</h3>
+							<pre>
+								{`[if_persona is="persona-id"]
+  Content for specific persona
+[/if_persona]
+
+[if_persona is="persona-id,another-id"]
+  Content for multiple personas
+[/if_persona]
+
+[if_persona not="persona-id"]
+  Content for all except this persona
+[/if_persona]`}
+							</pre>
+						</div>
 					</div>
 				</PanelBody>
 			</Fragment>

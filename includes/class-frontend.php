@@ -40,15 +40,6 @@ class Frontend {
 	private $persona_manager;
 
 	/**
-	 * Instance of the Persona_Content class.
-	 *
-	 * @since    1.3.0
-	 * @access   private
-	 * @var      Persona_Content    $persona_content    Instance of the Persona_Content class.
-	 */
-	private $persona_content;
-
-	/**
 	 * Instance of the Personas_API class.
 	 *
 	 * @since    1.3.0
@@ -56,6 +47,15 @@ class Frontend {
 	 * @var      Personas_API    $personas_api    Instance of the Personas_API class.
 	 */
 	private $personas_api;
+
+	/**
+	 * Shortcode nesting level tracking.
+	 *
+	 * @since    1.5.0
+	 * @access   private
+	 * @var      int    $nesting_level    Current nesting level of shortcodes.
+	 */
+	private $nesting_level = 0;
 
 	/**
 	 * Get the singleton instance of the class.
@@ -78,7 +78,6 @@ class Frontend {
 	private function __construct() {
 		// Initialize instances.
 		$this->persona_manager = Persona_Manager::get_instance();
-		$this->persona_content = Persona_Content::get_instance();
 		$this->personas_api    = Personas_API::get_instance();
 
 		// Setup hooks.
@@ -92,7 +91,6 @@ class Frontend {
 	 */
 	private function setup_hooks() {
 		// Register shortcodes.
-		add_shortcode( 'persona_content', array( $this, 'persona_content_shortcode' ) );
 		add_shortcode( 'persona_switcher', array( $this, 'persona_switcher_shortcode' ) );
 		add_shortcode( 'if_persona', array( $this, 'if_persona_shortcode' ) );
 
@@ -103,8 +101,8 @@ class Frontend {
 		// Add frontend assets.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_assets' ) );
 
-		// Add filter for content to handle metaslider compatibility.
-		add_filter( 'the_content', array( $this, 'filter_content_for_metaslider' ), 999 );
+		// Filter main content to optimize shortcode processing.
+		add_filter( 'the_content', array( $this, 'maybe_process_persona_shortcodes' ), 11 );
 	}
 
 	/**
@@ -141,87 +139,17 @@ class Frontend {
 					'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
 					'nonce'          => wp_create_nonce( 'cme_personas_nonce' ),
 					'currentPersona' => $this->personas_api->get_current_persona(),
+					'reloadOnSwitch' => apply_filters( 'cme_personas_reload_on_switch', false ),
 				)
 			);
 		}
 	}
 
 	/**
-	 * Filter content to handle Meta Slider compatibility.
-	 *
-	 * This function detects if the content contains Meta Slider shortcodes
-	 * and processes them properly to avoid conflicts.
-	 *
-	 * @since     1.4.2
-	 * @param     string $content   The content to filter.
-	 * @return    string            The filtered content.
-	 */
-	public function filter_content_for_metaslider( $content ) {
-		// Check if content contains a Meta Slider shortcode.
-		if ( ! empty( $content ) && strpos( $content, '[metaslider' ) !== false ) {
-			// Process meta slider shortcodes separately to avoid interference.
-			$content = $this->process_metaslider_shortcodes( $content );
-		}
-
-		return $content;
-	}
-
-	/**
-	 * Process content with Meta Slider shortcodes safely.
-	 *
-	 * This method handles shortcode processing in a way that doesn't interfere
-	 * with Meta Slider shortcodes by temporarily removing our shortcodes.
-	 *
-	 * @since     1.4.2
-	 * @param     string $content   Content to process.
-	 * @return    string            Processed content.
-	 */
-	private function process_metaslider_shortcodes( $content ) {
-		// Remember our shortcode handlers.
-		$persona_content_handler  = $this->get_shortcode_handler( 'persona_content' );
-		$persona_switcher_handler = $this->get_shortcode_handler( 'persona_switcher' );
-		$if_persona_handler       = $this->get_shortcode_handler( 'if_persona' );
-
-		// Temporarily remove our shortcodes.
-		remove_shortcode( 'persona_content' );
-		remove_shortcode( 'persona_switcher' );
-		remove_shortcode( 'if_persona' );
-
-		// Process Meta Slider shortcodes.
-		$content = do_shortcode( $content );
-
-		// Re-add our shortcodes.
-		if ( $persona_content_handler ) {
-			add_shortcode( 'persona_content', $persona_content_handler );
-		}
-
-		if ( $persona_switcher_handler ) {
-			add_shortcode( 'persona_switcher', $persona_switcher_handler );
-		}
-
-		if ( $if_persona_handler ) {
-			add_shortcode( 'if_persona', $if_persona_handler );
-		}
-
-		return $content;
-	}
-
-	/**
-	 * Get the current handler for a shortcode.
-	 *
-	 * @since     1.4.2
-	 * @param     string $tag   The shortcode tag.
-	 * @return    callable|false The shortcode handler or false if not found.
-	 */
-	private function get_shortcode_handler( $tag ) {
-		global $shortcode_tags;
-		return isset( $shortcode_tags[ $tag ] ) ? $shortcode_tags[ $tag ] : false;
-	}
-
-	/**
 	 * Process content with shortcodes safely.
 	 *
-	 * This method handles general shortcode processing in content.
+	 * This method handles general shortcode processing in content
+	 * with protection against excessive nesting.
 	 *
 	 * @since     1.4.2
 	 * @param     string $content   Content to process.
@@ -229,60 +157,86 @@ class Frontend {
 	 */
 	private function process_shortcodes( $content ) {
 		if ( ! empty( $content ) ) {
-			return do_shortcode( $content );
+			// Prevent excessive nesting.
+			if ( $this->nesting_level > 10 ) {
+				return $content; // Too deep, just return unprocessed.
+			}
+
+			$this->nesting_level++;
+			$processed = do_shortcode( $content );
+			$this->nesting_level--;
+
+			return $processed;
 		}
 		return $content;
 	}
 
 	/**
-	 * Shortcode for persona-specific content.
+	 * Conditionally process shortcodes in content for performance optimization.
 	 *
-	 * Usage: [persona_content persona="business" entity_id="123" entity_type="post" field="content"]
-	 *        [persona_content persona="family"]Default content for other personas[/persona_content]
-	 *
-	 * @since     1.3.0
-	 * @param     array  $atts      Shortcode attributes.
-	 * @param     string $content   Default content (optional).
-	 * @return    string            The persona-specific content or default content.
+	 * @since     1.5.0
+	 * @param     string $content   The content to process.
+	 * @return    string            The processed content.
 	 */
-	public function persona_content_shortcode( $atts, $content = null ) {
-		$atts = shortcode_atts(
-			array(
-				'persona'     => null, // When null, the current persona will be used.
-				'entity_id'   => null, // When null, the current post will be used.
-				'entity_type' => 'post',
-				'field'       => 'content',
-			),
-			$atts,
-			'persona_content'
-		);
+	public function maybe_process_persona_shortcodes( $content ) {
+		// Only process if shortcodes exist in the content.
+		if ( false !== strpos( $content, '[if_persona' ) ) {
+			// Reset nesting level counter.
+			$this->nesting_level = 0;
 
-		// If no entity_id is provided, use current post.
-		if ( null === $atts['entity_id'] ) {
-			global $post;
-			$atts['entity_id'] = $post ? $post->ID : 0;
+			// Add special handling to optimize any persona shortcodes that won't apply.
+			$current_persona = $this->personas_api->get_current_persona();
+
+			// Add filter to quickly handle persona shortcodes.
+			add_filter( 'pre_do_shortcode_tag', array( $this, 'pre_process_persona_shortcode' ), 10, 4 );
+
+			// Process the shortcodes.
+			$content = do_shortcode( $content );
+
+			// Remove the filter.
+			remove_filter( 'pre_do_shortcode_tag', array( $this, 'pre_process_persona_shortcode' ), 10 );
 		}
 
-		// If entity_id is still null or 0, return the default content.
-		if ( empty( $atts['entity_id'] ) ) {
-			return $this->process_shortcodes( $content );
+		return $content;
+	}
+
+	/**
+	 * Pre-process persona shortcodes to quickly exclude non-matching content.
+	 *
+	 * @since     1.5.0
+	 * @param     bool|string $return      Short-circuit return value.
+	 * @param     string      $tag         Shortcode name.
+	 * @param     array       $attr        Shortcode attributes.
+	 * @param     array       $m           Regular expression match array.
+	 * @return    bool|string              Short-circuit return value.
+	 */
+	public function pre_process_persona_shortcode( $return, $tag, $attr, $m ) {
+		// Only handle our shortcode.
+		if ( 'if_persona' !== $tag ) {
+			return $return;
 		}
 
-		// Get persona-specific content.
-		$persona_content = $this->personas_api->get_content(
-			$atts['entity_id'],
-			$atts['entity_type'],
-			$atts['field'],
-			$atts['persona']
-		);
+		// Current persona.
+		$current_persona = $this->personas_api->get_current_persona();
 
-		// If we have persona-specific content, return it.
-		if ( $persona_content ) {
-			return $persona_content;
+		// Check for 'is' condition.
+		if ( isset( $attr['is'] ) ) {
+			$allowed_personas = array_map( 'trim', explode( ',', $attr['is'] ) );
+			if ( ! in_array( $current_persona, $allowed_personas, true ) ) {
+				return ''; // Short-circuit - this content won't be displayed.
+			}
 		}
 
-		// Otherwise return the default content.
-		return $this->process_shortcodes( $content );
+		// Check for 'not' condition.
+		if ( isset( $attr['not'] ) ) {
+			$excluded_personas = array_map( 'trim', explode( ',', $attr['not'] ) );
+			if ( in_array( $current_persona, $excluded_personas, true ) ) {
+				return ''; // Short-circuit - this content won't be displayed.
+			}
+		}
+
+		// Let normal processing happen.
+		return $return;
 	}
 
 	/**
