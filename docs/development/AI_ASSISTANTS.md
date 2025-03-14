@@ -11,7 +11,11 @@ This document provides guidelines for working with AI programming assistants (li
     - [1. Never use `--no-verify` flag](#1-never-use---no-verify-flag)
     - [2. Database Migration Restrictions](#2-database-migration-restrictions)
     - [3. Prefer deletion over commenting](#3-prefer-deletion-over-commenting)
+    - [4. Never modify repository without branching](#4-never-modify-repository-without-branching)
   - [Best Practices](#best-practices)
+    - [Questioning Unclear Instructions](#questioning-unclear-instructions)
+    - [Suggesting Version Increments](#suggesting-version-increments)
+    - [Continuous Documentation Updates](#continuous-documentation-updates)
     - [Giving Effective Instructions](#giving-effective-instructions)
     - [Common Workflows](#common-workflows)
   - [Review Process](#review-process)
@@ -50,7 +54,51 @@ When using AI assistants to generate or modify code:
 - Follow "clean as you go" - remove obsolete code immediately
 - Commit messages should document what was removed and why
 
+### 4. Never modify repository without branching
+
+- NEVER make changes directly to `main` or `dev` branches
+- Always create a new branch for ANY change, no matter how small
+- Branch names should follow conventions in [GIT_WORKFLOW.md](./GIT_WORKFLOW.md)
+- All branches should be created from `dev`, not from `main`
+- This applies to ALL repository content: code, documentation, configuration, etc.
+
 ## Best Practices
+
+### Questioning Unclear Instructions
+
+AI assistants SHOULD ask for clarification when instructions are unclear:
+
+- **Always seek clarification** when requirements seem ambiguous or incomplete
+- **Ask specific, targeted questions** rather than making assumptions
+- **Provide options** when multiple approaches are possible
+- **Request examples** when the expected output format is unclear
+
+❌ **INCORRECT**: Proceeding with assumptions when instructions are unclear  
+✅ **CORRECT**: "Could you clarify what you mean by X? I'm considering approaches A or B."
+
+### Suggesting Version Increments
+
+AI assistants should proactively suggest appropriate version increments:
+
+- Understand semantic versioning requirements (refer to [GIT_WORKFLOW.md](./GIT_WORKFLOW.md))
+- Suggest the appropriate increment level based on the nature of changes
+- Provide reasoning for your suggestion
+- When in doubt, recommend a higher increment level
+
+❌ **INCORRECT**: Implementing a patch version when adding new features  
+✅ **CORRECT**: "Since this adds new functionality while maintaining backward compatibility, I recommend incrementing the MINOR version (0.x.0)."
+
+### Continuous Documentation Updates
+
+AI assistants should prioritize documentation updates:
+
+- Update documentation alongside code changes, not afterwards
+- Keep README files, user guides, and technical documentation in sync
+- Update checklists and project status documents as tasks are completed
+- Document any API changes, new features, or behavioral changes
+
+❌ **INCORRECT**: "We'll update the documentation after implementing all changes"  
+✅ **CORRECT**: "I've updated both the implementation and its documentation to keep them in sync"
 
 ### Giving Effective Instructions
 

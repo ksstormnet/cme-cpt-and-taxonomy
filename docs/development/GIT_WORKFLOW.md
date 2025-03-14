@@ -2,9 +2,34 @@
 
 This document outlines the standard procedures for working with Git in the CME Personas plugin project. For general development practices, refer to [DEVELOPMENT_WORKFLOW.md](./DEVELOPMENT_WORKFLOW.md).
 
+## CRITICAL PRACTICES - READ FIRST
+
+1. **NEVER modify ANY repository content without creating a branch first**
+
+   - This includes code, documentation, configuration files, assets, etc.
+   - No exceptions for "small" or "quick" changes
+   - Always follow the branching strategy below for all changes
+
+2. **ALWAYS branch from `dev`, not from `main`**
+
+   - All development work starts from the `dev` branch
+   - Only release processes should interact directly with `main`
+
+3. **CONTINUOUSLY update documentation as you work**
+
+   - Update documentation alongside code changes, not at the end
+   - Keep checklists current as tasks are completed
+   - Don't defer documentation updates until version increments
+
+4. **USE appropriate semantic versioning**
+   - MAJOR version (x.0.0): Breaking changes that are not backward compatible
+   - MINOR version (0.x.0): New features added in a backward compatible manner
+   - PATCH version (0.0.x): Backward compatible bug fixes and non-functional changes
+
 ## Table of Contents
 
 - [Git Workflow Procedures](#git-workflow-procedures)
+  - [CRITICAL PRACTICES - READ FIRST](#critical-practices---read-first)
   - [Table of Contents](#table-of-contents)
   - [Branch Structure](#branch-structure)
   - [Regular Commit Process](#regular-commit-process)
@@ -23,6 +48,10 @@ This document outlines the standard procedures for working with Git in the CME P
     - [6. Push Changes to Remote](#6-push-changes-to-remote)
     - [7. Check Deployment Status](#7-check-deployment-status)
   - [Essential Git Practices](#essential-git-practices)
+  - [Version Increment Guidelines](#version-increment-guidelines)
+    - [When to Use MAJOR Version (x.0.0)](#when-to-use-major-version-x00)
+    - [When to Use MINOR Version (0.x.0)](#when-to-use-minor-version-0x0)
+    - [When to Use PATCH Version (0.0.x)](#when-to-use-patch-version-00x)
 
 ## Branch Structure
 
@@ -213,3 +242,32 @@ echo "Check deployment status at: ${GITHUB_REPO_URL}/actions"
 8. **Never push directly to main or dev** branches - always use PRs
 9. **Never rewrite history** of shared branches (main/dev)
 10. **Follow the process** - don't take shortcuts in the git workflow
+11. **Suggest version increments** when appropriate for your changes
+12. **Update documentation continuously** as you implement changes
+
+## Version Increment Guidelines
+
+When determining or suggesting version increments, follow these guidelines:
+
+### When to Use MAJOR Version (x.0.0)
+
+- Breaking API changes
+- Incompatible changes to database schemas
+- Removing deprecated functionality
+- Changes requiring users to modify their implementation
+
+### When to Use MINOR Version (0.x.0)
+
+- Adding new features while maintaining backward compatibility
+- Marking functionality as deprecated (but still available)
+- Substantial internal refactoring that doesn't break compatibility
+- Adding new files or modules with new functionality
+
+### When to Use PATCH Version (0.0.x)
+
+- Bug fixes without API changes
+- Performance improvements without API changes
+- Non-functional changes like formatting, style, and documentation
+- Changes to error messages or logs
+
+If in doubt about which version increment to use, err on the side of a higher increment level to avoid underestimating the impact of changes.

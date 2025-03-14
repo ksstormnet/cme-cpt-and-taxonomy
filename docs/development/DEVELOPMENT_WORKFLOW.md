@@ -179,7 +179,12 @@ function oldFunction() {
 
 2. **Keep features small and focused**: Each feature should address a specific requirement or task.
 
-3. **Update documentation as you go**: When you change functionality, update the relevant documentation in the same PR.
+3. **Update documentation continuously**: Documentation is a first-class citizen in our codebase:
+
+   - Update documentation alongside code changes, not after completing them
+   - Keep user-facing guides in sync with implementation changes
+   - Update checklists and task tracking as you complete each item
+   - Ensure API documentation reflects the current behavior
 
 4. **Test thoroughly**: Ensure your changes work correctly before requesting review.
 
@@ -188,6 +193,10 @@ function oldFunction() {
 6. **Respond to review feedback promptly**: Address reviewer comments in a timely manner.
 
 7. **Keep dependencies updated**: Regularly check for outdated dependencies and update them.
+
+8. **Suggest appropriate version increments**: Based on the nature of your changes, suggest the appropriate semantic version increment (see [GIT_WORKFLOW.md](./GIT_WORKFLOW.md) for guidelines).
+
+9. **Question unclear requirements**: Don't make assumptions when requirements are unclear. Ask specific questions to clarify expectations.
 
 By following these practices, we maintain a high-quality codebase and efficient development process.
 
