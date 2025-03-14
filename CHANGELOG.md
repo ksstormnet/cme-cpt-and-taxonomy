@@ -28,15 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed legacy files and eliminated backward compatibility for cleaner architecture
   - Applied consistent class naming throughout the codebase
 
-## [1.5.2] - 2025-03-14
-
-### Fixed
-
-- Fixed CSS syntax errors in grid-template-columns properties
-- Corrected missing commas in repeat() and minmax() functions in dashboard CSS
-- Resolved issue with documentation and management cards displaying as standard links instead of styled cards
-- Enhanced card styling with proper CSS specificity and responsive designs
-
 ## [1.5.1] - 2025-03-14
 
 ### Fixed
