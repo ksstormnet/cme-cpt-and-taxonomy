@@ -128,13 +128,13 @@
 }
 
 /* Documentation Cards */
-.cme-card-grid {
+.cme-personas-dashboard .cme-card-grid {
     display: grid;
     gap: 20px;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
 
-.cme-card {
+.cme-personas-dashboard .cme-card {
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -145,27 +145,32 @@
     padding: 20px;
     text-decoration: none;
     transition: all 0.2s ease;
+    height: auto;
+    width: auto;
+    line-height: 1.4;
 }
 
-.cme-card:hover {
+.cme-personas-dashboard .cme-card:hover {
     border-color: #2271b1;
     box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
     transform: translateY(-2px);
 }
 
-.cme-card-icon {
+.cme-personas-dashboard .cme-card-icon {
     color: #2271b1;
     font-size: 2em;
     margin-bottom: 15px;
+    height: auto;
+    width: auto;
 }
 
-.cme-card-title {
+.cme-personas-dashboard .cme-card-title {
     font-size: 1.2em;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-.cme-card-desc {
+.cme-personas-dashboard .cme-card-desc {
     color: #50575e;
     font-size: 0.9em;
 }
@@ -176,7 +181,7 @@
         grid-template-columns: 1fr;
     }
 
-    .cme-card-grid {
+    .cme-personas-dashboard .cme-card-grid {
         grid-template-columns: 1fr;
     }
 
