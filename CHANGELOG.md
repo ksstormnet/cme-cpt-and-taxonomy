@@ -28,6 +28,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed legacy files and eliminated backward compatibility for cleaner architecture
   - Applied consistent class naming throughout the codebase
 
++## [1.5.4] - 2025-03-15
+
+### Fixed
+
+- Fixed persona images not displaying in the rotator
+- Added visibility property to ensure proper image display with aria-hidden attributes
+- Ensured proper CSS selector formatting for navigation buttons
+- Fixed grid-template-columns missing commas in CSS
+
 ## [1.5.3] - 2025-03-15
 
 ### Added
