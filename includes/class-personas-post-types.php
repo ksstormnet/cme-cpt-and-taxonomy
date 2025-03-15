@@ -133,7 +133,9 @@ class Personas_Post_Types {
 	public function render_persona_attributes_metabox( \WP_Post $post ): void {
 		wp_nonce_field( 'persona_attributes_nonce', 'persona_attributes_nonce' );
 
+		// Get attributes, ensure empty string is used when no saved data exists.
 		$attributes = get_post_meta( $post->ID, 'persona_attributes', true );
+		$attributes = ( empty( $attributes ) && ! is_numeric( $attributes ) ) ? '' : $attributes;
 
 		?>
 		<p><?php esc_html_e( 'Enter key attributes for this persona. This information will be displayed on the dashboard and can be used for future AI integration.', 'cme-personas' ); ?></p>
@@ -148,6 +150,15 @@ class Personas_Post_Types {
 				'textarea_rows' => 10,
 				'teeny'         => true,
 				'quicktags'     => array( 'buttons' => 'strong,em,ul,ol,li,link' ),
+				'tinymce'       => array(
+					'init_instance_callback' => 'function(editor) {
+						editor.on("focus", function() {
+							if (editor.getContent() === "<p></p>") {
+								editor.setContent("");
+							}
+						});
+					}',
+				),
 			)
 		);
 	}
