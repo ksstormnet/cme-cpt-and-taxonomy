@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed empty and default text issues with the persona attributes field:
+  - Ensures field is empty when creating a new persona
+  - Handles existing posts with no attributes data correctly
+  - Prevents HTML markup from appearing in the editor
+
 ### Changed
 
 - Refactored plugin architecture to follow Single Responsibility Principle:
@@ -28,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed legacy files and eliminated backward compatibility for cleaner architecture
   - Applied consistent class naming throughout the codebase
 
-+## [1.5.4] - 2025-03-15
+## [1.5.4] - 2025-03-15
 
 ### Fixed
 
