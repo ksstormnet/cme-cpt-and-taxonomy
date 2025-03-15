@@ -73,7 +73,7 @@ class Personas_Dashboard {
 	/**
 	 * Enqueue dashboard specific scripts.
 	 *
-	 * @since    1.5.2
+	 * @since    1.5.3
 	 * @param    string $hook    Current admin page.
 	 */
 	public function enqueue_scripts( $hook ) {
@@ -191,48 +191,90 @@ class Personas_Dashboard {
 							<div class="cme-persona-card">
 								<h2 class="cme-persona-card-title"><?php echo esc_html( $persona->post_title ); ?></h2>
 
-								<div class="cme-persona-image-rotator">
+								<div class="cme-persona-image-rotator" role="region" aria-label="<?php esc_attr_e( 'Persona image gallery', 'cme-personas' ); ?>">
 									<div class="cme-persona-image-container">
 										<?php if ( $male_image_id ) : ?>
-											<div class="cme-persona-slide">
-												<?php echo wp_get_attachment_image( $male_image_id, 'medium', false, array( 'class' => 'cme-persona-slide-image' ) ); ?>
+											<div class="cme-persona-slide" aria-hidden="false">
+												<?php
+												// Translators: %s is the name of the persona.
+												$male_alt_text = sprintf( esc_attr__( '%s persona image', 'cme-personas' ), esc_attr( $male_name ) );
+												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by wp_get_attachment_image.
+												echo wp_get_attachment_image(
+													$male_image_id,
+													'medium',
+													false,
+													array(
+														'class'   => 'cme-persona-slide-image',
+														'alt'     => $male_alt_text,
+														'loading' => 'lazy',
+													)
+												);
+												?>
 												<div class="cme-persona-slide-caption"><?php echo esc_html( $male_name ); ?></div>
 											</div>
 										<?php else : ?>
-											<div class="cme-persona-slide">
-												<div class="cme-persona-image-placeholder dashicons dashicons-businessman"></div>
+											<div class="cme-persona-slide" aria-hidden="false">
+												<div class="cme-persona-image-placeholder dashicons dashicons-businessman" aria-hidden="true"></div>
 												<div class="cme-persona-slide-caption"><?php esc_html_e( 'Male', 'cme-personas' ); ?></div>
 											</div>
 										<?php endif; ?>
 
 										<?php if ( $female_image_id ) : ?>
-											<div class="cme-persona-slide">
-												<?php echo wp_get_attachment_image( $female_image_id, 'medium', false, array( 'class' => 'cme-persona-slide-image' ) ); ?>
+											<div class="cme-persona-slide" aria-hidden="true">
+												<?php
+												// Translators: %s is the name of the persona.
+												$female_alt_text = sprintf( esc_attr__( '%s persona image', 'cme-personas' ), esc_attr( $female_name ) );
+												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by wp_get_attachment_image.
+												echo wp_get_attachment_image(
+													$female_image_id,
+													'medium',
+													false,
+													array(
+														'class'   => 'cme-persona-slide-image',
+														'alt'     => $female_alt_text,
+														'loading' => 'lazy',
+													)
+												);
+												?>
 												<div class="cme-persona-slide-caption"><?php echo esc_html( $female_name ); ?></div>
 											</div>
 										<?php else : ?>
-											<div class="cme-persona-slide">
-												<div class="cme-persona-image-placeholder dashicons dashicons-businesswoman"></div>
+											<div class="cme-persona-slide" aria-hidden="true">
+												<div class="cme-persona-image-placeholder dashicons dashicons-businesswoman" aria-hidden="true"></div>
 												<div class="cme-persona-slide-caption"><?php esc_html_e( 'Female', 'cme-personas' ); ?></div>
 											</div>
 										<?php endif; ?>
 
 										<?php if ( $indeterminate_image_id ) : ?>
-											<div class="cme-persona-slide">
-												<?php echo wp_get_attachment_image( $indeterminate_image_id, 'medium', false, array( 'class' => 'cme-persona-slide-image' ) ); ?>
+											<div class="cme-persona-slide" aria-hidden="true">
+												<?php
+												// Translators: %s is the name of the persona.
+												$indeterminate_alt_text = sprintf( esc_attr__( '%s persona image', 'cme-personas' ), esc_attr( $indeterminate_name ) );
+												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by wp_get_attachment_image.
+												echo wp_get_attachment_image(
+													$indeterminate_image_id,
+													'medium',
+													false,
+													array(
+														'class'   => 'cme-persona-slide-image',
+														'alt'     => $indeterminate_alt_text,
+														'loading' => 'lazy',
+													)
+												);
+												?>
 												<div class="cme-persona-slide-caption"><?php echo esc_html( $indeterminate_name ); ?></div>
 											</div>
 										<?php else : ?>
-											<div class="cme-persona-slide">
-												<div class="cme-persona-image-placeholder dashicons dashicons-admin-users"></div>
+											<div class="cme-persona-slide" aria-hidden="true">
+												<div class="cme-persona-image-placeholder dashicons dashicons-admin-users" aria-hidden="true"></div>
 												<div class="cme-persona-slide-caption"><?php esc_html_e( 'Person', 'cme-personas' ); ?></div>
 											</div>
 										<?php endif; ?>
 									</div>
 
-									<div class="cme-persona-rotator-nav">
+									<div class="cme-persona-rotator-nav" aria-label="<?php esc_attr_e( 'Persona image gallery controls', 'cme-personas' ); ?>">
 										<button class="cme-persona-rotator-prev" aria-label="<?php esc_attr_e( 'Previous image', 'cme-personas' ); ?>">&lsaquo;</button>
-										<div class="cme-persona-rotator-dots"></div>
+										<div class="cme-persona-rotator-dots" role="tablist" aria-label="<?php esc_attr_e( 'Select a persona image', 'cme-personas' ); ?>"></div>
 										<button class="cme-persona-rotator-next" aria-label="<?php esc_attr_e( 'Next image', 'cme-personas' ); ?>">&rsaquo;</button>
 									</div>
 								</div>
