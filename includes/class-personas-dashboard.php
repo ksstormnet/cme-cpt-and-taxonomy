@@ -73,7 +73,7 @@ class Personas_Dashboard {
 	/**
 	 * Enqueue dashboard specific scripts.
 	 *
-	 * @since    1.5.2
+	 * @since    1.5.3
 	 * @param    string $hook    Current admin page.
 	 */
 	public function enqueue_scripts( $hook ) {
@@ -195,11 +195,21 @@ class Personas_Dashboard {
 									<div class="cme-persona-image-container">
 										<?php if ( $male_image_id ) : ?>
 											<div class="cme-persona-slide" aria-hidden="false">
-												<?php echo wp_get_attachment_image( $male_image_id, 'medium', false, array(
-													'class' => 'cme-persona-slide-image',
-													'alt' => sprintf( esc_attr__( '%s persona image', 'cme-personas' ), esc_attr( $male_name ) ),
-													'loading' => 'lazy'
-												) ); ?>
+												<?php
+												// Translators: %s is the name of the persona.
+												$male_alt_text = sprintf( esc_attr__( '%s persona image', 'cme-personas' ), esc_attr( $male_name ) );
+												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by wp_get_attachment_image.
+												echo wp_get_attachment_image(
+													$male_image_id,
+													'medium',
+													false,
+													array(
+														'class'   => 'cme-persona-slide-image',
+														'alt'     => $male_alt_text,
+														'loading' => 'lazy',
+													)
+												);
+												?>
 												<div class="cme-persona-slide-caption"><?php echo esc_html( $male_name ); ?></div>
 											</div>
 										<?php else : ?>
@@ -211,11 +221,21 @@ class Personas_Dashboard {
 
 										<?php if ( $female_image_id ) : ?>
 											<div class="cme-persona-slide" aria-hidden="true">
-												<?php echo wp_get_attachment_image( $female_image_id, 'medium', false, array(
-													'class' => 'cme-persona-slide-image',
-													'alt' => sprintf( esc_attr__( '%s persona image', 'cme-personas' ), esc_attr( $female_name ) ),
-													'loading' => 'lazy'
-												) ); ?>
+												<?php
+												// Translators: %s is the name of the persona.
+												$female_alt_text = sprintf( esc_attr__( '%s persona image', 'cme-personas' ), esc_attr( $female_name ) );
+												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by wp_get_attachment_image.
+												echo wp_get_attachment_image(
+													$female_image_id,
+													'medium',
+													false,
+													array(
+														'class'   => 'cme-persona-slide-image',
+														'alt'     => $female_alt_text,
+														'loading' => 'lazy',
+													)
+												);
+												?>
 												<div class="cme-persona-slide-caption"><?php echo esc_html( $female_name ); ?></div>
 											</div>
 										<?php else : ?>
@@ -227,11 +247,21 @@ class Personas_Dashboard {
 
 										<?php if ( $indeterminate_image_id ) : ?>
 											<div class="cme-persona-slide" aria-hidden="true">
-												<?php echo wp_get_attachment_image( $indeterminate_image_id, 'medium', false, array(
-													'class' => 'cme-persona-slide-image',
-													'alt' => sprintf( esc_attr__( '%s persona image', 'cme-personas' ), esc_attr( $indeterminate_name ) ),
-													'loading' => 'lazy'
-												) ); ?>
+												<?php
+												// Translators: %s is the name of the persona.
+												$indeterminate_alt_text = sprintf( esc_attr__( '%s persona image', 'cme-personas' ), esc_attr( $indeterminate_name ) );
+												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by wp_get_attachment_image.
+												echo wp_get_attachment_image(
+													$indeterminate_image_id,
+													'medium',
+													false,
+													array(
+														'class'   => 'cme-persona-slide-image',
+														'alt'     => $indeterminate_alt_text,
+														'loading' => 'lazy',
+													)
+												);
+												?>
 												<div class="cme-persona-slide-caption"><?php echo esc_html( $indeterminate_name ); ?></div>
 											</div>
 										<?php else : ?>

@@ -1,292 +1,344 @@
 /**
- * Personas Dashboard JavaScript
+ * Persona Rotator Script for the Admin Dashboard
  *
- * @version 1.5.3
- * @param {Object} $ jQuery object
+ * Provides interactive image rotation for persona cards with keyboard,
+ * mouse, and touch support with accessibility features.
+ *
+ * @since 1.5.3
+ * @param {Object} $ - jQuery object
  */
 
 (function ($) {
 	'use strict';
 
-	/**
-	 * Initialize the image rotators for persona cards
-	 */
-	function initPersonaRotators() {
-		$('.cme-persona-image-rotator').each(function () {
-			const rotator = $(this);
-			const container = rotator.find('.cme-persona-image-container');
-			const slides = container.find('.cme-persona-slide');
+	// Feature detection for reduced motion preference
+	const prefersReducedMotion = window.matchMedia(
+		'(prefers-reduced-motion: reduce)'
+	).matches;
 
-			// Bail early if no slides to rotate
-			if (slides.length <= 0) {
+	/**
+	 * PersonaRotator class - Handles rotation of persona images
+	 */
+	class PersonaRotator {
+		/**
+		 * Constructor
+		 *
+		 * @param {HTMLElement} container - The rotator container element
+		 */
+		constructor(container) {
+			// Elements
+			this.container = $(container);
+			this.slides = this.container.find('.cme-persona-slide');
+			this.dotsContainer = this.container.find(
+				'.cme-persona-rotator-dots'
+			);
+			this.prevButton = this.container.find('.cme-persona-rotator-prev');
+			this.nextButton = this.container.find('.cme-persona-rotator-next');
+
+			// State
+			this.slideCount = this.slides.length;
+			this.currentIndex = 0;
+			this.isAnimating = false;
+			this.touchStartX = 0;
+			this.touchStartY = 0;
+			this.touchEndX = 0;
+			this.touchEndY = 0;
+
+			// Preload images for smoother transitions
+			this.preloadImages();
+
+			// Initialize
+			this.setupDots();
+			this.bindEvents();
+			this.updateAriaLive(
+				'Persona rotator initialized with ' +
+					this.slideCount +
+					' images.'
+			);
+		}
+
+		/**
+		 * Preload all slide images
+		 */
+		preloadImages() {
+			this.slides.each((index, slide) => {
+				const img = $(slide).find('img');
+				if (img.length) {
+					const imgSrc = img.attr('src');
+					if (imgSrc) {
+						const preloadImg = new Image();
+						preloadImg.src = imgSrc;
+					}
+				}
+			});
+		}
+
+		/**
+		 * Create dot indicators for each slide
+		 */
+		setupDots() {
+			for (let i = 0; i < this.slideCount; i++) {
+				const dot = $('<button>')
+					.addClass('cme-persona-rotator-dot')
+					.attr({
+						type: 'button',
+						'aria-label': `Show image ${i + 1} of ${this.slideCount}`,
+						'aria-selected': i === 0 ? 'true' : 'false',
+						role: 'tab',
+						tabindex: i === 0 ? '0' : '-1',
+					});
+
+				this.dotsContainer.append(dot);
+			}
+			this.dots = this.dotsContainer.find('.cme-persona-rotator-dot');
+		}
+
+		/**
+		 * Bind all event listeners
+		 */
+		bindEvents() {
+			// Button navigation
+			this.prevButton.on('click', this.prevSlide.bind(this));
+			this.nextButton.on('click', this.nextSlide.bind(this));
+
+			// Dot navigation
+			this.dots.on('click', (e) => {
+				const index = this.dots.index(e.currentTarget);
+				this.goToSlide(index);
+			});
+
+			// Keyboard navigation for the whole rotator
+			this.container.on('keydown', this.handleKeydown.bind(this));
+
+			// Touch events
+			this.container.on('touchstart', this.handleTouchStart.bind(this));
+			this.container.on('touchmove', this.handleTouchMove.bind(this));
+			this.container.on('touchend', this.handleTouchEnd.bind(this));
+
+			// Focus management
+			this.dots.on('keydown', this.handleDotKeydown.bind(this));
+		}
+
+		/**
+		 * Handle keydown events for the container
+		 *
+		 * @param {Event} e - The keydown event
+		 */
+		handleKeydown(e) {
+			switch (e.key) {
+				case 'ArrowLeft':
+					this.prevSlide();
+					e.preventDefault();
+					break;
+
+				case 'ArrowRight':
+					this.nextSlide();
+					e.preventDefault();
+					break;
+			}
+		}
+
+		/**
+		 * Handle keydown events for the dots
+		 *
+		 * @param {Event} e - The keydown event
+		 */
+		handleDotKeydown(e) {
+			let newIndex = this.currentIndex;
+
+			switch (e.key) {
+				case 'ArrowLeft':
+					newIndex = Math.max(0, this.currentIndex - 1);
+					e.preventDefault();
+					break;
+
+				case 'ArrowRight':
+					newIndex = Math.min(
+						this.slideCount - 1,
+						this.currentIndex + 1
+					);
+					e.preventDefault();
+					break;
+
+				case 'Home':
+					newIndex = 0;
+					e.preventDefault();
+					break;
+
+				case 'End':
+					newIndex = this.slideCount - 1;
+					e.preventDefault();
+					break;
+
+				default:
+					return;
+			}
+
+			if (newIndex !== this.currentIndex) {
+				this.goToSlide(newIndex);
+				this.dots.eq(newIndex).focus();
+			}
+		}
+
+		/**
+		 * Handle touch start event
+		 *
+		 * @param {Event} e - The touchstart event
+		 */
+		handleTouchStart(e) {
+			const touch = e.originalEvent.touches[0];
+			this.touchStartX = touch.clientX;
+			this.touchStartY = touch.clientY;
+		}
+
+		/**
+		 * Handle touch move event
+		 *
+		 * @param {Event} e - The touchmove event
+		 */
+		handleTouchMove(e) {
+			if (!this.touchStartX) {
 				return;
 			}
 
-			const dotsContainer = rotator.find('.cme-persona-rotator-dots');
-			const prevBtn = rotator.find('.cme-persona-rotator-prev');
-			const nextBtn = rotator.find('.cme-persona-rotator-next');
-			let currentIndex = 0;
-			let autoRotateInterval;
+			const touch = e.originalEvent.touches[0];
+			this.touchEndX = touch.clientX;
+			this.touchEndY = touch.clientY;
 
-			// Create dots based on number of slides
-			slides.each(function (index) {
-				// Create dot with role="tab" for accessibility
-				const dot = $(
-					'<div class="cme-persona-rotator-dot" role="tab" tabindex="0"></div>'
-				);
-				if (index === 0) {
-					dot.addClass('active');
-					dot.attr('aria-current', 'true');
-					dot.attr('aria-selected', 'true');
+			// Prevent vertical scrolling when swiping horizontally
+			const diffX = Math.abs(this.touchEndX - this.touchStartX);
+			const diffY = Math.abs(this.touchEndY - this.touchStartY);
+
+			if (diffX > diffY && diffX > 30) {
+				e.preventDefault();
+			}
+		}
+
+		/**
+		 * Handle touch end event
+		 */
+		handleTouchEnd() {
+			if (!this.touchStartX || !this.touchEndX) {
+				return;
+			}
+
+			const diffX = this.touchEndX - this.touchStartX;
+			const diffY = this.touchEndY - this.touchStartY;
+
+			// Only handle horizontal swipes, ignore vertical swipes
+			if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+				if (diffX > 0) {
+					this.prevSlide();
 				} else {
-					dot.attr('aria-current', 'false');
-					dot.attr('aria-selected', 'false');
+					this.nextSlide();
 				}
+			}
 
-				// Add unique ID and aria-controls to connect dots with slides
-				const slideId =
-					'persona-slide-' + rotator.attr('id') + '-' + index;
-				slides.eq(index).attr('id', slideId);
-				dot.attr('aria-controls', slideId);
+			// Reset values
+			this.touchStartX = 0;
+			this.touchEndX = 0;
+			this.touchStartY = 0;
+			this.touchEndY = 0;
+		}
 
-				dotsContainer.append(dot);
+		/**
+		 * Navigate to the previous slide
+		 */
+		prevSlide() {
+			const newIndex =
+				(this.currentIndex - 1 + this.slideCount) % this.slideCount;
+			this.goToSlide(newIndex);
+		}
 
-				// Add click handler to each dot
-				dot.on('click', function () {
-					goToSlide(index);
-				});
+		/**
+		 * Navigate to the next slide
+		 */
+		nextSlide() {
+			const newIndex = (this.currentIndex + 1) % this.slideCount;
+			this.goToSlide(newIndex);
+		}
 
-				// Add keyboard handler to each dot
-				dot.on('keydown', function (e) {
-					if (e.key === 'Enter' || e.key === ' ') {
-						e.preventDefault();
-						goToSlide(index);
-					}
-				});
+		/**
+		 * Go to a specific slide
+		 *
+		 * @param {number} index - The slide index to navigate to
+		 */
+		goToSlide(index) {
+			if (this.isAnimating || index === this.currentIndex) {
+				return;
+			}
+
+			this.isAnimating = true;
+
+			// Update slides
+			this.slides.attr('aria-hidden', 'true');
+			this.slides.eq(index).attr('aria-hidden', 'false');
+
+			// Update dots
+			this.dots.attr({
+				'aria-selected': 'false',
+				tabindex: '-1',
+			});
+			this.dots.eq(index).attr({
+				'aria-selected': 'true',
+				tabindex: '0',
 			});
 
-			const dots = dotsContainer.find('.cme-persona-rotator-dot');
-
-			// Make first slide active initially
-			slides.eq(0).addClass('active');
-			slides.attr('aria-hidden', 'true');
-			slides.eq(0).attr('aria-hidden', 'false');
-
-			// Set up click handlers for navigation buttons
-			prevBtn.on('click', function () {
-				goToSlide(currentIndex - 1);
-			});
-
-			nextBtn.on('click', function () {
-				goToSlide(currentIndex + 1);
-			});
-
-			// Add keyboard navigation
-			rotator.attr('tabindex', '0').on('keydown', function (e) {
-				if (e.key === 'ArrowLeft') {
-					goToSlide(currentIndex - 1);
-				} else if (e.key === 'ArrowRight') {
-					goToSlide(currentIndex + 1);
-				}
-			});
-
-			// Set up touch support
-			setupTouchSupport(
-				rotator,
-				container,
-				function () {
-					goToSlide(currentIndex - 1);
-				},
-				function () {
-					goToSlide(currentIndex + 1);
-				}
+			// Get captions for screen reader announcement
+			const caption =
+				this.slides
+					.eq(index)
+					.find('.cme-persona-slide-caption')
+					.text() || `Image ${index + 1}`;
+			this.updateAriaLive(
+				`Showing ${caption}, image ${index + 1} of ${this.slideCount}`
 			);
 
-			/**
-			 * Navigate to a specific slide
-			 *
-			 * @param {number} index The slide index to show
-			 */
-			function goToSlide(index) {
-				// Reset auto-rotation timer
-				clearInterval(autoRotateInterval);
+			// Apply transition with or without animation based on reduced motion preference
+			if (prefersReducedMotion) {
+				this.applySlideChange(index);
+			} else {
+				this.slides.eq(this.currentIndex).fadeOut(200);
+				this.slides.eq(index).fadeIn(200, () => {
+					this.applySlideChange(index);
+				});
+			}
+		}
 
-				// Handle looping
-				if (index < 0) {
-					index = slides.length - 1;
-				} else if (index >= slides.length) {
-					index = 0;
-				}
+		/**
+		 * Apply slide change after transition
+		 *
+		 * @param {number} index - The new slide index
+		 */
+		applySlideChange(index) {
+			this.currentIndex = index;
+			this.isAnimating = false;
+		}
 
-				// Remove active class from current slide and dot
-				slides.eq(currentIndex).removeClass('active');
-				dots.eq(currentIndex).removeClass('active');
-
-				// Remove ARIA attributes from current slide and dot
-				slides.eq(currentIndex).attr('aria-hidden', 'true');
-				dots.eq(currentIndex).attr('aria-current', 'false');
-				dots.eq(currentIndex).attr('aria-selected', 'false');
-
-				// Update current index
-				currentIndex = index;
-
-				// Add active class to new slide and dot
-				slides.eq(currentIndex).addClass('active');
-				dots.eq(currentIndex).addClass('active');
-
-				// Add ARIA attributes to new slide and dot
-				slides.eq(currentIndex).attr('aria-hidden', 'false');
-				dots.eq(currentIndex).attr('aria-current', 'true');
-				dots.eq(currentIndex).attr('aria-selected', 'true');
-
-				// Focus the active dot if this was triggered by keyboard navigation
-				if (rotator[0].ownerDocument.activeElement === rotator[0]) {
-					dots.eq(currentIndex).focus();
-				}
-
-				// Restart auto-rotation
-				startAutoRotate();
-
-				// Announce slide change to screen readers
-				rotator.find('.cme-persona-rotator-announcement').remove();
-				const slideCaption = slides
-					.eq(currentIndex)
-					.find('.cme-persona-slide-caption')
-					.text();
-				$(
-					'<div class="cme-persona-rotator-announcement sr-only" aria-live="polite"></div>'
-				)
-					.text('Showing image: ' + slideCaption)
-					.appendTo(rotator);
+		/**
+		 * Update aria-live region for screen reader announcements
+		 *
+		 * @param {string} message - The message to announce
+		 */
+		updateAriaLive(message) {
+			// If aria-live region doesn't exist, create it
+			let liveRegion = this.container.find('.cme-sr-only');
+			if (!liveRegion.length) {
+				liveRegion = $('<div>', {
+					class: 'cme-sr-only',
+					'aria-live': 'polite',
+					'aria-atomic': 'true',
+				}).appendTo(this.container);
 			}
 
-			/**
-			 * Start auto-rotation of slides
-			 */
-			function startAutoRotate() {
-				// Only setup auto-rotation if we have more than one slide
-				if (slides.length > 1) {
-					autoRotateInterval = setInterval(function () {
-						goToSlide(currentIndex + 1);
-					}, 5000);
-				}
-			}
-
-			// Start auto-rotation
-			startAutoRotate();
-
-			// Pause auto-rotation on hover
-			rotator.on('mouseenter focus', function () {
-				clearInterval(autoRotateInterval);
-			});
-
-			// Resume auto-rotation when mouse leaves or blur
-			rotator.on('mouseleave blur', function () {
-				startAutoRotate();
-			});
-
-			// No need to call setupTouchSupport here as it's already been setup above
-		});
-	}
-
-	/**
-	 * Set up touch swipe support for rotators
-	 *
-	 * @param {jQuery}   rotator      The rotator element
-	 * @param {jQuery}   container    The slide container element
-	 * @param {Function} prevFunction Function to go to previous slide
-	 * @param {Function} nextFunction Function to go to next slide
-	 */
-	function setupTouchSupport(rotator, container, prevFunction, nextFunction) {
-		let touchStartX = 0;
-		let touchEndX = 0;
-		let touchStartY = 0;
-		let touchEndY = 0;
-		let isSwiping = false;
-
-		container.on('touchstart', function (e) {
-			touchStartX = e.originalEvent.touches[0].clientX;
-			touchStartY = e.originalEvent.touches[0].clientY;
-			isSwiping = true;
-		});
-
-		container.on('touchmove', function (e) {
-			if (!isSwiping) {
-				return;
-			}
-
-			const touchX = e.originalEvent.touches[0].clientX;
-			const touchY = e.originalEvent.touches[0].clientY;
-
-			// Determine if scrolling vertically or swiping horizontally
-			const isScrollingVertical =
-				Math.abs(touchY - touchStartY) > Math.abs(touchX - touchStartX);
-
-			// If scrolling vertically, don't interfere with page scrolling
-			if (isScrollingVertical) {
-				isSwiping = false;
-				return;
-			}
-
-			// Prevent page scrolling when swiping horizontally
-			e.preventDefault();
-		});
-
-		container.on('touchend', function (e) {
-			if (!isSwiping) {
-				return;
-			}
-
-			touchEndX = e.originalEvent.changedTouches[0].clientX;
-			touchEndY = e.originalEvent.changedTouches[0].clientY;
-
-			handleSwipe();
-			isSwiping = false;
-		});
-
-		function handleSwipe() {
-			const SWIPE_THRESHOLD = 50; // Minimum swipe distance in pixels
-			const horizontalSwipeDistance = touchStartX - touchEndX;
-			const verticalSwipeDistance = touchStartY - touchEndY;
-
-			// Ensure the swipe is more horizontal than vertical
-			if (
-				Math.abs(horizontalSwipeDistance) >
-				Math.abs(verticalSwipeDistance)
-			) {
-				if (horizontalSwipeDistance > SWIPE_THRESHOLD) {
-					// Swipe left, go next
-					nextFunction();
-				} else if (horizontalSwipeDistance < -SWIPE_THRESHOLD) {
-					// Swipe right, go previous
-					prevFunction();
-				}
-			}
+			liveRegion.text(message);
 		}
 	}
 
-	// Add CSS for screen reader only content
-	$(
-		'<style>.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }</style>'
-	).appendTo('head');
-
-	// Initialize components when the DOM is ready
+	// Initialize all persona rotators when the document is ready
 	$(document).ready(function () {
-		// Generate unique IDs for each rotator
-		$('.cme-persona-image-rotator').each(function (index) {
-			$(this).attr('id', 'persona-rotator-' + index);
-		});
-
-		// Initialize rotators
-		initPersonaRotators();
-	});
-
-	// Handle image loading optimization
-	$(window).on('load', function () {
-		// Preload next image after initial load is complete
-		$('.cme-persona-slide-image').each(function () {
-			const img = new Image();
-			img.src = $(this).attr('src');
+		$('.cme-persona-image-rotator').each(function () {
+			new PersonaRotator(this);
 		});
 	});
 })(jQuery);
