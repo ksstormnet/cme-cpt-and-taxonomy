@@ -2,7 +2,7 @@
 
 ## Version Information
 
-Current as of v1.5.1
+Current as of v1.6.0
 
 This document provides a comprehensive technical overview of the CME Personas plugin architecture, explaining how the shortcode-based persona system works, its components, and how it can be extended.
 
