@@ -191,60 +191,48 @@ class Personas_Dashboard {
 							<div class="cme-persona-card">
 								<h2 class="cme-persona-card-title"><?php echo esc_html( $persona->post_title ); ?></h2>
 
-								<div class="cme-persona-image-rotator" role="region" aria-label="<?php esc_attr_e( 'Persona image gallery', 'cme-personas' ); ?>">
+								<div class="cme-persona-image-rotator">
 									<div class="cme-persona-image-container">
 										<?php if ( $male_image_id ) : ?>
-											<div class="cme-persona-slide" aria-hidden="false">
-												<?php echo wp_get_attachment_image( $male_image_id, 'medium', false, array(
-													'class' => 'cme-persona-slide-image',
-													'alt' => sprintf( esc_attr__( '%s persona image', 'cme-personas' ), esc_attr( $male_name ) ),
-													'loading' => 'lazy'
-												) ); ?>
+											<div class="cme-persona-slide">
+												<?php echo wp_get_attachment_image( $male_image_id, 'medium', false, array( 'class' => 'cme-persona-slide-image' ) ); ?>
 												<div class="cme-persona-slide-caption"><?php echo esc_html( $male_name ); ?></div>
 											</div>
 										<?php else : ?>
-											<div class="cme-persona-slide" aria-hidden="false">
-												<div class="cme-persona-image-placeholder dashicons dashicons-businessman" aria-hidden="true"></div>
+											<div class="cme-persona-slide">
+												<div class="cme-persona-image-placeholder dashicons dashicons-businessman"></div>
 												<div class="cme-persona-slide-caption"><?php esc_html_e( 'Male', 'cme-personas' ); ?></div>
 											</div>
 										<?php endif; ?>
 
 										<?php if ( $female_image_id ) : ?>
-											<div class="cme-persona-slide" aria-hidden="true">
-												<?php echo wp_get_attachment_image( $female_image_id, 'medium', false, array(
-													'class' => 'cme-persona-slide-image',
-													'alt' => sprintf( esc_attr__( '%s persona image', 'cme-personas' ), esc_attr( $female_name ) ),
-													'loading' => 'lazy'
-												) ); ?>
+											<div class="cme-persona-slide">
+												<?php echo wp_get_attachment_image( $female_image_id, 'medium', false, array( 'class' => 'cme-persona-slide-image' ) ); ?>
 												<div class="cme-persona-slide-caption"><?php echo esc_html( $female_name ); ?></div>
 											</div>
 										<?php else : ?>
-											<div class="cme-persona-slide" aria-hidden="true">
-												<div class="cme-persona-image-placeholder dashicons dashicons-businesswoman" aria-hidden="true"></div>
+											<div class="cme-persona-slide">
+												<div class="cme-persona-image-placeholder dashicons dashicons-businesswoman"></div>
 												<div class="cme-persona-slide-caption"><?php esc_html_e( 'Female', 'cme-personas' ); ?></div>
 											</div>
 										<?php endif; ?>
 
 										<?php if ( $indeterminate_image_id ) : ?>
-											<div class="cme-persona-slide" aria-hidden="true">
-												<?php echo wp_get_attachment_image( $indeterminate_image_id, 'medium', false, array(
-													'class' => 'cme-persona-slide-image',
-													'alt' => sprintf( esc_attr__( '%s persona image', 'cme-personas' ), esc_attr( $indeterminate_name ) ),
-													'loading' => 'lazy'
-												) ); ?>
+											<div class="cme-persona-slide">
+												<?php echo wp_get_attachment_image( $indeterminate_image_id, 'medium', false, array( 'class' => 'cme-persona-slide-image' ) ); ?>
 												<div class="cme-persona-slide-caption"><?php echo esc_html( $indeterminate_name ); ?></div>
 											</div>
 										<?php else : ?>
-											<div class="cme-persona-slide" aria-hidden="true">
-												<div class="cme-persona-image-placeholder dashicons dashicons-admin-users" aria-hidden="true"></div>
+											<div class="cme-persona-slide">
+												<div class="cme-persona-image-placeholder dashicons dashicons-admin-users"></div>
 												<div class="cme-persona-slide-caption"><?php esc_html_e( 'Person', 'cme-personas' ); ?></div>
 											</div>
 										<?php endif; ?>
 									</div>
 
-									<div class="cme-persona-rotator-nav" aria-label="<?php esc_attr_e( 'Persona image gallery controls', 'cme-personas' ); ?>">
+									<div class="cme-persona-rotator-nav">
 										<button class="cme-persona-rotator-prev" aria-label="<?php esc_attr_e( 'Previous image', 'cme-personas' ); ?>">&lsaquo;</button>
-										<div class="cme-persona-rotator-dots" role="tablist" aria-label="<?php esc_attr_e( 'Select a persona image', 'cme-personas' ); ?>"></div>
+										<div class="cme-persona-rotator-dots"></div>
 										<button class="cme-persona-rotator-next" aria-label="<?php esc_attr_e( 'Next image', 'cme-personas' ); ?>">&rsaquo;</button>
 									</div>
 								</div>
