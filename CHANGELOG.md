@@ -31,24 +31,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.5.3] - 2025-03-15
 
 ### Added
+
 - Touch swipe support for persona image rotator on mobile devices
 - ARIA attributes for improved accessibility throughout persona rotator
 - Screen reader announcements for slide changes
 - Support for reduced motion preferences to improve accessibility
 - Lazy loading of images for better performance
 - Image preloading for smoother transitions
+- CSS support for aria-hidden and aria-selected attributes
 
 ### Changed
+
 - Enhanced persona image rotator with better touch interaction
 - Improved keyboard navigation with focus management
 - Larger touch targets for better mobile experience
 - Enhanced visual indicators for active state
+- Updated CSS to align with JavaScript accessibility implementation
 
 ### Fixed
+
 - Fixed ESLint errors in personas-dashboard.js
 - Fixed duplicate function call in touch support implementation
 - Improved vertical scroll handling during horizontal swipes
 - Fixed potential memory leaks in event handling
+- Fixed CSS state management for slides to use aria attributes instead of classes
 
 ## [1.5.2] - 2025-03-14
 
