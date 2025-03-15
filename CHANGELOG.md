@@ -8,8 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- Empty field for persona attributes when creating a new persona.
-- Default text showing in the attributes field on first load.
+
+- Fixed empty and default text issues with the persona attributes field:
+  - Ensures field is empty when creating a new persona
+  - Handles existing posts with no attributes data correctly
+  - Prevents HTML markup from appearing in the editor
 
 ### Changed
 
