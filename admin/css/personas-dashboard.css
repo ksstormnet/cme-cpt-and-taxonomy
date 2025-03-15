@@ -183,6 +183,7 @@
 
 .cme-persona-rotator-dot:active {
     transform: scale(0.9); /* Provides tactile feedback */
+    transition: background 0.2s ease;
 }
 
 /* Styled based on aria-selected attribute for accessibility */

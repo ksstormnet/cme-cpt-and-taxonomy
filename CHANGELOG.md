@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed legacy files and eliminated backward compatibility for cleaner architecture
   - Applied consistent class naming throughout the codebase
 
-## [1.5.4] - 2025-03-15
++## [1.5.4] - 2025-03-15
 
 ### Fixed
 
