@@ -133,7 +133,11 @@ class Personas_Post_Types {
 	public function render_persona_attributes_metabox( \WP_Post $post ): void {
 		wp_nonce_field( 'persona_attributes_nonce', 'persona_attributes_nonce' );
 
-		$attributes = get_post_meta( $post->ID, 'persona_attributes', true );
+		// Get attributes, ensure new posts start with empty attributes.
+		$attributes = '';
+		if ( 'auto-draft' !== $post->post_status ) {
+			$attributes = get_post_meta( $post->ID, 'persona_attributes', true );
+		}
 
 		?>
 		<p><?php esc_html_e( 'Enter key attributes for this persona. This information will be displayed on the dashboard and can be used for future AI integration.', 'cme-personas' ); ?></p>
