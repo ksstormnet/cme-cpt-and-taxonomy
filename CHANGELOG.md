@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
+### Fixed
+- Empty field for persona attributes when creating a new persona.
+- Default text showing in the attributes field on first load.
 
+### Changed
 - Refactored plugin architecture to follow Single Responsibility Principle:
   - Split `class-persona-manager.php` into specialized components:
     - `class-personas-detector.php`: Handles persona detection from various sources
