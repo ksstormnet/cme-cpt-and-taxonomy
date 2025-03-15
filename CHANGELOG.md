@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Ensures field is empty when creating a new persona
   - Handles existing posts with no attributes data correctly
   - Prevents HTML markup from appearing in the editor
+- Synchronized repository branches to ensure consistent development workflow
 
 ### Changed
 
