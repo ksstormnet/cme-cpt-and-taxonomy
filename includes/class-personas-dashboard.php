@@ -185,8 +185,8 @@ class Personas_Dashboard {
 							$female_name        = $this->get_image_name( $female_image_id );
 							$indeterminate_name = $this->get_image_name( $indeterminate_image_id );
 
-							// Get attributes.
-							$attributes = get_post_meta( $persona->ID, 'persona_attributes', true );
+							// Get attributes from post content.
+							$attributes = $persona->post_content;
 							?>
 							<div class="cme-persona-card">
 								<h2 class="cme-persona-card-title"><?php echo esc_html( $persona->post_title ); ?></h2>
