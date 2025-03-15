@@ -9,10 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed empty and default text issues with the persona attributes field:
-  - Ensures field is empty when creating a new persona
-  - Handles existing posts with no attributes data correctly
-  - Prevents HTML markup from appearing in the editor
+- Fixed persona attributes TinyMCE formatting issues:
+  - Moved attributes from custom meta field to standard post content
+  - Leverages WordPress core editor instead of custom implementation
+  - Eliminates HTML markup issues in the editor
+  - Properly handles empty fields for new posts
 - Synchronized repository branches to ensure consistent development workflow
 
 ### Changed

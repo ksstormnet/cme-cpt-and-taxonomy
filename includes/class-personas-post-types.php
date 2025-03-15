@@ -86,7 +86,7 @@ class Personas_Post_Types {
 				'show_in_nav_menus' => true,
 				'show_in_rest'      => true,
 				'menu_icon'         => 'dashicons-groups',
-				'supports'          => array( 'title', 'excerpt', 'thumbnail' ),
+				'supports'          => array( 'title', 'excerpt', 'thumbnail', 'editor' ),
 				'has_archive'       => false,
 				'rewrite'           => array( 'slug' => 'persona' ),
 				'query_var'         => true,
@@ -113,14 +113,7 @@ class Personas_Post_Types {
 			'high'
 		);
 
-		add_meta_box(
-			'persona_attributes',
-			__( 'Key Attributes', 'cme-personas' ),
-			array( $this, 'render_persona_attributes_metabox' ),
-			$this->persona_post_type,
-			'normal',
-			'high'
-		);
+		// Key Attributes are now handled by the main editor.
 	}
 
 	/**
@@ -357,12 +350,6 @@ class Personas_Post_Types {
 			// Media taxonomy functionality has been removed.
 		}
 
-		// Save persona attributes.
-		if ( isset( $_POST['persona_attributes_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['persona_attributes_nonce'] ) ), 'persona_attributes_nonce' ) ) {
-			if ( isset( $_POST['persona_attributes'] ) ) {
-				$attributes = wp_kses_post( wp_unslash( $_POST['persona_attributes'] ) );
-				update_post_meta( $post_id, 'persona_attributes', $attributes );
-			}
-		}
+		// Attributes are now handled by the main post_content field.
 	}
 }
