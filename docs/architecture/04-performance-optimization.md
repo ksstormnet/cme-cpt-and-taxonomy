@@ -2,7 +2,7 @@
 
 ## Version Information
 
-Current as of v1.5.1
+Current as of v1.6.0
 
 This document outlines performance optimization strategies for the persona content system, with special focus on Redis caching implementation, edge caching, and other performance enhancements.
 

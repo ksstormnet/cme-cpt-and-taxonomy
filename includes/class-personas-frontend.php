@@ -101,12 +101,7 @@ class Personas_Frontend {
 	 */
 	private function setup_hooks() {
 		// Register shortcodes.
-		add_shortcode( 'persona_switcher', array( $this, 'persona_switcher_shortcode' ) );
 		add_shortcode( 'if_persona', array( $this, 'if_persona_shortcode' ) );
-
-		// Add AJAX handlers for frontend persona switching.
-		add_action( 'wp_ajax_cme_switch_persona', array( $this, 'ajax_switch_persona' ) );
-		add_action( 'wp_ajax_nopriv_cme_switch_persona', array( $this, 'ajax_switch_persona' ) );
 
 		// Add frontend assets.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_assets' ) );
@@ -292,113 +287,5 @@ class Personas_Frontend {
 
 		// If we get here, the conditions are met.
 		return $this->process_shortcodes( $content );
-	}
-
-	/**
-	 * Shortcode for persona switcher.
-	 *
-	 * Usage: [persona_switcher]
-	 *        [persona_switcher display="dropdown" button_text="Switch Persona"]
-	 *
-	 * @since     1.3.0
-	 * @param     array $atts    Shortcode attributes.
-	 * @return    string         HTML output for the persona switcher.
-	 */
-	public function persona_switcher_shortcode( $atts ) {
-		$atts = shortcode_atts(
-			array(
-				'display'     => 'buttons', // Either buttons or dropdown format.
-				'button_text' => __( 'Select Persona', 'cme-personas' ),
-				'class'       => '', // For custom styling.
-			),
-			$atts,
-			'persona_switcher'
-		);
-
-		// Get all personas.
-		$personas = $this->repository->get_all_personas();
-
-		// Get current persona.
-		$current_persona = $this->facade->get_current_persona();
-
-		// Start building output.
-		$output = '<div class="cme-persona-switcher ' . esc_attr( $atts['class'] ) . '" data-display="' . esc_attr( $atts['display'] ) . '">';
-
-		if ( 'dropdown' === $atts['display'] ) {
-			// Dropdown display.
-			$output .= '<label for="cme-persona-select">' . esc_html( $atts['button_text'] ) . '</label>';
-			$output .= '<select id="cme-persona-select" class="cme-persona-select">';
-
-			foreach ( $personas as $id => $name ) {
-				$selected = $id === $current_persona ? ' selected' : '';
-				$output  .= '<option value="' . esc_attr( $id ) . '"' . $selected . '>' . esc_html( $name ) . '</option>';
-			}
-
-			$output .= '</select>';
-		} else {
-			// Buttons display.
-			$output .= '<div class="cme-persona-buttons">';
-
-			foreach ( $personas as $id => $name ) {
-				$active  = $id === $current_persona ? ' active' : '';
-				$output .= '<button type="button" class="cme-persona-button' . $active . '" data-persona="' . esc_attr( $id ) . '">' . esc_html( $name ) . '</button>';
-			}
-
-			$output .= '</div>';
-		}
-
-		$output .= '</div>';
-
-		// Ensure frontend assets are loaded.
-		$this->enqueue_frontend_assets();
-
-		return $output;
-	}
-
-	/**
-	 * AJAX handler for switching personas.
-	 *
-	 * This method validates the request, changes the user's persona preference,
-	 * and returns JSON response with success or error messages.
-	 *
-	 * @since    1.3.0
-	 */
-	public function ajax_switch_persona() {
-		// Check nonce.
-		if ( ! check_ajax_referer( 'cme_personas_nonce', 'nonce', false ) ) {
-			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'cme-personas' ) ) );
-		}
-
-		// Get persona ID.
-		$persona_id = isset( $_POST['persona'] ) ? sanitize_key( $_POST['persona'] ) : '';
-		if ( empty( $persona_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'No persona specified.', 'cme-personas' ) ) );
-		}
-
-		// Set persona.
-		$success = $this->facade->set_persona( $persona_id );
-
-		if ( $success ) {
-			// Get persona details for the name.
-			$persona_details = $this->repository->get_persona_details( $persona_id );
-			$persona_name    = $persona_details ? $persona_details['title'] : $persona_id;
-
-			wp_send_json_success(
-				array(
-					'persona' => $persona_id,
-					'message' => sprintf(
-						/* translators: %s: persona name */
-						__( 'Successfully switched to %s persona.', 'cme-personas' ),
-						$persona_name
-					),
-				)
-			);
-		} else {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Failed to switch persona.', 'cme-personas' ),
-				)
-			);
-		}
 	}
 }

@@ -63,7 +63,6 @@ class Personas_Loader {
 			'class-personas-assets.php',
 			'class-personas-shortcodes.php',
 			'class-personas-settings.php',
-			'class-personas-ajax.php',
 			'class-personas-frontend.php',
 		);
 
@@ -104,7 +103,6 @@ class Personas_Loader {
 		Personas_Detector::get_instance();
 		Personas_Facade::get_instance();
 		Personas_Assets::get_instance();
-		Personas_Ajax::get_instance();
 		Personas_Frontend::get_instance();
 	}
 
@@ -115,11 +113,7 @@ class Personas_Loader {
 	 * @return   void
 	 */
 	private function setup_hooks() {
-		// Register AJAX handler for welcome notice.
-		add_action( 'wp_ajax_cme_dismiss_welcome', array( $this, 'dismiss_welcome_notice' ) );
-
-		// Add welcome notice.
-		add_action( 'admin_notices', array( $this, 'display_welcome_notice' ) );
+		// No hooks needed after removing welcome notice.
 	}
 
 	/**
@@ -134,62 +128,5 @@ class Personas_Loader {
 			false,
 			dirname( plugin_basename( CME_PERSONAS_FILE ) ) . '/languages/'
 		);
-	}
-
-	/**
-	 * Display welcome notice for first-time users.
-	 *
-	 * @since    1.6.0
-	 * @return   void
-	 */
-	public function display_welcome_notice() {
-		// Only show to admins.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		// Check if we've shown this before.
-		if ( get_option( 'cme_cpt_taxonomy_welcome_shown' ) ) {
-			return;
-		}
-
-		?>
-		<div class="notice notice-info is-dismissible cme-welcome-notice">
-			<h3><?php esc_html_e( 'Thank you for installing Cruise Made Easy Personas!', 'cme-personas' ); ?></h3>
-			<p><?php esc_html_e( 'You can now start using Customer Personas.', 'cme-personas' ); ?></p>
-			<p>
-				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=persona' ) ); ?>" class="button button-primary"><?php esc_html_e( 'Manage Personas', 'cme-personas' ); ?></a>
-				<a href="#" class="cme-dismiss-welcome button" data-nonce="<?php echo esc_attr( wp_create_nonce( 'cme_dismiss_welcome' ) ); ?>"><?php esc_html_e( 'Dismiss', 'cme-personas' ); ?></a>
-			</p>
-		</div>
-		<script>
-			jQuery(document).ready(function($) {
-				$('.cme-dismiss-welcome').on('click', function(e) {
-					e.preventDefault();
-					$.post(ajaxurl, {
-						action: 'cme_dismiss_welcome',
-						nonce: $(this).data('nonce')
-					});
-					$(this).closest('.notice').fadeOut();
-				});
-			});
-		</script>
-		<?php
-	}
-
-	/**
-	 * AJAX handler for dismissing welcome notice.
-	 *
-	 * @since    1.6.0
-	 * @return   void
-	 */
-	public function dismiss_welcome_notice() {
-		if ( ! current_user_can( 'manage_options' ) ||
-			! isset( $_POST['nonce'] ) ||
-			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'cme_dismiss_welcome' ) ) {
-			wp_send_json_error( 'Permission denied' );
-		}
-		update_option( 'cme_cpt_taxonomy_welcome_shown', 1 );
-		wp_send_json_success();
 	}
 }

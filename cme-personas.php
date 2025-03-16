@@ -38,10 +38,6 @@ if ( file_exists( $autoloader_path ) ) {
 	require_once $autoloader_path;
 }
 
-// Define plugin constants for legacy compatibility.
-define( 'CME_PLUGIN_DIR', CME_PERSONAS_PATH );
-define( 'CME_PLUGIN_FILE', CME_PERSONAS_FILE );
-
 // Include the main loader class for plugin initialization.
 require_once CME_PERSONAS_PATH . 'includes/class-personas-loader.php';
 
